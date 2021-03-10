@@ -1,11 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using RogueLike.Models;
 
 namespace RogueLike.Sprites
@@ -22,7 +17,7 @@ namespace RogueLike.Sprites
         public Input Input { get; set; }
         public Player(Texture2D texture) : base(texture)
         {
-            
+
         }
         public void Move()
         {
@@ -56,7 +51,7 @@ namespace RogueLike.Sprites
         {
             if (IsDead)
                 return;
-            
+
             base.Draw(gameTime, spriteBatch);
         }
         public void OnCollide(Sprite sprite)

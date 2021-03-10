@@ -13,12 +13,12 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin ../../../../MonoGame_Tutorials-master/MonoGame_Tutorials/Tutorial020/Content/Font.spritefont
+#begin Font.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:../../../../MonoGame_Tutorials-master/MonoGame_Tutorials/Tutorial020/Content/Font.spritefont;Font.spritefont
+/build:Font.spritefont;Font.spritefont
 
 #begin BackgroundMusic.mp3
 /importer:Mp3Importer
@@ -62,18 +62,6 @@
 /processorParam:TextureFormat=Color
 /build:crosshair.png
 
-#begin Game.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Game.png
-
 #begin gunLeft.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -103,18 +91,6 @@
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:gunshot.mp3
-
-#begin MainMenu.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:MainMenu.png
 
 #begin mud.png
 /importer:TextureImporter

@@ -2,9 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RogueLike.Sprites
 {
@@ -22,7 +19,7 @@ namespace RogueLike.Sprites
         public Vector2 Origin { get; set; }
         public Vector2 Velocity { get; set; }
         public float Rotation { get; set; }
-        public  Vector2 Direction { get; set; }
+        public Vector2 Direction { get; set; }
         public float Speed { get; set; }
         public int Health { get; set; }
         public int Damage { get; set; }
@@ -72,7 +69,7 @@ namespace RogueLike.Sprites
 
         public override void Update(GameTime gameTime)
         {
-            
+
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
