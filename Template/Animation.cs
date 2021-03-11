@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace RogueLike
 {
-    class Animation
+    public class Animation
     {
         public Texture2D Texture { get; set; }
         public Vector2 Position { get; set; }

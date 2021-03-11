@@ -66,6 +66,10 @@ namespace RogueLike.Sprites
             if (texture != null)
                 Origin = new Vector2(_texture.Width / 2, _texture.Height / 2);
         }
+        public Sprite()
+        {
+
+        }
 
         public override void Update(GameTime gameTime)
         {

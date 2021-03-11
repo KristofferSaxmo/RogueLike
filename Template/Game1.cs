@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RogueLike.States;
+using System;
 
 namespace RogueLike
 {
@@ -9,8 +10,10 @@ namespace RogueLike
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        public static int screenWidth = 1920;
-        public static int screenHeight = 1080;
+        public static Random Random;
+
+        public static int ScreenWidth = 1920;
+        public static int ScreenHeight = 1080;
 
         private State _currentState;
         private State _nextState;
@@ -22,8 +25,8 @@ namespace RogueLike
         }
         protected override void Initialize()
         {
-            graphics.PreferredBackBufferWidth = screenWidth;
-            graphics.PreferredBackBufferHeight = screenHeight;
+            graphics.PreferredBackBufferWidth = ScreenWidth;
+            graphics.PreferredBackBufferHeight = ScreenHeight;
             graphics.ApplyChanges();
 
             IsMouseVisible = true;

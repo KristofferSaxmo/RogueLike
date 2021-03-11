@@ -9,8 +9,8 @@
     <ProjectGuid>{284BCDE3-D524-4248-B7ED-4671226330E9}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Template</RootNamespace>
-    <AssemblyName>Template</AssemblyName>
+    <RootNamespace>RogueLike</RootNamespace>
+    <AssemblyName>RogueLike</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>Windows</MonoGamePlatform>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -46,12 +46,24 @@
     <Compile Include="Component.cs" />
     <Compile Include="Controls\Button.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="Managers\RoomManager.cs" />
     <Compile Include="Models\Input.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rooms\Room.cs" />
     <Compile Include="Sprites\ICollidable.cs" />
     <Compile Include="Sprites\Player.cs" />
+    <Compile Include="Sprites\RoomSprites\Stump.cs" />
+    <Compile Include="Sprites\RoomSprites\TelepadCrystal.cs" />
+    <Compile Include="Sprites\RoomSprites\TelepadBase.cs" />
+    <Compile Include="Sprites\RoomSprites\Tree.cs" />
+    <Compile Include="Sprites\RoomSprites\Plant1.cs" />
+    <Compile Include="Sprites\RoomSprites\Plant2.cs" />
+    <Compile Include="Sprites\RoomSprites\PlantAnimation.cs" />
+    <Compile Include="Sprites\RoomSprites\Rock1.cs" />
+    <Compile Include="Sprites\RoomSprites\Rock2.cs" />
     <Compile Include="Sprites\Sprite.cs" />
+    <Compile Include="Sprites\RoomSprites\Wall.cs" />
     <Compile Include="States\GameState.cs" />
     <Compile Include="States\MenuState.cs" />
     <Compile Include="States\State.cs" />

@@ -26,19 +26,19 @@ namespace RogueLike.States
                 new Sprite(null)
                 {
                     Layer = 0f,
-                    Position = new Vector2(Game1.screenWidth / 2, Game1.screenHeight / 2),
+                    Position = new Vector2(Game1.ScreenWidth / 2, Game1.ScreenHeight / 2),
                 },
                 new Button(buttonTexture, buttonFont)
                 {
                     Text = "Play",
-                    Position = new Vector2(Game1.screenWidth / 2, 400),
+                    Position = new Vector2(Game1.ScreenWidth / 2, 400),
                     Click = new EventHandler(Button_Play_Clicked),
                     Layer = 0.1f
                 },
                 new Button(buttonTexture, buttonFont)
                 {
                     Text = "Quit",
-                    Position = new Vector2(Game1.screenWidth / 2, 450),
+                    Position = new Vector2(Game1.ScreenWidth / 2, 450),
                     Click = new EventHandler(Button_Quit_Clicked),
                     Layer = 0.1f
                 },

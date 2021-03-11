@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using RogueLike.Managers;
 using RogueLike.Sprites;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +12,10 @@ namespace RogueLike.States
     public class GameState : State
     {
         private SpriteFont _font;
+        private RoomManager _roomManager;
         private List<Sprite> _sprites;
         private List<Player> _players;
+        private bool test = true;
 
         public GameState(Game1 game, ContentManager content) : base(game, content)
         {
@@ -42,6 +45,8 @@ namespace RogueLike.States
             };
 
             _players = _sprites.Where(c => c is Player).Select(c => (Player)c).ToList();
+
+            _roomManager = new RoomManager(_content);
         }
         public override void Update(GameTime gameTime)
         {
@@ -53,6 +58,10 @@ namespace RogueLike.States
 
             var collidableSprites = _sprites.Where(c => c is ICollidable);
 
+            if (test)
+            {
+                _sprites.Add(_roomManager.CreateRoom());
+            }
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
