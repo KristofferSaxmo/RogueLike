@@ -30,10 +30,6 @@ namespace RogueLike.Sprites
             get { return _scale; }
             set { _scale = value; }
         }
-        public Rectangle Hitbox
-        {
-            get { return _hitbox; }
-        }
         public Rectangle Rectangle
         {
             get
@@ -45,6 +41,10 @@ namespace RogueLike.Sprites
 
                 throw new Exception("Unknown sprite");
             }
+        }
+        public Rectangle Hitbox
+        {
+            get { return _hitbox; }
         }
         public Rectangle CollisionArea
         {

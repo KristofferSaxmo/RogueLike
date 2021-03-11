@@ -41,7 +41,7 @@ namespace RogueLike.Managers
 
         public Room CreateRoom()
         {
-            _position = new Vector2(500, 500);
+            _position = new Vector2(500, 200);
 
             return new Room(_textures, _position);
         }

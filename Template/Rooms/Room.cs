@@ -18,15 +18,15 @@ namespace RogueLike.Rooms
 
         private int[,] _map = new int[,]
             {
-                {1, 1, 1, 1, 2, 1, 1, 1, 1 },
+                {1, 1, 1, 1, 3, 1, 1, 1, 1 },
                 {1, 0, 0, 0, 0, 0, 0, 0, 1 },
                 {1, 0, 0, 0, 0, 0, 0, 0, 1 },
                 {1, 0, 0, 0, 0, 0, 0, 0, 1 },
-                {2, 0, 0, 0, 0, 0, 0, 0, 2 },
+                {3, 0, 0, 0, 0, 0, 0, 0, 3 },
                 {1, 0, 0, 0, 0, 0, 0, 0, 1 },
                 {1, 0, 0, 0, 0, 0, 0, 0, 1 },
                 {1, 0, 0, 0, 0, 0, 0, 0, 1 },
-                {1, 1, 1, 1, 2, 1, 1, 1, 1 },
+                {1, 2, 2, 2, 2, 2, 2, 2, 1 },
             };
         /// <summary>
         /// 0 = Empty
@@ -65,11 +65,20 @@ namespace RogueLike.Rooms
             {
                 for (int j = 0; j < _map.GetLength(1); j++) // For each column
                 {
-                    if ((int)_map.GetValue(i, j) == 1) // If it's a wall
+                    if ((int)_map.GetValue(j, i) == 1) // If it's a wall
                     {
                         _sprites.Add(new Wall(_textures[0]) // Add wall
                         {
-                            Position = new Vector2(_position.X + i * 60, _position.Y + j * 60),
+                            Position = RandomPosition(i, j, 0),
+                            Layer = 0.1f,
+                        });
+                    }
+
+                    if ((int)_map.GetValue(j, i) == 2) // If it's water
+                    {
+                        _sprites.Add(new Wall(_textures[13]) // Add water
+                        {
+                            Position = RandomPosition(i, j, 0),
                             Layer = 0.1f,
                         });
                     }
@@ -90,7 +99,7 @@ namespace RogueLike.Rooms
                             case 7:
                                 _sprites.Add(new Tree(_textures[1])
                                 {
-                                    Position = RandomPosition(i, j),
+                                    Position = RandomPosition(i, j, 50),
                                     Layer = 0.1f,
                                 });
                                 break; // Tree 20%
@@ -101,7 +110,7 @@ namespace RogueLike.Rooms
                             case 11:
                                 _sprites.Add(new Plant1(_textures[3])
                                 {
-                                    Position = RandomPosition(i, j),
+                                    Position = RandomPosition(i, j, 50),
                                     Layer = 0.1f,
                                 });
                                 break; // Plant1 20%
@@ -112,7 +121,7 @@ namespace RogueLike.Rooms
                             case 15:
                                 _sprites.Add(new Rock1(_textures[6])
                                 {
-                                    Position = RandomPosition(i, j),
+                                    Position = RandomPosition(i, j, 50),
                                     Layer = 0.1f,
                                 });
                                 break; // Rock1 20%
@@ -123,7 +132,7 @@ namespace RogueLike.Rooms
                             case 19:
                                 _sprites.Add(new Plant2(_textures[4])
                                 {
-                                    Position = RandomPosition(i, j),
+                                    Position = RandomPosition(i, j, 50),
                                     Layer = 0.1f,
                                 });
                                 break; // Plant2 20%
@@ -133,9 +142,9 @@ namespace RogueLike.Rooms
                 }
             }
         }
-        public Vector2 RandomPosition(int i, int j)
+        public Vector2 RandomPosition(int i, int j, int maxRandom)
         {
-            return new Vector2(_position.X + i * 60 + random.Next(50), _position.Y + j * 60 + random.Next(50));
+            return new Vector2(_position.X + i * 96 + random.Next(maxRandom), _position.Y + j * 96 + random.Next(maxRandom));
         }
         public override void Update(GameTime gameTime)
         {
