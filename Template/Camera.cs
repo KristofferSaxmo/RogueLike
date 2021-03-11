@@ -26,5 +26,10 @@ namespace RogueLike
 
             Transform = position * offset;
         }
+        public Vector2 GetWorldPosition(Vector2 screenPosition)
+        {
+            Matrix inverseTransform = Matrix.Invert(Transform);
+            return Vector2.Transform(new Vector2(screenPosition.X, screenPosition.Y), inverseTransform);
+        }
     }
 }
