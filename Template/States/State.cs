@@ -18,6 +18,7 @@ namespace RogueLike.States
         }
         public abstract void LoadContent();
         public abstract void Update(GameTime gameTime);
+        public abstract void UpdateCamera(Camera camera);
         public abstract void Draw(GameTime gameTime, SpriteBatch spriteBatch);
 
     }

@@ -60,6 +60,7 @@ namespace RogueLike.States
             foreach (var component in _components)
                 component.Update(gameTime);
         }
+        public override void UpdateCamera(Camera camera) { }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {

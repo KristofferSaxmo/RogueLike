@@ -18,6 +18,8 @@ namespace RogueLike
         private State _currentState;
         private State _nextState;
 
+        private Camera _camera;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -28,6 +30,8 @@ namespace RogueLike
             graphics.PreferredBackBufferWidth = ScreenWidth;
             graphics.PreferredBackBufferHeight = ScreenHeight;
             graphics.ApplyChanges();
+
+            _camera = new Camera();
 
             IsMouseVisible = true;
 
@@ -56,6 +60,8 @@ namespace RogueLike
             }
 
             _currentState.Update(gameTime);
+
+            _currentState.UpdateCamera(_camera);
 
             base.Update(gameTime);
         }

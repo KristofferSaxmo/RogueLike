@@ -16,6 +16,7 @@ namespace RogueLike.States
         private List<Sprite> _sprites;
         private List<Player> _players;
         private bool test = true;
+        private Camera _camera;
 
         public GameState(Game1 game, ContentManager content) : base(game, content)
         {
@@ -63,9 +64,17 @@ namespace RogueLike.States
                 test = false;
             }
         }
+        public override void UpdateCamera(Camera camera)
+        {
+            foreach(Player player in _players)
+            {
+                camera.Follow(player);
+            }
+            _camera = camera;
+        }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin(SpriteSortMode.FrontToBack, null, SamplerState.PointClamp, null, null, null, null);
+            spriteBatch.Begin(SpriteSortMode.FrontToBack, null, SamplerState.PointClamp, null, null, null, _camera.Transform);
 
             foreach (var sprite in _sprites)
             {
