@@ -32,7 +32,6 @@ namespace RogueLike.States
                     Layer = 0.5f,
                     Health = 3,
                     Position = Vector2.Zero,
-                    Scale = 3,
                     Speed = 3,
                     Input = new Models.Input()
                     {

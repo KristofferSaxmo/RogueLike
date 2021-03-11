@@ -10,7 +10,7 @@ namespace RogueLike.Sprites
         #region Fields
         protected Texture2D _texture;
         protected Rectangle _hitbox;
-        protected int _scale;
+        protected int _scale = 3;
         #endregion
 
         #region Properties
@@ -78,7 +78,7 @@ namespace RogueLike.Sprites
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             if (_texture != null)
-                spriteBatch.Draw(_texture, Position, null, Color.White, Rotation, Origin, 1f, SpriteEffects.None, Layer);
+                spriteBatch.Draw(_texture, Rectangle, null, Color.White, Rotation, Origin, SpriteEffects.None, Layer);
         }
 
         #region Collision

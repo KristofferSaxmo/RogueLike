@@ -63,7 +63,7 @@ namespace RogueLike.States
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin(SpriteSortMode.FrontToBack);
+            spriteBatch.Begin(SpriteSortMode.FrontToBack, null, SamplerState.PointClamp, null, null, null, null);
 
             foreach (var component in _components)
                 component.Draw(gameTime, spriteBatch);
