@@ -61,6 +61,7 @@ namespace RogueLike.States
             if (test)
             {
                 _sprites.Add(_roomManager.CreateRoom());
+                test = false;
             }
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)

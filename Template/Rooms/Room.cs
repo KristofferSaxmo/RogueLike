@@ -14,6 +14,8 @@ namespace RogueLike.Rooms
     {
         private List<Sprite> _sprites = new List<Sprite>();
 
+        private Random random = new Random();
+
         private int[,] _map = new int[,]
             {
                 {1, 1, 1, 1, 2, 1, 1, 1, 1 },
@@ -71,8 +73,69 @@ namespace RogueLike.Rooms
                             Layer = 0.1f,
                         });
                     }
+
+                    else if ((int) _map.GetValue(i, j) == 0) // If it's an empty space
+                    {
+                        switch (random.Next(20))
+                        {
+                            case 0:
+                            case 1:
+                            case 2:
+                            case 3:
+                                break; // Empty 20%
+
+                            case 4:
+                            case 5:
+                            case 6:
+                            case 7:
+                                _sprites.Add(new Tree(_textures[1])
+                                {
+                                    Position = RandomPosition(i, j),
+                                    Layer = 0.1f,
+                                });
+                                break; // Tree 20%
+
+                            case 8:
+                            case 9:
+                            case 10:
+                            case 11:
+                                _sprites.Add(new Plant1(_textures[3])
+                                {
+                                    Position = RandomPosition(i, j),
+                                    Layer = 0.1f,
+                                });
+                                break; // Plant1 20%
+
+                            case 12:
+                            case 13:
+                            case 14:
+                            case 15:
+                                _sprites.Add(new Rock1(_textures[6])
+                                {
+                                    Position = RandomPosition(i, j),
+                                    Layer = 0.1f,
+                                });
+                                break; // Rock1 20%
+
+                            case 16:
+                            case 17:
+                            case 18:
+                            case 19:
+                                _sprites.Add(new Plant2(_textures[4])
+                                {
+                                    Position = RandomPosition(i, j),
+                                    Layer = 0.1f,
+                                });
+                                break; // Plant2 20%
+
+                        }
+                    }
                 }
             }
+        }
+        public Vector2 RandomPosition(int i, int j)
+        {
+            return new Vector2(_position.X + i * 60 + random.Next(50), _position.Y + j * 60 + random.Next(50));
         }
         public override void Update(GameTime gameTime)
         {

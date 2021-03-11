@@ -14,7 +14,7 @@ namespace RogueLike.Managers
     {
         private List<Texture2D> _textures;
 
-        private Vector2 _position = new Vector2(500, 500);
+        private Vector2 _position;
 
         public RoomManager(ContentManager content)
         {
@@ -41,6 +41,8 @@ namespace RogueLike.Managers
 
         public Room CreateRoom()
         {
+            _position = new Vector2(500, 500);
+
             return new Room(_textures, _position);
         }
     }
