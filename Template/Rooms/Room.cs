@@ -16,18 +16,9 @@ namespace RogueLike.Rooms
 
         private Random random = new Random();
 
-        private int[,] _map = new int[,]
-            {
-                {1, 1, 1, 1, 3, 1, 1, 1, 1 },
-                {1, 0, 0, 0, 0, 0, 0, 0, 1 },
-                {1, 0, 0, 0, 0, 0, 0, 0, 1 },
-                {1, 0, 0, 0, 0, 0, 0, 0, 1 },
-                {3, 0, 0, 0, 0, 0, 0, 0, 3 },
-                {1, 0, 0, 0, 0, 0, 0, 0, 1 },
-                {1, 0, 0, 0, 0, 0, 0, 0, 1 },
-                {1, 0, 0, 0, 0, 0, 0, 0, 1 },
-                {1, 2, 2, 2, 2, 2, 2, 2, 1 },
-            };
+        private Color Grass = new Color(36, 73, 67);
+
+        private int[,] _map;
         /// <summary>
         /// 0 = Empty
         /// 1 = Wall
@@ -56,16 +47,30 @@ namespace RogueLike.Rooms
         /// _textures[15] - telepad_crystal-sheet
         /// </summary>
 
-        public Room(List<Texture2D> textures, Vector2 position)
+        public Room(List<Texture2D> textures, Vector2 position, Vector2 roomSize)
         {
+            _map = new int[(int)roomSize.X, (int)roomSize.Y];
             _textures = textures;
             _position = position;
 
-            for (int i = 0; i < _map.GetLength(0); i++) // For each row
+            for (int i = 0; i < (int)roomSize.X; i++) // Tile X
             {
-                for (int j = 0; j < _map.GetLength(1); j++) // For each column
+                for (int j = 0; j < (int)roomSize.Y; j++) // Tile Y
                 {
-                    if ((int)_map.GetValue(j, i) == 1) // If it's a wall
+                    if (i == 0 || j == 0 || i == (int)roomSize.X - 1 || j == (int)roomSize.Y - 1)
+                        _map[i, j] = 1;
+                }
+            }
+
+
+
+
+
+            for (int i = 0; i < _map.GetLength(0); i++) // Tile X
+            {
+                for (int j = 0; j < _map.GetLength(1); j++) // Tile Y
+                {
+                    if ((int)_map.GetValue(i, j) == 1) // If it's a wall
                     {
                         _sprites.Add(new Wall(_textures[0]) // Add wall
                         {
@@ -74,7 +79,7 @@ namespace RogueLike.Rooms
                         });
                     }
 
-                    if ((int)_map.GetValue(j, i) == 2) // If it's water
+                    if ((int)_map.GetValue(i, j) == 2) // If it's water
                     {
                         _sprites.Add(new Wall(_textures[13]) // Add water
                         {
