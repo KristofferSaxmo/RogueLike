@@ -25,8 +25,6 @@ namespace RogueLike.Rooms
         /// 2 = Possible Door
         /// </summary>
 
-        private Vector2 _position;
-
         private List<Texture2D> _textures;
         /// <summary>
         /// _textures[0] - tree_wall
@@ -49,9 +47,9 @@ namespace RogueLike.Rooms
 
         public Room(List<Texture2D> textures, Vector2 position, Vector2 roomSize)
         {
-            _map = new int[(int)roomSize.X, (int)roomSize.Y];
             _textures = textures;
-            _position = position;
+            Position = position;
+            _map = new int[(int)roomSize.X, (int)roomSize.Y];
 
             for (int i = 0; i < (int)roomSize.X; i++) // Tile X
             {
@@ -149,7 +147,7 @@ namespace RogueLike.Rooms
         }
         public Vector2 RandomPosition(int i, int j, int maxRandom)
         {
-            return new Vector2(_position.X + i * 96 + random.Next(maxRandom), _position.Y + j * 96 + random.Next(maxRandom));
+            return new Vector2(Position.X + i * 96 + random.Next(maxRandom), Position.Y + j * 96 + random.Next(maxRandom));
         }
         public override void Update(GameTime gameTime)
         {
