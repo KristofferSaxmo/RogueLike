@@ -12,7 +12,7 @@ namespace RogueLike.Managers
 {
     public class RoomManager
     {
-        private List<Texture2D> _textures;
+        private Dictionary<string, Texture2D> _textures;
 
         private Vector2 _position;
 
@@ -20,24 +20,24 @@ namespace RogueLike.Managers
 
         public RoomManager(ContentManager content)
         {
-            _textures = new List<Texture2D>()
+            _textures = new Dictionary<string, Texture2D>()
             {
-                content.Load<Texture2D>("tree_wall"),
-                content.Load<Texture2D>("pine_tree"),
-                content.Load<Texture2D>("stump"),
-                content.Load<Texture2D>("plant1"),
-                content.Load<Texture2D>("plant2"),
-                content.Load<Texture2D>("plant-sheet"),
-                content.Load<Texture2D>("rock1"),
-                content.Load<Texture2D>("rock2"),
-                content.Load<Texture2D>("tree_top1"),
-                content.Load<Texture2D>("tree_top2"),
-                content.Load<Texture2D>("tree_top3"),
-                content.Load<Texture2D>("mud"),
-                content.Load<Texture2D>("mushroom"),
-                content.Load<Texture2D>("water_ledge"),
-                content.Load<Texture2D>("telepad_base-sheet"),
-                content.Load<Texture2D>("telepad_crystal-sheet"),
+                { "Wall", content.Load<Texture2D>("room/tree_wall") },
+                { "Tree", content.Load<Texture2D>("room/pine_tree") },
+                { "Stump", content.Load<Texture2D>("room/stump") },
+                { "Plant1", content.Load<Texture2D>("room/plant1") },
+                { "Plant2", content.Load<Texture2D>("room/plant2") },
+                { "Plant-Sheet", content.Load<Texture2D>("room/plant-sheet") },
+                { "Rock1", content.Load<Texture2D>("room/rock1") },
+                { "Rock2", content.Load<Texture2D>("room/rock2") },
+                { "TreeTop1", content.Load<Texture2D>("room/tree_top1") },
+                { "TreeTop2", content.Load<Texture2D>("room/tree_top2") },
+                { "TreeTop3", content.Load<Texture2D>("room/tree_top3") },
+                { "Mud", content.Load<Texture2D>("room/mud") },
+                { "Mushroom", content.Load<Texture2D>("room/mushroom") },
+                { "WaterEdge", content.Load<Texture2D>("room/water_edge") },
+                { "TelepadBaseSheet", content.Load<Texture2D>("room/telepad_base-sheet") },
+                { "TelepadCrystalSheet", content.Load<Texture2D>("room/telepad_crystal-sheet") }
             };
         }
 

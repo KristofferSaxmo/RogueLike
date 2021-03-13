@@ -18,8 +18,8 @@ namespace RogueLike.States
 
         public override void LoadContent()
         {
-            var buttonTexture = _content.Load<Texture2D>("Button");
-            var buttonFont = _content.Load<SpriteFont>("Font");
+            var buttonTexture = _content.Load<Texture2D>("misc/button");
+            var buttonFont = _content.Load<SpriteFont>("misc/font");
 
             _components = new List<Component>()
             {
