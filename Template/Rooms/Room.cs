@@ -73,7 +73,6 @@ namespace RogueLike.Rooms
                         _sprites.Add(new Wall(_textures[0]) // Add wall
                         {
                             Position = RandomPosition(i, j, 0),
-                            Layer = 0.1f,
                         });
                     }
 
@@ -82,7 +81,6 @@ namespace RogueLike.Rooms
                         _sprites.Add(new Wall(_textures[13]) // Add water
                         {
                             Position = RandomPosition(i, j, 0),
-                            Layer = 0.1f,
                         });
                     }
 
@@ -103,7 +101,6 @@ namespace RogueLike.Rooms
                                 _sprites.Add(new Tree(_textures[1])
                                 {
                                     Position = RandomPosition(i, j, 50),
-                                    Layer = 0.1f,
                                 });
                                 break; // Tree 20%
 
@@ -114,7 +111,6 @@ namespace RogueLike.Rooms
                                 _sprites.Add(new Plant1(_textures[3])
                                 {
                                     Position = RandomPosition(i, j, 50),
-                                    Layer = 0.1f,
                                 });
                                 break; // Plant1 20%
 
@@ -125,7 +121,6 @@ namespace RogueLike.Rooms
                                 _sprites.Add(new Rock1(_textures[6])
                                 {
                                     Position = RandomPosition(i, j, 50),
-                                    Layer = 0.1f,
                                 });
                                 break; // Rock1 20%
 
@@ -136,7 +131,6 @@ namespace RogueLike.Rooms
                                 _sprites.Add(new Plant2(_textures[4])
                                 {
                                     Position = RandomPosition(i, j, 50),
-                                    Layer = 0.1f,
                                 });
                                 break; // Plant2 20%
 

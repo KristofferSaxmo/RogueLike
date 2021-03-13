@@ -23,11 +23,6 @@ namespace RogueLike.States
 
             _components = new List<Component>()
             {
-                new Sprite(null)
-                {
-                    Layer = 0f,
-                    Position = new Vector2(Game1.ScreenWidth / 2, Game1.ScreenHeight / 2),
-                },
                 new Button(buttonTexture, buttonFont)
                 {
                     Text = "Play",

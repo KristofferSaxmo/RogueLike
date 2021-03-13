@@ -17,7 +17,7 @@ namespace RogueLike.Sprites
         public Input Input { get; set; }
         public Player(Texture2D texture) : base(texture)
         {
-
+            LayerOrigin = texture.Height * Scale;
         }
         public void Move()
         {

@@ -30,9 +30,8 @@ namespace RogueLike.States
             {
                 new Player(playerSheet)
                 {
-                    Layer = 0.5f,
                     Health = 3,
-                    Position = new Vector2(900, 600),
+                    Position = new Vector2(900, 200),
                     Speed = 3,
                     Input = new Models.Input()
                     {

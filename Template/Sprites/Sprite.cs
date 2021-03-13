@@ -23,7 +23,17 @@ namespace RogueLike.Sprites
         public float Speed { get; set; }
         public int Health { get; set; }
         public int Damage { get; set; }
-        public float Layer { get; set; }
+        public float LayerOrigin { get; set; }
+        public float Layer
+        {
+            get
+            {
+                if (_texture != null)
+                    return MathHelper.Clamp((100000 + Position.Y + LayerOrigin) / 10000000, 0.0f, 1.0f);
+
+                throw new Exception("Unknown sprite");
+            }
+        }
         public bool IsRemoved { get; set; }
         public int Scale
         {

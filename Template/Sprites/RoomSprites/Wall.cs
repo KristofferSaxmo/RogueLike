@@ -13,7 +13,7 @@ namespace RogueLike.Sprites.RoomSprites
     {
         public Wall(Texture2D texture) : base(texture)
         {
-            
+            LayerOrigin = 58 * Scale;
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
