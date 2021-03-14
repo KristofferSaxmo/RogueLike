@@ -16,7 +16,6 @@ namespace RogueLike.States
         private RoomManager _roomManager;
         private List<Sprite> _sprites;
         private List<Player> _players;
-        private bool test = true;
         private Camera _camera;
 
         public GameState(Game1 game, ContentManager content) : base(game, content)
@@ -51,6 +50,8 @@ namespace RogueLike.States
             _players = _sprites.Where(c => c is Player).Select(c => (Player)c).ToList();
 
             _roomManager = new RoomManager(_content);
+
+            _sprites.Add(_roomManager.CreateRoom()); // Test
         }
         public override void Update(GameTime gameTime)
         {
@@ -62,10 +63,30 @@ namespace RogueLike.States
 
             var collidableSprites = _sprites.Where(c => c is ICollidable);
 
-            if (test)
+            AddChildren();
+
+            RemoveSprites();
+        }
+        public void AddChildren()
+        {
+            for (int i = 0; i < _sprites.Count; i++)
             {
-                _sprites.Add(_roomManager.CreateRoom());
-                test = false;
+                var sprite = _sprites[i];
+                foreach (var child in sprite.Children)
+                    _sprites.Add(child);
+
+                sprite.Children = new List<Sprite>();
+            }
+        }
+        public void RemoveSprites()
+        {
+            for (int i = 0; i < _sprites.Count; i++)
+            {
+                if (_sprites[i].IsRemoved)
+                {
+                    _sprites.RemoveAt(i);
+                    i--;
+                }
             }
         }
         public override void UpdateCamera(Camera camera)

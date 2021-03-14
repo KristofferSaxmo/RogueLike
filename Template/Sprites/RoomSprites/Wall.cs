@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RogueLike.Sprites.RoomSprites
 {
-    public class Wall : Sprite
+    public class Wall : Sprite, ICollidable
     {
         public Wall(Texture2D texture) : base(texture)
         {
@@ -18,6 +18,11 @@ namespace RogueLike.Sprites.RoomSprites
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             base.Draw(gameTime, spriteBatch);
+        }
+
+        public void OnCollide(Sprite sprite)
+        {
+            throw new NotImplementedException();
         }
     }
 }

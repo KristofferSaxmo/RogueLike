@@ -134,7 +134,7 @@ namespace RogueLike.Sprites
         }
         public Sprite()
         {
-
+            Children = new List<Sprite>();
         }
 
         public override void Update(GameTime gameTime)
