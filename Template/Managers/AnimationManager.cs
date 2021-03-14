@@ -77,7 +77,7 @@ namespace RogueLike.Managers
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, Rectangle collisionArea, Rectangle hitbox)
+        public void Draw(SpriteBatch spriteBatch)
         {
             int width = _animation.Texture.Width / _animation.FrameCount;
             int height = _animation.Texture.Height;
@@ -92,9 +92,7 @@ namespace RogueLike.Managers
 
             Rectangle destinationRectangle = new Rectangle(Position.ToPoint(), _animation.Size);
 
-            spriteBatch.Draw(_animation.Texture, destinationRectangle, sourceRectangle, Color.White, Rotation, Vector2.Zero, SpriteEffects.None, Layer);
-            spriteBatch.Draw(_animation.Texture, collisionArea, Color.Yellow);
-            spriteBatch.Draw(_animation.Texture, hitbox, Color.Red);
+            spriteBatch.Draw(_animation.Texture, destinationRectangle, sourceRectangle, Color.White, Rotation, Origin, SpriteEffects.None, Layer);
         }
 
         public object Clone()

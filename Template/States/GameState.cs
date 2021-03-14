@@ -84,9 +84,6 @@ namespace RogueLike.States
                     if (spriteA == spriteB)
                         continue;
 
-                    if (!spriteA.CollisionArea.Intersects(spriteB.CollisionArea))
-                        continue;
-
                     if (spriteA.Intersects(spriteB))
                         ((ICollidable)spriteA).OnCollide(spriteB);
                 }

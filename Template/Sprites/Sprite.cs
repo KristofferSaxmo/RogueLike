@@ -96,14 +96,7 @@ namespace RogueLike.Sprites
         }
         public Rectangle Hitbox
         {
-            get { return _hitbox; }
-        }
-        public Rectangle CollisionArea
-        {
-            get
-            {
-                return new Rectangle(Hitbox.X, Hitbox.Y, MathHelper.Max(Hitbox.Width, Hitbox.Height), MathHelper.Max(Hitbox.Width, Hitbox.Height));
-            }
+            get { return new Rectangle(_hitbox.X - (int)Origin.X * Scale, _hitbox.Y - (int)Origin.Y * Scale, _hitbox.Width, _hitbox.Height); }
         }
         public Sprite Parent;
         #endregion
@@ -145,13 +138,11 @@ namespace RogueLike.Sprites
         {
             if (_texture != null)
             {
-                spriteBatch.Draw(_texture, Rectangle, null, Color.White, Rotation, Vector2.Zero, SpriteEffects.None, Layer);
-                spriteBatch.Draw(_texture, CollisionArea, Color.Yellow);
-                spriteBatch.Draw(_texture, Hitbox, Color.Red);
+                spriteBatch.Draw(_texture, Rectangle, null, Color.White, Rotation, Origin, SpriteEffects.None, Layer);
             }
 
             else if (_animationManager != null)
-                _animationManager.Draw(spriteBatch, CollisionArea, Hitbox);
+                _animationManager.Draw(spriteBatch);
         }
         public object Clone()
         {
