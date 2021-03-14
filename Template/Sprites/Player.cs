@@ -35,7 +35,7 @@ namespace RogueLike.Sprites
             if (_currentKey.IsKeyDown(Input.Left))
                 Velocity = new Vector2(Velocity.X - Speed, Velocity.Y);
 
-            else if (_currentKey.IsKeyDown(Input.Right))
+            if (_currentKey.IsKeyDown(Input.Right))
                 Velocity = new Vector2(Velocity.X + Speed, Velocity.Y);
 
             if (_currentKey.IsKeyDown(Input.Up))
@@ -48,7 +48,7 @@ namespace RogueLike.Sprites
         }
         public void ChangeAnimation()
         {
-                        if (Velocity.X < 0)
+            if (Velocity.X < 0)
             {
                 _animationManager.Play(_animations["WalkLeft"]);
                 isFacingLeft = true;
@@ -97,7 +97,7 @@ namespace RogueLike.Sprites
         }
         public void UpdateHitbox()
         {
-
+            _hitbox = new Rectangle(Rectangle.X + 2 * Scale, Rectangle.Y + 25 * Scale, 7 * Scale, 3 * Scale);
         }
         public void OnCollide(Sprite sprite)
         {

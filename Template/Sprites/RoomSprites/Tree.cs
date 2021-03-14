@@ -21,7 +21,7 @@ namespace RogueLike.Sprites.RoomSprites
         }
         public void UpdateHitbox()
         {
-
+            _hitbox = new Rectangle(Rectangle.X + 9 * Scale, Rectangle.Y + 53 * Scale, 11 * Scale, 7 * Scale);
         }
         public void OnCollide(Sprite sprite)
         {

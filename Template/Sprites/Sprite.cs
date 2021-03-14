@@ -144,10 +144,14 @@ namespace RogueLike.Sprites
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             if (_texture != null)
-                spriteBatch.Draw(_texture, Rectangle, null, Color.White, Rotation, Origin, SpriteEffects.None, Layer);
+            {
+                spriteBatch.Draw(_texture, Rectangle, null, Color.White, Rotation, Vector2.Zero, SpriteEffects.None, Layer);
+                spriteBatch.Draw(_texture, CollisionArea, Color.Yellow);
+                spriteBatch.Draw(_texture, Hitbox, Color.Red);
+            }
 
             else if (_animationManager != null)
-                _animationManager.Draw(spriteBatch);
+                _animationManager.Draw(spriteBatch, CollisionArea, Hitbox);
         }
         public object Clone()
         {
@@ -165,38 +169,45 @@ namespace RogueLike.Sprites
         #region Collision
         public bool Intersects(Sprite sprite)
         {
+            if ((Velocity.X > 0 && IsTouchingLeft(sprite)) ||
+                (Velocity.X < 0 & IsTouchingRight(sprite)))
+                return true;
+
+            if ((Velocity.Y > 0 && IsTouchingTop(sprite)) ||
+                (Velocity.Y < 0 & IsTouchingBottom(sprite)))
+                return true;
             return false;
         }
         protected bool IsTouchingLeft(Sprite sprite)
         {
-            return this.Hitbox.Right + this.Velocity.X > sprite.Hitbox.Left &&
-              this.Hitbox.Left < sprite.Hitbox.Left &&
-              this.Hitbox.Bottom > sprite.Hitbox.Top &&
-              this.Hitbox.Top < sprite.Hitbox.Bottom;
+            return Hitbox.Right + Velocity.X > sprite.Hitbox.Left &&
+              Hitbox.Left < sprite.Hitbox.Left &&
+              Hitbox.Bottom > sprite.Hitbox.Top &&
+              Hitbox.Top < sprite.Hitbox.Bottom;
         }
 
         protected bool IsTouchingRight(Sprite sprite)
         {
-            return this.Hitbox.Left + this.Velocity.X < sprite.Hitbox.Right &&
-              this.Hitbox.Right > sprite.Hitbox.Right &&
-              this.Hitbox.Bottom > sprite.Hitbox.Top &&
-              this.Hitbox.Top < sprite.Hitbox.Bottom;
+            return Hitbox.Left + Velocity.X < sprite.Hitbox.Right &&
+              Hitbox.Right > sprite.Hitbox.Right &&
+              Hitbox.Bottom > sprite.Hitbox.Top &&
+              Hitbox.Top < sprite.Hitbox.Bottom;
         }
 
         protected bool IsTouchingTop(Sprite sprite)
         {
-            return this.Hitbox.Bottom + this.Velocity.Y > sprite.Hitbox.Top &&
-              this.Hitbox.Top < sprite.Hitbox.Top &&
-              this.Hitbox.Right > sprite.Hitbox.Left &&
-              this.Hitbox.Left < sprite.Hitbox.Right;
+            return Hitbox.Bottom + Velocity.Y > sprite.Hitbox.Top &&
+              Hitbox.Top < sprite.Hitbox.Top &&
+              Hitbox.Right > sprite.Hitbox.Left &&
+              Hitbox.Left < sprite.Hitbox.Right;
         }
 
         protected bool IsTouchingBottom(Sprite sprite)
         {
-            return this.Hitbox.Top + this.Velocity.Y < sprite.Hitbox.Bottom &&
-              this.Hitbox.Bottom > sprite.Hitbox.Bottom &&
-              this.Hitbox.Right > sprite.Hitbox.Left &&
-              this.Hitbox.Left < sprite.Hitbox.Right;
+            return Hitbox.Top + Velocity.Y < sprite.Hitbox.Bottom &&
+              Hitbox.Bottom > sprite.Hitbox.Bottom &&
+              Hitbox.Right > sprite.Hitbox.Left &&
+              Hitbox.Left < sprite.Hitbox.Right;
         }
         #endregion
         #endregion
