@@ -24,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE;WINDOWS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -41,12 +42,13 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Animation.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Component.cs" />
     <Compile Include="Controls\Button.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="Managers\AnimationManager.cs" />
     <Compile Include="Managers\RoomManager.cs" />
+    <Compile Include="Models\Animation.cs" />
     <Compile Include="Models\Input.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

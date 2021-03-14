@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using RogueLike.Managers;
+using RogueLike.Models;
 using RogueLike.Sprites;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,16 +25,20 @@ namespace RogueLike.States
         }
         public override void LoadContent()
         {
-            Texture2D playerSheet = _content.Load<Texture2D>("playerSheet");
-
             _sprites = new List<Sprite>()
             {
-                new Player(playerSheet)
+                new Player(new Dictionary<string, Animation>()
+                {
+                    { "WalkLeft", new Animation(_content.Load<Texture2D>("player/player_walk_left"), 4) },
+                    { "WalkRight", new Animation(_content.Load<Texture2D>("player/player_walk_right"), 4) },
+                    { "IdleLeft", new Animation(_content.Load<Texture2D>("player/player_idle_left"), 1) },
+                    { "IdleRight", new Animation(_content.Load<Texture2D>("player/player_idle_right"), 1) }
+                })
                 {
                     Health = 3,
                     Position = new Vector2(900, 200),
                     Speed = 3,
-                    Input = new Models.Input()
+                    Input = new Input()
                     {
                         Left = Keys.A,
                         Right = Keys.D,

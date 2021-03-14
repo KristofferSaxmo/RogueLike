@@ -1,7 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using RogueLike.Managers;
 using RogueLike.Models;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace RogueLike.Sprites
 {
@@ -10,14 +13,17 @@ namespace RogueLike.Sprites
         private KeyboardState _currentKey;
 
         private KeyboardState _previousKey;
+
+        private bool isFacingLeft = true;
+
         public bool IsDead
         {
             get { return Health <= 0; }
         }
         public Input Input { get; set; }
-        public Player(Texture2D texture) : base(texture)
+        public Player(Dictionary<string, Animation> animations) : base(animations)
         {
-            LayerOrigin = texture.Height * Scale;
+            LayerOrigin = 28;
         }
         public void Move()
         {
@@ -37,6 +43,32 @@ namespace RogueLike.Sprites
 
             Position += Velocity;
         }
+        public void ChangeAnimation()
+        {
+                        if (Velocity.X < 0)
+            {
+                _animationManager.Play(_animations["WalkLeft"]);
+                isFacingLeft = true;
+            }
+
+            else if (Velocity.X > 0)
+            {
+                _animationManager.Play(_animations["WalkRight"]);
+                isFacingLeft = false;
+            }
+
+            else if (Velocity.Y != 0 && isFacingLeft)
+                _animationManager.Play(_animations["WalkLeft"]);
+
+            else if (Velocity.Y != 0 && !isFacingLeft)
+                _animationManager.Play(_animations["WalkRight"]);
+
+            else if (isFacingLeft)
+                _animationManager.Play(_animations["IdleLeft"]);
+
+            else if (!isFacingLeft)
+                _animationManager.Play(_animations["IdleRight"]);
+        }
         public override void Update(GameTime gameTime)
         {
             if (IsDead)
@@ -46,6 +78,10 @@ namespace RogueLike.Sprites
             _currentKey = Keyboard.GetState();
 
             Move();
+
+            ChangeAnimation();
+
+            _animationManager.Update(gameTime, Layer);
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
