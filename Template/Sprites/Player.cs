@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using RogueLike.Managers;
 using RogueLike.Models;
+using RogueLike.Rooms;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,6 +14,8 @@ namespace RogueLike.Sprites
         private KeyboardState _currentKey;
 
         private KeyboardState _previousKey;
+
+        private Vector2 _previousPosition;
 
         private bool isFacingLeft = true;
 
@@ -77,6 +80,8 @@ namespace RogueLike.Sprites
             _previousKey = _currentKey;
             _currentKey = Keyboard.GetState();
 
+            _previousPosition = Position;
+
             Move();
 
             ChangeAnimation();
@@ -90,10 +95,17 @@ namespace RogueLike.Sprites
 
             base.Draw(gameTime, spriteBatch);
         }
+        public void UpdateHitbox()
+        {
+
+        }
         public void OnCollide(Sprite sprite)
         {
             if (IsDead)
                 return;
+
+            if (sprite.Parent is Room)
+                Position = _previousPosition;
         }
     }
 }

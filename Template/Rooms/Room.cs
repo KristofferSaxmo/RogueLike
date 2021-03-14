@@ -53,6 +53,7 @@ namespace RogueLike.Rooms
                         Children.Add(new Wall(_textures["Wall"]) // Add wall
                         {
                             Position = RandomPosition(i, j, 0),
+                            Parent = this
                         });
                     }
 
@@ -61,6 +62,7 @@ namespace RogueLike.Rooms
                         Children.Add(new Wall(_textures["WaterEdge"]) // Add water
                         {
                             Position = RandomPosition(i, j, 0),
+                            Parent = this
                         });
                     }
 
@@ -81,6 +83,7 @@ namespace RogueLike.Rooms
                                 Children.Add(new Tree(_textures["Tree"])
                                 {
                                     Position = RandomPosition(i, j, 50),
+                                    Parent = this
                                 });
                                 break; // Tree 20%
 
@@ -91,6 +94,7 @@ namespace RogueLike.Rooms
                                 Children.Add(new Plant1(_textures["Plant1"])
                                 {
                                     Position = RandomPosition(i, j, 50),
+                                    Parent = this
                                 });
                                 break; // Plant1 20%
 
@@ -101,6 +105,7 @@ namespace RogueLike.Rooms
                                 Children.Add(new Rock1(_textures["Rock1"])
                                 {
                                     Position = RandomPosition(i, j, 50),
+                                    Parent = this
                                 });
                                 break; // Rock1 20%
 
@@ -111,6 +116,7 @@ namespace RogueLike.Rooms
                                 Children.Add(new Plant2(_textures["Plant2"])
                                 {
                                     Position = RandomPosition(i, j, 50),
+                                    Parent = this
                                 });
                                 break; // Plant2 20%
 

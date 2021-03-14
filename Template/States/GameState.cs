@@ -61,11 +61,36 @@ namespace RogueLike.States
             foreach (var sprite in _sprites)
                 sprite.Update(gameTime);
 
-            var collidableSprites = _sprites.Where(c => c is ICollidable);
+            DetectCollisions();
 
             AddChildren();
 
             RemoveSprites();
+        }
+        public void DetectCollisions()
+        {
+            var collidableSprites = _sprites.Where(c => c is ICollidable);
+
+            foreach (var sprite in collidableSprites)
+            {
+                ((ICollidable)sprite).UpdateHitbox();
+            }
+
+            foreach (var spriteA in collidableSprites)
+            {
+                foreach (var spriteB in collidableSprites)
+                {
+                    // Don't do anything if they're the same sprite!
+                    if (spriteA == spriteB)
+                        continue;
+
+                    if (!spriteA.CollisionArea.Intersects(spriteB.CollisionArea))
+                        continue;
+
+                    if (spriteA.Intersects(spriteB))
+                        ((ICollidable)spriteA).OnCollide(spriteB);
+                }
+            }
         }
         public void AddChildren()
         {

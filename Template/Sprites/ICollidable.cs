@@ -2,6 +2,7 @@
 {
     public interface ICollidable
     {
+        void UpdateHitbox();
         void OnCollide(Sprite sprite);
     }
 }
