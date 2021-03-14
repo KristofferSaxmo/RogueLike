@@ -16,7 +16,7 @@ namespace RogueLike.States
         {
         }
 
-        public override void LoadContent()
+        public override void LoadContent(Texture2D defaultTex)
         {
             var buttonTexture = _content.Load<Texture2D>("misc/button");
             var buttonFont = _content.Load<SpriteFont>("misc/font");

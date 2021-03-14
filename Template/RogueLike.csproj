@@ -64,6 +64,7 @@
     <Compile Include="Sprites\RoomSprites\PlantAnimation.cs" />
     <Compile Include="Sprites\RoomSprites\Rock1.cs" />
     <Compile Include="Sprites\RoomSprites\Rock2.cs" />
+    <Compile Include="Sprites\RoomSprites\WaterEdge.cs" />
     <Compile Include="Sprites\Sprite.cs" />
     <Compile Include="Sprites\RoomSprites\Wall.cs" />
     <Compile Include="States\GameState.cs" />

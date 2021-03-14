@@ -16,7 +16,7 @@ namespace RogueLike.States
 
             _content = content;
         }
-        public abstract void LoadContent();
+        public abstract void LoadContent(Texture2D defaultTex);
         public abstract void Update(GameTime gameTime);
         public abstract void UpdateCamera(Camera camera);
         public abstract void Draw(GameTime gameTime, SpriteBatch spriteBatch);

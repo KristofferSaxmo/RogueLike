@@ -18,6 +18,8 @@ namespace RogueLike
         private State _currentState;
         private State _nextState;
 
+        private Texture2D _defaultTex;
+
         private Camera _camera;
 
         public Game1()
@@ -41,8 +43,11 @@ namespace RogueLike
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            _defaultTex = new Texture2D(GraphicsDevice, 1, 1);
+            _defaultTex.SetData(new Color[1] { Color.White });
+
             _currentState = new MenuState(this, Content);
-            _currentState.LoadContent();
+            _currentState.LoadContent(_defaultTex);
             _nextState = null;
         }
         protected override void UnloadContent()
@@ -54,7 +59,7 @@ namespace RogueLike
             if (_nextState != null)
             {
                 _currentState = _nextState;
-                _currentState.LoadContent();
+                _currentState.LoadContent(_defaultTex);
 
                 _nextState = null;
             }
@@ -71,7 +76,7 @@ namespace RogueLike
         }
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(new Color(36, 73, 67));
+            GraphicsDevice.Clear(Color.Black);
 
             _currentState.Draw(gameTime, spriteBatch);
 

@@ -302,7 +302,7 @@
 /processorParam:TextureFormat=Color
 /build:room/tree_top3.png
 
-#begin room/tree_wall.png
+#begin room/tree_wall_left.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -312,7 +312,19 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:room/tree_wall.png
+/build:room/tree_wall_left.png
+
+#begin room/tree_wall_right.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:room/tree_wall_right.png
 
 #begin room/water_edge.png
 /importer:TextureImporter

@@ -17,13 +17,15 @@ namespace RogueLike.States
         private List<Sprite> _sprites;
         private List<Player> _players;
         private Camera _camera;
+        private Texture2D defaultTex;
 
         public GameState(Game1 game, ContentManager content) : base(game, content)
         {
 
         }
-        public override void LoadContent()
+        public override void LoadContent(Texture2D defaultTex)
         {
+
             _sprites = new List<Sprite>()
             {
                 new Player(new Dictionary<string, Animation>()
@@ -35,7 +37,7 @@ namespace RogueLike.States
                 })
                 {
                     Health = 3,
-                    Position = new Vector2(900, 200),
+                    Position = new Vector2(1100, 200),
                     Speed = 3,
                     Input = new Input()
                     {
@@ -51,7 +53,7 @@ namespace RogueLike.States
 
             _roomManager = new RoomManager(_content);
 
-            _sprites.Add(_roomManager.CreateRoom()); // Test
+            _sprites.Add(_roomManager.CreateRoom(defaultTex)); // Test
         }
         public override void Update(GameTime gameTime)
         {
@@ -83,6 +85,12 @@ namespace RogueLike.States
                     // Don't do anything if they're the same sprite!
                     if (spriteA == spriteB)
                         continue;
+
+                    if (spriteA.Parent == spriteB.Parent)
+                        continue;
+
+                    if (spriteA.Layer == spriteB.Layer)
+                        spriteA.Position = new Vector2(spriteA.Position.X, spriteA.Position.Y);
 
                     if (spriteA.Intersects(spriteB))
                         ((ICollidable)spriteA).OnCollide(spriteB);

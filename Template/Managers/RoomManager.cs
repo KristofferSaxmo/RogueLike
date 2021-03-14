@@ -22,7 +22,8 @@ namespace RogueLike.Managers
         {
             _textures = new Dictionary<string, Texture2D>()
             {
-                { "Wall", content.Load<Texture2D>("room/tree_wall") },
+                { "LeftWall", content.Load<Texture2D>("room/tree_wall_left") },
+                { "RightWall", content.Load<Texture2D>("room/tree_wall_right") },
                 { "Tree", content.Load<Texture2D>("room/pine_tree") },
                 { "Stump", content.Load<Texture2D>("room/stump") },
                 { "Plant1", content.Load<Texture2D>("room/plant1") },
@@ -41,13 +42,13 @@ namespace RogueLike.Managers
             };
         }
 
-        public Room CreateRoom()
+        public Room CreateRoom(Texture2D defaultTex)
         {
             _position = new Vector2(200, -300);
 
             _roomSize = new Vector2(20, 20);
 
-            return new Room(_textures, _position, _roomSize);
+            return new Room(_textures, defaultTex, _position, _roomSize, 96);
         }
     }
 }
