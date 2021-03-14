@@ -69,23 +69,20 @@ namespace RogueLike.Rooms
                                 Parent = this
                             });
                         }
-                        if (y == 0 && x != roomSize.X - 1)
+                        if (y == 0)
                         {
-                            Children.Add(new Wall(_textures["RightWall"])
-                            {
-                                Position = new Vector2(RandomXPos(x, 0, 32), RandomYPos(y - 1, 20, 100)),
-                                Parent = this
-                            });
-                            Children.Add(new Wall(_textures["RightWall"])
-                            {
-                                Position = new Vector2(RandomXPos(x, 32, 64), RandomYPos(y - 1, 20, 100)),
-                                Parent = this
-                            });
-                            Children.Add(new Wall(_textures["RightWall"])
-                            {
-                                Position = new Vector2(RandomXPos(x, 64, 92), RandomYPos(y - 1, 20, 100)),
-                                Parent = this
-                            });
+                            if (x < roomSize.X / 2)
+                                Children.Add(new Wall(_textures["LeftWall"])
+                                {
+                                    Position = new Vector2(RandomXPos(x, 0, 0), RandomYPos(y - 1, 50, 50)),
+                                    Parent = this
+                                });
+                            else
+                                Children.Add(new Wall(_textures["RightWall"])
+                                {
+                                    Position = new Vector2(RandomXPos(x, 0, 0), RandomYPos(y - 1, 50, 50)),
+                                    Parent = this
+                                });
                         }
                         else if (y == roomSize.X - 1)
                         {
