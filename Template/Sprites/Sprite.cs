@@ -163,6 +163,10 @@ namespace RogueLike.Sprites
         }
 
         #region Collision
+        public bool Intersects(Sprite sprite)
+        {
+            return false;
+        }
         protected bool IsTouchingLeft(Sprite sprite)
         {
             return this.Hitbox.Right + this.Velocity.X > sprite.Hitbox.Left &&
