@@ -162,11 +162,18 @@ namespace RogueLike.Sprites
         {
             if ((Velocity.X > 0 && IsTouchingLeft(sprite)) ||
                 (Velocity.X < 0 & IsTouchingRight(sprite)))
+            {
+                Velocity = new Vector2(0, Velocity.Y);
                 return true;
+            }
 
             if ((Velocity.Y > 0 && IsTouchingTop(sprite)) ||
                 (Velocity.Y < 0 & IsTouchingBottom(sprite)))
+            {
+                Velocity = new Vector2(Velocity.X, 0);
                 return true;
+            }
+
             return false;
         }
         protected bool IsTouchingLeft(Sprite sprite)

@@ -43,8 +43,6 @@ namespace RogueLike.Sprites
 
             if (_currentKey.IsKeyDown(Input.Down))
                 Velocity = new Vector2(Velocity.X, Velocity.Y + Speed);
-
-            Position += Velocity;
         }
         public void ChangeAnimation()
         {

@@ -87,6 +87,7 @@ namespace RogueLike.States
                     if (spriteA.Intersects(spriteB))
                         ((ICollidable)spriteA).OnCollide(spriteB);
                 }
+                spriteA.Position += spriteA.Velocity;
             }
         }
         public void AddChildren()
