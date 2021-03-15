@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using RogueLike.Models;
 using RogueLike.Sprites;
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,13 @@ namespace RogueLike.Sprites.RoomSprites
 {
     public class PlantAnimation : Sprite
     {
-        public PlantAnimation(Texture2D texture) : base(texture)
+        public PlantAnimation(Dictionary<string, Animation> animations) : base(animations)
         {
-            
+            LayerOrigin = -10;
+        }
+        public override void Update(GameTime gameTime)
+        {
+            _animationManager.Update(gameTime, Layer);
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {

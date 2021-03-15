@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace RogueLike.Sprites.RoomSprites
 {
-    public class Plant2 : Sprite
+    public class DefaultSprite : Sprite
     {
-        public Plant2(Texture2D texture) : base(texture)
+        public DefaultSprite(Texture2D texture) : base(texture)
         {
-            
+            LayerOrigin = -1000;
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {

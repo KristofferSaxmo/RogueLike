@@ -13,7 +13,7 @@ namespace RogueLike.Sprites.RoomSprites
     {
         public Plant1(Texture2D texture) : base(texture)
         {
-            LayerOrigin = -10;
+            LayerOrigin = -1000;
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {

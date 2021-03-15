@@ -24,6 +24,8 @@ namespace RogueLike.Managers
             {
                 { "LeftWall", content.Load<Texture2D>("room/tree_wall_left") },
                 { "RightWall", content.Load<Texture2D>("room/tree_wall_right") },
+                { "LeftWallBlack", content.Load<Texture2D>("room/tree_wall_left_black") },
+                { "RightWallBlack", content.Load<Texture2D>("room/tree_wall_right_black") },
                 { "Tree", content.Load<Texture2D>("room/pine_tree") },
                 { "Stump", content.Load<Texture2D>("room/stump") },
                 { "Plant1", content.Load<Texture2D>("room/plant1") },
@@ -46,7 +48,7 @@ namespace RogueLike.Managers
         {
             _position = new Vector2(200, -300);
 
-            _roomSize = new Vector2(20, 20);
+            _roomSize = new Vector2(30, 30);
 
             return new Room(_textures, defaultTex, _position, _roomSize, 96);
         }

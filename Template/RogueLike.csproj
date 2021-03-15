@@ -60,11 +60,11 @@
     <Compile Include="Sprites\RoomSprites\TelepadBase.cs" />
     <Compile Include="Sprites\RoomSprites\Tree.cs" />
     <Compile Include="Sprites\RoomSprites\Plant1.cs" />
-    <Compile Include="Sprites\RoomSprites\Plant2.cs" />
+    <Compile Include="Sprites\DefaultSprite.cs" />
     <Compile Include="Sprites\RoomSprites\PlantAnimation.cs" />
     <Compile Include="Sprites\RoomSprites\Rock1.cs" />
-    <Compile Include="Sprites\RoomSprites\Rock2.cs" />
     <Compile Include="Sprites\RoomSprites\WaterEdge.cs" />
+    <Compile Include="Sprites\Shadow.cs" />
     <Compile Include="Sprites\Sprite.cs" />
     <Compile Include="Sprites\RoomSprites\Wall.cs" />
     <Compile Include="States\GameState.cs" />

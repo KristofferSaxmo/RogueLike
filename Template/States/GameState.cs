@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using RogueLike.Managers;
 using RogueLike.Models;
 using RogueLike.Sprites;
+using RogueLike.Sprites.RoomSprites;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,7 +18,6 @@ namespace RogueLike.States
         private List<Sprite> _sprites;
         private List<Player> _players;
         private Camera _camera;
-        private Texture2D defaultTex;
 
         public GameState(Game1 game, ContentManager content) : base(game, content)
         {
@@ -25,20 +25,21 @@ namespace RogueLike.States
         }
         public override void LoadContent(Texture2D defaultTex)
         {
+            _roomManager = new RoomManager(_content);
 
             _sprites = new List<Sprite>()
             {
                 new Player(new Dictionary<string, Animation>()
                 {
-                    { "WalkLeft", new Animation(_content.Load<Texture2D>("player/player_walk_left"), 4) },
-                    { "WalkRight", new Animation(_content.Load<Texture2D>("player/player_walk_right"), 4) },
-                    { "IdleLeft", new Animation(_content.Load<Texture2D>("player/player_idle_left"), 1) },
-                    { "IdleRight", new Animation(_content.Load<Texture2D>("player/player_idle_right"), 1) }
+                    { "WalkLeft", new Animation(_content.Load<Texture2D>("player/player_walk_left"), 4, 0.2f) },
+                    { "WalkRight", new Animation(_content.Load<Texture2D>("player/player_walk_right"), 4, 0.2f) },
+                    { "IdleLeft", new Animation(_content.Load<Texture2D>("player/player_idle_left"), 1, 0.2f) },
+                    { "IdleRight", new Animation(_content.Load<Texture2D>("player/player_idle_right"), 1, 0.2f) }
                 })
                 {
                     Health = 3,
-                    Position = new Vector2(1100, 200),
-                    Speed = 3,
+                    Position = new Vector2(1100, 1100),
+                    Speed = 10,
                     Input = new Input()
                     {
                         Left = Keys.A,
@@ -47,11 +48,9 @@ namespace RogueLike.States
                         Down = Keys.S,
                     },
                 },
-            };
+        };
 
             _players = _sprites.Where(c => c is Player).Select(c => (Player)c).ToList();
-
-            _roomManager = new RoomManager(_content);
 
             _sprites.Add(_roomManager.CreateRoom(defaultTex)); // Test
         }

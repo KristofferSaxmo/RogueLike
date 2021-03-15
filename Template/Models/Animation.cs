@@ -26,7 +26,7 @@ namespace RogueLike.Models
         
         public Point Size { get; set; }
 
-        public Animation(Texture2D texture, int frameCount)
+        public Animation(Texture2D texture, int frameCount, float frameSpeed)
         {
             Texture = texture;
 
@@ -34,7 +34,7 @@ namespace RogueLike.Models
 
             IsLooping = true;
 
-            FrameSpeed = 0.2f;
+            FrameSpeed = frameSpeed;
         }
 
         public object Clone()

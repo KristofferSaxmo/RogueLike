@@ -4,12 +4,13 @@ using Microsoft.Xna.Framework.Input;
 using RogueLike.Managers;
 using RogueLike.Models;
 using RogueLike.Rooms;
+using RogueLike.Sprites.Shadows;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace RogueLike.Sprites
 {
-    class Player : Sprite, ICollidable
+    public class Player : Sprite, ICollidable
     {
         private KeyboardState _currentKey;
 
