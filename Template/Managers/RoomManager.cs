@@ -18,6 +18,8 @@ namespace RogueLike.Managers
 
         private Vector2 _roomSize;
 
+        private bool _currentRoom;
+
         public RoomManager(ContentManager content)
         {
             _textures = new Dictionary<string, Texture2D>()

@@ -29,6 +29,7 @@ namespace RogueLike.States
 
             _sprites = new List<Sprite>()
             {
+                _roomManager.CreateRoom(defaultTex),
                 new Player(new Dictionary<string, Animation>()
                 {
                     { "WalkLeft", new Animation(_content.Load<Texture2D>("player/player_walk_left"), 4, 0.2f) },
@@ -48,11 +49,8 @@ namespace RogueLike.States
                         Down = Keys.S,
                     },
                 },
-        };
-
+            };
             _players = _sprites.Where(c => c is Player).Select(c => (Player)c).ToList();
-
-            _sprites.Add(_roomManager.CreateRoom(defaultTex)); // Test
         }
         public override void Update(GameTime gameTime)
         {

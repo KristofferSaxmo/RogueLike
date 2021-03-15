@@ -290,7 +290,7 @@ namespace RogueLike.Rooms
                 {
                     for (int y = -10; y < (int)roomSize.Y + 10; y++) // Tile Y
                     {
-                        if (((x < 0 || x > (int)roomSize.X - 1) && y < (int)roomSize.Y - 1) ||
+                        if (((x < 0 || x > (int)roomSize.X - 1) && y < (int)roomSize.Y - 2) ||
                             (x >= 0 && x < (int)roomSize.X) && y < -1)
                         {
                             if (_random.Next(100) <= 50)
@@ -329,7 +329,7 @@ namespace RogueLike.Rooms
                         if (x < 0 || x > (int)roomSize.X - 1 ||
                         y < -1 || y > (int)roomSize.Y - 1)
                         {
-                            if (_random.Next(100) <= 100)
+                            if (_random.Next(100) <= 50)
                             {
                                 int random = _random.Next(3);
 
