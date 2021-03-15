@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Input;
 using RogueLike.Managers;
 using RogueLike.Models;
 using RogueLike.Rooms;
-using RogueLike.Sprites.Shadows;
 using System.Collections.Generic;
 using System.Linq;
 

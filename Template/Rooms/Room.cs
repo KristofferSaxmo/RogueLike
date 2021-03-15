@@ -192,28 +192,32 @@ namespace RogueLike.Rooms
                         {
                             if (x < roomSize.X / 2)
                             {
-                                Children.Add(new Wall(_textures["LeftWallBlack"])
+                                Children.Add(new Wall(_textures["LeftWall"])
                                 {
                                     Position = new Vector2(RandomXPos(x, 0, 0), RandomYPos(y, 48, 48)),
-                                    Parent = this
+                                    Parent = this,
+                                    Color = Color.Black
                                 });
-                                Children.Add(new Wall(_textures["LeftWallBlack"])
+                                Children.Add(new Wall(_textures["LeftWall"])
                                 {
                                     Position = new Vector2(RandomXPos(x, 48, 48), RandomYPos(y, 18, 18)),
-                                    Parent = this
+                                    Parent = this,
+                                    Color = Color.Black
                                 });
                             }
                             else
                             {
-                                Children.Add(new Wall(_textures["RightWallBlack"])
+                                Children.Add(new Wall(_textures["RightWall"])
                                 {
                                     Position = new Vector2(RandomXPos(x, 0, 0), RandomYPos(y, 48, 48)),
-                                    Parent = this
+                                    Parent = this,
+                                    Color = Color.Black
                                 });
-                                Children.Add(new Wall(_textures["RightWallBlack"])
+                                Children.Add(new Wall(_textures["RightWall"])
                                 {
                                     Position = new Vector2(RandomXPos(x, 48, 48), RandomYPos(y, 18, 18)),
-                                    Parent = this
+                                    Parent = this,
+                                    Color = Color.Black
                                 });
                             }
                         }
@@ -224,7 +228,7 @@ namespace RogueLike.Rooms
                     else if (_map[x, y] == 0)
                     {
                         if (_random.Next(100) <= 30) // 30%
-                            Children.Add(new Tree(_textures["Tree"])
+                            Children.Add(new Tree(_textures["Tree"], _textures["TreeShadow"])
                             {
                                 Position = RandomPosition(x, y, 50),
                                 Parent = this
@@ -252,7 +256,7 @@ namespace RogueLike.Rooms
                             });
 
                         if (_random.Next(100) <= 10) // 10%
-                            Children.Add(new Rock1(_textures["Rock1"])
+                            Children.Add(new Rock1(_textures["Rock1"], _textures["Rock1Shadow"])
                             {
                                 Position = RandomPosition(x, y, 50),
                                 Parent = this

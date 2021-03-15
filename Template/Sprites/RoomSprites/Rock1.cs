@@ -11,7 +11,7 @@ namespace RogueLike.Sprites.RoomSprites
 {
     public class Rock1 : Sprite
     {
-        public Rock1(Texture2D texture) : base(texture)
+        public Rock1(Texture2D texture, Texture2D shadowTexture) : base(texture, shadowTexture)
         {
             LayerOrigin = -15;
         }

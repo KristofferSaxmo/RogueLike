@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RogueLike.Sprites.Shadows
+namespace RogueLike.Sprites
 {
     public class Shadow : Sprite
     {
@@ -14,9 +14,9 @@ namespace RogueLike.Sprites.Shadows
         {
             LayerOrigin = -1001;
         }
-        public void Follow(Vector2 position)
+        public override void Update(GameTime gameTime)
         {
-            Position = position;
+            Position = Parent.Position;
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {

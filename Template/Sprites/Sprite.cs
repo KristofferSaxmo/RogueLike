@@ -13,6 +13,7 @@ namespace RogueLike.Sprites
         #region Fields
         protected Dictionary<string, Animation> _animations;
         protected AnimationManager _animationManager;
+        protected Shadow _shadow;
         protected Texture2D _texture;
         protected Rectangle _hitbox;
         protected int _scale = 3;
@@ -59,6 +60,7 @@ namespace RogueLike.Sprites
         }
         public Vector2 Direction { get; set; }
         public float Speed { get; set; }
+        public float Transparency { get; set; }
         public int Health { get; set; }
         public int Damage { get; set; }
         public float LayerOrigin { get; set; }
@@ -69,6 +71,7 @@ namespace RogueLike.Sprites
                 return MathHelper.Clamp((10000 + Position.Y + LayerOrigin) / 1000000, 0.0f, 1.0f);
             }
         }
+        public Color Color { get; set; }
         public bool IsRemoved { get; set; }
         public int Scale
         {
@@ -108,6 +111,24 @@ namespace RogueLike.Sprites
 
             Children = new List<Sprite>();
 
+            Color = Color.White;
+
+            if (texture != null)
+                Origin = new Vector2(_texture.Width / 2, _texture.Height / 2);
+        }
+        public Sprite(Texture2D texture, Texture2D shadowTexture)
+        {
+            _texture = texture;
+
+            Children = new List<Sprite>();
+
+            Children.Add(_shadow = new Shadow(shadowTexture)
+            {
+                Parent = this
+            });
+
+            Color = Color.White;
+
             if (texture != null)
                 Origin = new Vector2(_texture.Width / 2, _texture.Height / 2);
         }
@@ -122,6 +143,8 @@ namespace RogueLike.Sprites
             var animation = _animations.FirstOrDefault().Value;
 
             _animationManager = new AnimationManager(animation, Scale);
+
+            Color = Color.White;
 
             Origin = new Vector2(animation.FrameWidth / 2, animation.FrameHeight / 2);
         }
@@ -138,7 +161,7 @@ namespace RogueLike.Sprites
         {
             if (_texture != null)
             {
-                spriteBatch.Draw(_texture, Rectangle, null, Color.White, Rotation, Origin, SpriteEffects.None, Layer);
+                spriteBatch.Draw(_texture, Rectangle, null, Color, Rotation, Origin, SpriteEffects.None, Layer);
             }
 
             else if (_animationManager != null)

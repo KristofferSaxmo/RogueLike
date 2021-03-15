@@ -11,7 +11,7 @@ namespace RogueLike.Sprites.RoomSprites
 {
     public class Tree : Sprite, ICollidable
     {
-        public Tree(Texture2D texture) : base(texture)
+        public Tree(Texture2D texture, Texture2D shadowTexture) : base(texture, shadowTexture)
         {
             LayerOrigin = 57;
         }
