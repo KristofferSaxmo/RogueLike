@@ -227,56 +227,56 @@ namespace RogueLike.Rooms
                     #region Create Other
                     else if (_map[x, y] == 0)
                     {
-                        if (_random.Next(100) <= 30) // 30%
+                        if (_random.Next(100) < 30) // 30%
                             Children.Add(new Tree(_textures["Tree"], _textures["TreeShadow"])
                             {
                                 Position = RandomPosition(x, y, 50),
                                 Parent = this
                             });
 
-                        if (_random.Next(100) <= 10) // 10%
+                        if (_random.Next(100) < 10) // 10%
                             Children.Add(new Plant1(_textures["Plant1"])
                             {
                                 Position = RandomPosition(x, y, 50),
                                 Parent = this
                             });
 
-                        if (_random.Next(100) <= 10) // 10%
+                        if (_random.Next(100) < 30) // 30%
                             Children.Add(new DefaultSprite(_textures["Plant2"])
                             {
                                 Position = RandomPosition(x, y, 50),
                                 Parent = this
                             });
 
-                        if (_random.Next(100) <= 2) // 2%
+                        if (_random.Next(100) < 2) // 2%
                             Children.Add(new PlantAnimation(new Dictionary<string, Animation>() { { "Animation", new Animation(_textures["Plant-Sheet"], 4, 0.5f) } })
                             {
                                 Position = RandomPosition(x, y, 50),
                                 Parent = this
                             });
 
-                        if (_random.Next(100) <= 10) // 10%
+                        if (_random.Next(100) < 20) // 20%
                             Children.Add(new Rock1(_textures["Rock1"], _textures["Rock1Shadow"])
                             {
                                 Position = RandomPosition(x, y, 50),
                                 Parent = this
                             });
 
-                        if (_random.Next(100) <= 10) // 10%
+                        if (_random.Next(100) < 30) // 30%
                             Children.Add(new DefaultSprite(_textures["Rock2"])
                             {
                                 Position = RandomPosition(x, y, 50),
                                 Parent = this
                             });
 
-                        if (_random.Next(100) <= 5) // 5%
+                        if (_random.Next(100) < 10) // 10%
                             Children.Add(new DefaultSprite(_textures["Mushroom"])
                             {
                                 Position = RandomPosition(x, y, 50),
                                 Parent = this
                             });
 
-                        if (_random.Next(100) <= 1) // 1%
+                        if (_random.Next(100) < 2) // 2%
                             Children.Add(new DefaultSprite(_textures["Mud"])
                             {
                                 Position = RandomPosition(x, y, 50),

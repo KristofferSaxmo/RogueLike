@@ -12,7 +12,7 @@ namespace RogueLike.Sprites
     {
         public Shadow(Texture2D texture) : base(texture)
         {
-            LayerOrigin = -1001;
+
         }
         public override void Update(GameTime gameTime)
         {
@@ -20,7 +20,7 @@ namespace RogueLike.Sprites
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            base.Draw(gameTime, spriteBatch);
+            spriteBatch.Draw(_texture, Rectangle, null, Color, Rotation, Origin, SpriteEffects.None, 0f);
         }
     }
 }
