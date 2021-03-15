@@ -14,11 +14,7 @@ namespace RogueLike.Managers
     {
         private Dictionary<string, Texture2D> _textures;
 
-        private Vector2 _position;
-
-        private Vector2 _roomSize;
-
-        private bool _currentRoom;
+        public Room CurrentRoom { get; set; }
 
         public RoomManager(ContentManager content)
         {
@@ -36,24 +32,25 @@ namespace RogueLike.Managers
                 { "Rock1", content.Load<Texture2D>("room/rock1") },
                 { "Rock1Shadow", content.Load<Texture2D>("room/rock1-shadow") },
                 { "Rock2", content.Load<Texture2D>("room/rock2") },
+                { "Path1", content.Load<Texture2D>("room/path1") },
+                { "Path2", content.Load<Texture2D>("room/path2") },
+                { "Path3", content.Load<Texture2D>("room/path3") },
                 { "TreeTop1", content.Load<Texture2D>("room/tree_top1") },
                 { "TreeTop2", content.Load<Texture2D>("room/tree_top2") },
                 { "TreeTop3", content.Load<Texture2D>("room/tree_top3") },
                 { "Mud", content.Load<Texture2D>("room/mud") },
                 { "Mushroom", content.Load<Texture2D>("room/mushroom") },
                 { "WaterEdge", content.Load<Texture2D>("room/water_edge") },
+                { "WaterEdge-Sheet", content.Load<Texture2D>("room/water_edge-sheet") },
                 { "TelepadBaseSheet", content.Load<Texture2D>("room/telepad_base-sheet") },
                 { "TelepadCrystalSheet", content.Load<Texture2D>("room/telepad_crystal-sheet") }
             };
         }
 
-        public Room CreateRoom(Texture2D defaultTex)
+        public Room CreateRoom(Texture2D defaultTex, Vector2 position, Vector2 roomSize)
         {
-            _position = new Vector2(200, -300);
-
-            _roomSize = new Vector2(30, 30);
-
-            return new Room(_textures, defaultTex, _position, _roomSize, 96);
+            CurrentRoom = new Room(_textures, defaultTex, position, roomSize, 96);
+            return CurrentRoom;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using RogueLike.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,13 @@ namespace RogueLike.Sprites.RoomSprites
 {
     public class WaterEdge : Sprite, ICollidable
     {
-        public WaterEdge(Texture2D texture) : base(texture)
+        public WaterEdge(Dictionary<string, Animation> animations) : base(animations)
         {
-            LayerOrigin = 0;
+
+        }
+        public override void Update(GameTime gameTime)
+        {
+            _animationManager.Update(gameTime, Layer);
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {

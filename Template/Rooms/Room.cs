@@ -13,6 +13,11 @@ namespace RogueLike.Rooms
 {
     public class Room : Sprite
     {
+        public Vector2 RoomSize { get; set; }
+        public int TileSize { get; set; }
+        public bool IsWater { get; set; }
+        public Rectangle Area { get; set; }
+
         private Random _random = new Random();
 
         private Color _grass = new Color(36, 73, 67);
@@ -21,11 +26,7 @@ namespace RogueLike.Rooms
 
         private Rectangle _grassRec, _grassRec2, _waterRec;
 
-        private bool _isWater;
-
         private int[,] _map;
-
-        private int _tileSize;
         /// <summary>
         /// 0 = Empty
         /// 1 = Wall
@@ -40,18 +41,20 @@ namespace RogueLike.Rooms
             _texture = texture;
             Position = position;
             _map = new int[(int)roomSize.X, (int)roomSize.Y];
-            _tileSize = tileSize;
+            RoomSize = roomSize;
+            TileSize = tileSize;
+            Area = new Rectangle((int)position.X, (int)position.Y, (int)roomSize.X * tileSize, (int)roomSize.Y * tileSize);
 
             if (_random.Next(2) == 0) // 50% chance for water
-                _isWater = true;
+                IsWater = true;
             else
-                _isWater = false;
+                IsWater = false;
 
             _grassRec = new Rectangle(
                 (int)Position.X,
                 (int)Position.Y - 20,
-                (_map.GetLength(0) - 1) * _tileSize,
-                _map.GetLength(1) * _tileSize + 1);
+                (_map.GetLength(0) - 1) * tileSize,
+                _map.GetLength(1) * tileSize + 1);
 
             _waterRec = new Rectangle(
                 (int)Position.X - 10 * tileSize,
@@ -64,7 +67,6 @@ namespace RogueLike.Rooms
                     (int)Position.Y + (int)roomSize.Y * tileSize - 70,
                     ((int)roomSize.X - 1) * tileSize + 22 * tileSize,
                     1000);
-
 
             #region Create Room
             for (int i = 0; i < (int)roomSize.X; i++) // Tile X
@@ -80,12 +82,12 @@ namespace RogueLike.Rooms
             #region Fill Room
 
             #region Water Room
-            if (_isWater)
+            if (IsWater)
             {
                 for (int x = -10; x < roomSize.X + 10; x++)
                 {
                     // Water
-                    Children.Add(new WaterEdge(_textures["WaterEdge"])
+                    Children.Add(new WaterEdge(new Dictionary<string, Animation>() { { "Animation", new Animation(_textures["WaterEdge-Sheet"], 27, 0.1f) } })
                     {
                         Position = new Vector2(RandomXPos(x, 0, 0), RandomYPos((int)roomSize.Y - 1, 144, 144)),
                         Parent = this
@@ -95,12 +97,12 @@ namespace RogueLike.Rooms
                     {
                         Children.Add(new Wall(_textures["LeftWall"])
                         {
-                            Position = new Vector2(RandomXPos(x, 0, 0), Position.Y + ((int)roomSize.Y - 1) * _tileSize - 5),
+                            Position = new Vector2(RandomXPos(x, 0, 0), Position.Y + ((int)roomSize.Y - 1) * TileSize - 5),
                             Parent = this
                         });
                         Children.Add(new Wall(_textures["LeftWall"])
                         {
-                            Position = new Vector2(RandomXPos(x, 48, 48), Position.Y + ((int)roomSize.Y - 1) * _tileSize - 25),
+                            Position = new Vector2(RandomXPos(x, 48, 48), Position.Y + ((int)roomSize.Y - 1) * TileSize - 25),
                             Parent = this
                         });
                     }
@@ -109,12 +111,12 @@ namespace RogueLike.Rooms
                     {
                         Children.Add(new Wall(_textures["RightWall"])
                         {
-                            Position = new Vector2(RandomXPos(x, 0, 0), Position.Y + ((int)roomSize.Y - 1) * _tileSize - 5),
+                            Position = new Vector2(RandomXPos(x, 0, 0), Position.Y + ((int)roomSize.Y - 1) * TileSize - 5),
                             Parent = this
                         });
                         Children.Add(new Wall(_textures["RightWall"])
                         {
-                            Position = new Vector2(RandomXPos(x, 48, 48), Position.Y + ((int)roomSize.Y - 1) * _tileSize - 25),
+                            Position = new Vector2(RandomXPos(x, 48, 48), Position.Y + ((int)roomSize.Y - 1) * TileSize - 25),
                             Parent = this
                         });
                     }
@@ -139,7 +141,7 @@ namespace RogueLike.Rooms
                             });
                             Children.Add(new Wall(_textures["LeftWall"])
                             {
-                                Position = new Vector2(RandomXPos(x, 30, 30), Position.Y + y * _tileSize - 48),
+                                Position = new Vector2(RandomXPos(x, 30, 30), Position.Y + y * TileSize - 48),
                                 Parent = this
                             });
                         }
@@ -153,7 +155,7 @@ namespace RogueLike.Rooms
                             });
                             Children.Add(new Wall(_textures["RightWall"])
                             {
-                                Position = new Vector2(RandomXPos(x, 0, 0), Position.Y + y * _tileSize - 48),
+                                Position = new Vector2(RandomXPos(x, 0, 0), Position.Y + y * TileSize - 48),
                                 Parent = this
                             });
                         }
@@ -188,7 +190,7 @@ namespace RogueLike.Rooms
                             }
                         }
                         // Bottom Walls
-                        else if (y == roomSize.Y - 1 && !_isWater)
+                        else if (y == roomSize.Y - 1 && !IsWater)
                         {
                             if (x < roomSize.X / 2)
                             {
@@ -234,7 +236,7 @@ namespace RogueLike.Rooms
                                 Parent = this
                             });
 
-                        if (_random.Next(100) < 10) // 10%
+                        if (_random.Next(100) < 20) // 20%
                             Children.Add(new Plant1(_textures["Plant1"])
                             {
                                 Position = RandomPosition(x, y, 50),
@@ -287,8 +289,8 @@ namespace RogueLike.Rooms
                 }
             }
 
-            #region Outside Tree Tops
-            if (_isWater)
+                    #region Outside Tree Tops
+                    if (IsWater)
             {
                 for (int x = -10; x < (int)roomSize.X + 10; x++) // Tile X
                 {
@@ -369,20 +371,20 @@ namespace RogueLike.Rooms
         }
         private Vector2 RandomPosition(int x, int y, int maxRandom)
         {
-            return new Vector2(Position.X + x * _tileSize + _random.Next(maxRandom), Position.Y + y * _tileSize + _random.Next(maxRandom));
+            return new Vector2(Position.X + x * TileSize + _random.Next(maxRandom), Position.Y + y * TileSize + _random.Next(maxRandom));
         }
         private float RandomXPos(int x, int minRandom, int maxRandom)
         {
-            return Position.X + x * _tileSize + _random.Next(minRandom, maxRandom);
+            return Position.X + x * TileSize + _random.Next(minRandom, maxRandom);
         }
         private float RandomYPos(int y, int minRandom, int maxRandom)
         {
-            return Position.Y + y * _tileSize + _random.Next(minRandom, maxRandom);
+            return Position.Y + y * TileSize + _random.Next(minRandom, maxRandom);
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(_texture, _grassRec, _grass);
-            if (_isWater)
+            if (IsWater)
             {
                 spriteBatch.Draw(_texture, _grassRec2, _grass);
                 spriteBatch.Draw(_texture, _waterRec, _water);

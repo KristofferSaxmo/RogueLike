@@ -29,7 +29,11 @@ namespace RogueLike.States
 
             _sprites = new List<Sprite>()
             {
-                _roomManager.CreateRoom(defaultTex),
+                _roomManager.CreateRoom(
+                    defaultTex,
+                    new Vector2(0, 0),
+                    new Vector2(30, 30)),
+
                 new Player(new Dictionary<string, Animation>()
                 {
                     { "WalkLeft", new Animation(_content.Load<Texture2D>("player/player_walk_left"), 4, 0.2f) },
@@ -39,7 +43,7 @@ namespace RogueLike.States
                 })
                 {
                     Health = 3,
-                    Position = new Vector2(1100, 1100),
+                    Position = new Vector2(_roomManager.CurrentRoom.Area.X + _roomManager.CurrentRoom.Area.Center.X, _roomManager.CurrentRoom.Area.Y + _roomManager.CurrentRoom.Area.Center.Y),
                     Speed = 10,
                     Input = new Input()
                     {
