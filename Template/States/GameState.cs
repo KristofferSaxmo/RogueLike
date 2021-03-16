@@ -39,7 +39,13 @@ namespace RogueLike.States
                     { "WalkLeft", new Animation(_content.Load<Texture2D>("player/player_run_left"), 4, 0.1f) },
                     { "WalkRight", new Animation(_content.Load<Texture2D>("player/player_run_right"), 4, 0.1f) },
                     { "IdleLeft", new Animation(_content.Load<Texture2D>("player/player_idle_left"), 5, 0.2f) },
-                    { "IdleRight", new Animation(_content.Load<Texture2D>("player/player_idle_right"), 5, 0.2f) }
+                    { "IdleRight", new Animation(_content.Load<Texture2D>("player/player_idle_right"), 5, 0.2f) },
+                    { "AttackRight1", new Animation(_content.Load<Texture2D>("player/player_attack_right1"), 6, 0.04f) { IsLooping = false } },
+                    { "AttackRight2", new Animation(_content.Load<Texture2D>("player/player_attack_right2"), 6, 0.04f) { IsLooping = false } },
+                    { "AttackRight3", new Animation(_content.Load<Texture2D>("player/player_attack_right3"), 5, 0.1f) { IsLooping = false } },
+                    { "AttackLeft1", new Animation(_content.Load<Texture2D>("player/player_attack_left1"), 6, 0.04f) { IsLooping = false } },
+                    { "AttackLeft2", new Animation(_content.Load<Texture2D>("player/player_attack_left2"), 6, 0.04f) { IsLooping = false } },
+                    { "AttackLeft3", new Animation(_content.Load<Texture2D>("player/player_attack_left3"), 5, 0.1f) { IsLooping = false } }
                 })
                 {
                     Health = 3,
@@ -50,7 +56,7 @@ namespace RogueLike.States
                         Left = Keys.A,
                         Right = Keys.D,
                         Up = Keys.W,
-                        Down = Keys.S,
+                        Down = Keys.S
                     },
                 },
             };
@@ -131,7 +137,7 @@ namespace RogueLike.States
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin(SpriteSortMode.FrontToBack, null, SamplerState.PointClamp, null, null, null, _camera.Transform);
+            spriteBatch.Begin(SpriteSortMode.FrontToBack, null, SamplerState.PointClamp, null, null, null, Camera.Transform);
 
             foreach (var sprite in _sprites)
             {

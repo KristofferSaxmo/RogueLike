@@ -10,7 +10,7 @@ namespace RogueLike
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        public static Random Random;
+        public static Random Random = new Random();
 
         public static int ScreenWidth = 1920;
         public static int ScreenHeight = 1080;

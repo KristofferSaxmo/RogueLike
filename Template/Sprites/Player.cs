@@ -15,9 +15,15 @@ namespace RogueLike.Sprites
 
         private KeyboardState _previousKey;
 
-        private Vector2 _previousPosition;
+        private MouseState _currentMouse;
 
-        private bool isFacingLeft = true;
+        private MouseState _previousMouse;
+
+        private int _attackCooldown;
+
+        private int _lastAttack = 0;
+
+        private bool _isFacingLeft;
 
         public bool IsDead
         {
@@ -27,6 +33,60 @@ namespace RogueLike.Sprites
         public Player(Dictionary<string, Animation> animations) : base(animations)
         {
             LayerOrigin = 28;
+        }
+        public void Attack()
+        {
+            if (_lastAttack == 0)
+                Velocity = Vector2.Zero;
+
+            if (_isFacingLeft)
+            {
+                if (!IsAttacking() && (_lastAttack == 0 || _lastAttack == 3))
+                {
+                    _animationManager.Play(_animations["AttackLeft1"]);
+                    _attackCooldown = 0;
+                    _lastAttack = 1;
+                    Velocity = new Vector2(-7, 0);
+                }
+                else if (!IsAttacking() && _lastAttack == 1)
+                {
+                    _animationManager.Play(_animations["AttackLeft2"]);
+                    _attackCooldown = 0;
+                    _lastAttack = 2;
+                    Velocity = new Vector2(-7, 0);
+                }
+                else if (!IsAttacking() && _lastAttack == 2)
+                {
+                    _animationManager.Play(_animations["AttackLeft3"]);
+                    _attackCooldown = 0;
+                    _lastAttack = 3;
+                    Velocity = new Vector2(-10, 0);
+                }
+            }
+            else
+            {
+                if (!IsAttacking() && (_lastAttack == 0 || _lastAttack == 3))
+                {
+                    _animationManager.Play(_animations["AttackRight1"]);
+                    _attackCooldown = 0;
+                    _lastAttack = 1;
+                    Velocity = new Vector2(7, 0);
+                }
+                else if (!IsAttacking() && _lastAttack == 1)
+                {
+                    _animationManager.Play(_animations["AttackRight2"]);
+                    _attackCooldown = 0;
+                    _lastAttack = 2;
+                    Velocity = new Vector2(7, 0);
+                }
+                else if (!IsAttacking() && _lastAttack == 2)
+                {
+                    _animationManager.Play(_animations["AttackRight3"]);
+                    _attackCooldown = 0;
+                    _lastAttack = 3;
+                    Velocity = new Vector2(10, 0);
+                }
+            }
         }
         public void Move()
         {
@@ -49,25 +109,23 @@ namespace RogueLike.Sprites
             if (Velocity.X < 0)
             {
                 _animationManager.Play(_animations["WalkLeft"]);
-                isFacingLeft = true;
+                _isFacingLeft = true;
             }
-
             else if (Velocity.X > 0)
             {
                 _animationManager.Play(_animations["WalkRight"]);
-                isFacingLeft = false;
+                _isFacingLeft = false;
             }
-
-            else if (Velocity.Y != 0 && isFacingLeft)
+            else if (Velocity.Y != 0 && _isFacingLeft)
                 _animationManager.Play(_animations["WalkLeft"]);
 
-            else if (Velocity.Y != 0 && !isFacingLeft)
+            else if (Velocity.Y != 0 && !_isFacingLeft)
                 _animationManager.Play(_animations["WalkRight"]);
 
-            else if (isFacingLeft)
+            else if (_isFacingLeft && !IsAttacking())
                 _animationManager.Play(_animations["IdleLeft"]);
 
-            else if (!isFacingLeft)
+            else if (!_isFacingLeft && !IsAttacking())
                 _animationManager.Play(_animations["IdleRight"]);
         }
         public override void Update(GameTime gameTime)
@@ -75,16 +133,48 @@ namespace RogueLike.Sprites
             if (IsDead)
                 return;
 
+            _animationManager.Update(gameTime, Layer);
+
             _previousKey = _currentKey;
             _currentKey = Keyboard.GetState();
 
-            _previousPosition = Position;
+            _previousMouse = _currentMouse;
+            _currentMouse = Mouse.GetState();
 
-            Move();
+            if (_currentMouse.LeftButton == ButtonState.Pressed)
+                Attack();
 
-            ChangeAnimation();
+            if (IsAttacking())
+            {
+                //Camera.GetWorldPosition(new Vector2(_currentMouse.X, _currentMouse.Y)).X < Rectangle.X + Rectangle.Width / 200
 
-            _animationManager.Update(gameTime, Layer);
+                if (Velocity.X > Vector2.Zero.X)
+                    Velocity -= new Vector2(0.5f, 0);
+                else if (Velocity.X < Vector2.Zero.X)
+                        Velocity += new Vector2(0.5f, 0);
+
+                if (Velocity.Y > Vector2.Zero.Y)
+                    Velocity -= new Vector2(0, 0.5f);
+                else if (Velocity.Y < Vector2.Zero.Y)
+                    Velocity -= new Vector2(0, 0.5f);
+
+                if (Velocity.X < 0.1f && Velocity.X > -0.5f)
+                    Velocity = new Vector2(0, Velocity.Y);
+
+                if (Velocity.Y < 0.1f && Velocity.Y > -0.5f)
+                    Velocity = new Vector2(Velocity.X, 0);
+            }
+            else
+            {
+                Move();
+                ChangeAnimation();
+            }
+
+            if (_attackCooldown < 30)
+                _attackCooldown++;
+            else
+                _lastAttack = 0;
+
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
@@ -95,15 +185,24 @@ namespace RogueLike.Sprites
         }
         public void UpdateHitbox()
         {
-            _hitbox = new Rectangle(Rectangle.X + 13 * Scale, Rectangle.Y + 27 * Scale, 12 * Scale, 5 * Scale);
+            _hitbox = new Rectangle(Rectangle.X + 29 * Scale, Rectangle.Y + 33 * Scale, 12 * Scale, 4 * Scale);
         }
         public void OnCollide(Sprite sprite)
         {
             if (IsDead)
                 return;
+        }
+        public bool IsAttacking()
+        {
+            if (_animationManager.CurrentAnimation == _animations["AttackLeft1"] ||
+                _animationManager.CurrentAnimation == _animations["AttackLeft2"] ||
+                _animationManager.CurrentAnimation == _animations["AttackLeft3"] ||
+                _animationManager.CurrentAnimation == _animations["AttackRight1"] ||
+                _animationManager.CurrentAnimation == _animations["AttackRight2"] ||
+                _animationManager.CurrentAnimation == _animations["AttackRight3"])
+                return true;
 
-            if (sprite.Parent is Room)
-                Position = _previousPosition;
+            return false;
         }
     }
 }

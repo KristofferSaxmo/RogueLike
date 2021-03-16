@@ -59,6 +59,9 @@ namespace RogueLike.Managers
             _timer = 0f;
 
             _animation.CurrentFrame = 0;
+
+            if (!_animation.IsLooping)
+                _animation = null;
         }
 
         public void Update(GameTime gameTime, float layer)
@@ -74,12 +77,20 @@ namespace RogueLike.Managers
                 _animation.CurrentFrame++;
 
                 if (_animation.CurrentFrame >= _animation.FrameCount)
-                    _animation.CurrentFrame = 0;
+                {
+                    if (_animation.IsLooping)
+                        _animation.CurrentFrame = 0;
+                    else
+                        _animation = null;
+                }
             }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
+            if (_animation == null)
+                return;
+
             int width = _animation.Texture.Width / _animation.FrameCount;
             int height = _animation.Texture.Height;
             int row = _animation.CurrentFrame / _animation.FrameCount;

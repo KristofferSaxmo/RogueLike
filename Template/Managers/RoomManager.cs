@@ -40,8 +40,8 @@ namespace RogueLike.Managers
                 { "TreeTop3", content.Load<Texture2D>("room/tree_top3") },
                 { "Mud", content.Load<Texture2D>("room/mud") },
                 { "Mushroom", content.Load<Texture2D>("room/mushroom") },
-                { "WaterEdge", content.Load<Texture2D>("room/water_edge") },
                 { "WaterEdge-Sheet", content.Load<Texture2D>("room/water_edge-sheet") },
+                { "Water-Sheet", content.Load<Texture2D>("room/water-sheet") },
                 { "TelepadBaseSheet", content.Load<Texture2D>("room/telepad_base-sheet") },
                 { "TelepadCrystalSheet", content.Load<Texture2D>("room/telepad_crystal-sheet") }
             };

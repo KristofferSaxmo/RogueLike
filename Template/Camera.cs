@@ -10,13 +10,13 @@ namespace RogueLike
 {
     public class Camera
     {
-        public Matrix Transform { get; private set; }
+        public static Matrix Transform { get; private set; }
 
         public void Follow(Sprite target)
         {
             var position = Matrix.CreateTranslation(
-              -target.Position.X - (target.Rectangle.Width / 2),
-              -target.Position.Y - (target.Rectangle.Height / 2),
+              -target.Position.X,
+              -target.Position.Y,
               0);
 
             var offset = Matrix.CreateTranslation(
@@ -26,7 +26,7 @@ namespace RogueLike
 
             Transform = position * offset;
         }
-        public Vector2 GetWorldPosition(Vector2 screenPosition)
+        public static Vector2 GetWorldPosition(Vector2 screenPosition)
         {
             Matrix inverseTransform = Matrix.Invert(Transform);
             return Vector2.Transform(new Vector2(screenPosition.X, screenPosition.Y), inverseTransform);

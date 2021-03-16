@@ -11,7 +11,5 @@ namespace RogueLike.Models
         public Keys Left { get; set; }
 
         public Keys Right { get; set; }
-
-        public Keys Attack { get; set; }
     }
 }

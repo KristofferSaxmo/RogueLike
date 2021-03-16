@@ -18,8 +18,6 @@ namespace RogueLike.Rooms
         public bool IsWater { get; set; }
         public Rectangle Area { get; set; }
 
-        private Random _random = new Random();
-
         private Color _grass = new Color(36, 73, 67);
 
         private Color _water = new Color(61, 61, 126);
@@ -45,7 +43,7 @@ namespace RogueLike.Rooms
             TileSize = tileSize;
             Area = new Rectangle((int)position.X, (int)position.Y, (int)roomSize.X * tileSize, (int)roomSize.Y * tileSize);
 
-            if (_random.Next(2) == 0) // 50% chance for water
+            if (Game1.Random.Next(2) == 0) // 50% chance for water
                 IsWater = true;
             else
                 IsWater = false;
@@ -86,8 +84,16 @@ namespace RogueLike.Rooms
             {
                 for (int x = -10; x < roomSize.X + 10; x++)
                 {
+                    for (int y = (int)roomSize.Y; y < (int)roomSize.Y + 5; y++)
+                    {
+                        Children.Add(new AnimatedDefaultSprite(new Dictionary<string, Animation>() { { "Animation", new Animation(_textures["Water-Sheet"], 32, 0.1f) } })
+                        {
+                            Position = new Vector2(RandomXPos(x, 0, 0), RandomYPos(y, 144, 144)),
+                            Parent = this
+                        });
+                    }
                     // Water
-                    Children.Add(new WaterEdge(new Dictionary<string, Animation>() { { "Animation", new Animation(_textures["WaterEdge-Sheet"], 27, 0.1f) } })
+                    Children.Add(new WaterEdge(new Dictionary<string, Animation>() { { "Animation", new Animation(_textures["WaterEdge-Sheet"], 32, 0.1f) } })
                     {
                         Position = new Vector2(RandomXPos(x, 0, 0), RandomYPos((int)roomSize.Y - 1, 144, 144)),
                         Parent = this
@@ -229,56 +235,56 @@ namespace RogueLike.Rooms
                     #region Create Other
                     else if (_map[x, y] == 0)
                     {
-                        if (_random.Next(100) < 30) // 30%
+                        if (Game1.Random.Next(100) < 30) // 30%
                             Children.Add(new Tree(_textures["Tree"], _textures["TreeShadow"])
                             {
                                 Position = RandomPosition(x, y, 50),
                                 Parent = this
                             });
 
-                        if (_random.Next(100) < 20) // 20%
+                        if (Game1.Random.Next(100) < 15) // 15%
                             Children.Add(new Plant1(_textures["Plant1"])
                             {
                                 Position = RandomPosition(x, y, 50),
                                 Parent = this
                             });
 
-                        if (_random.Next(100) < 30) // 30%
+                        if (Game1.Random.Next(100) < 30) // 30%
                             Children.Add(new DefaultSprite(_textures["Plant2"])
                             {
                                 Position = RandomPosition(x, y, 50),
                                 Parent = this
                             });
 
-                        if (_random.Next(100) < 2) // 2%
+                        if (Game1.Random.Next(100) < 15) // 15%
                             Children.Add(new PlantAnimation(new Dictionary<string, Animation>() { { "Animation", new Animation(_textures["Plant-Sheet"], 4, 0.5f) } })
                             {
                                 Position = RandomPosition(x, y, 50),
                                 Parent = this
                             });
 
-                        if (_random.Next(100) < 20) // 20%
+                        if (Game1.Random.Next(100) < 20) // 20%
                             Children.Add(new Rock1(_textures["Rock1"], _textures["Rock1Shadow"])
                             {
                                 Position = RandomPosition(x, y, 50),
                                 Parent = this
                             });
 
-                        if (_random.Next(100) < 30) // 30%
+                        if (Game1.Random.Next(100) < 30) // 30%
                             Children.Add(new DefaultSprite(_textures["Rock2"])
                             {
                                 Position = RandomPosition(x, y, 50),
                                 Parent = this
                             });
 
-                        if (_random.Next(100) < 10) // 10%
+                        if (Game1.Random.Next(100) < 10) // 10%
                             Children.Add(new DefaultSprite(_textures["Mushroom"])
                             {
                                 Position = RandomPosition(x, y, 50),
                                 Parent = this
                             });
 
-                        if (_random.Next(100) < 2) // 2%
+                        if (Game1.Random.Next(100) < 2) // 2%
                             Children.Add(new DefaultSprite(_textures["Mud"])
                             {
                                 Position = RandomPosition(x, y, 50),
@@ -299,9 +305,9 @@ namespace RogueLike.Rooms
                         if (((x < 0 || x > (int)roomSize.X - 1) && y < (int)roomSize.Y - 2) ||
                             (x >= 0 && x < (int)roomSize.X) && y < -1)
                         {
-                            if (_random.Next(100) <= 50)
+                            if (Game1.Random.Next(100) <= 50)
                             {
-                                int random = _random.Next(3);
+                                int random = Game1.Random.Next(3);
 
                                 if (random == 0)
                                     Children.Add(new DefaultSprite(_textures["TreeTop1"])
@@ -335,9 +341,9 @@ namespace RogueLike.Rooms
                         if (x < 0 || x > (int)roomSize.X - 1 ||
                         y < -1 || y > (int)roomSize.Y - 1)
                         {
-                            if (_random.Next(100) <= 50)
+                            if (Game1.Random.Next(100) <= 50)
                             {
-                                int random = _random.Next(3);
+                                int random = Game1.Random.Next(3);
 
                                 if (random == 0)
                                     Children.Add(new DefaultSprite(_textures["TreeTop1"])
@@ -371,15 +377,15 @@ namespace RogueLike.Rooms
         }
         private Vector2 RandomPosition(int x, int y, int maxRandom)
         {
-            return new Vector2(Position.X + x * TileSize + _random.Next(maxRandom), Position.Y + y * TileSize + _random.Next(maxRandom));
+            return new Vector2(Position.X + x * TileSize + Game1.Random.Next(maxRandom), Position.Y + y * TileSize + Game1.Random.Next(maxRandom));
         }
         private float RandomXPos(int x, int minRandom, int maxRandom)
         {
-            return Position.X + x * TileSize + _random.Next(minRandom, maxRandom);
+            return Position.X + x * TileSize + Game1.Random.Next(minRandom, maxRandom);
         }
         private float RandomYPos(int y, int minRandom, int maxRandom)
         {
-            return Position.Y + y * TileSize + _random.Next(minRandom, maxRandom);
+            return Position.Y + y * TileSize + Game1.Random.Next(minRandom, maxRandom);
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {

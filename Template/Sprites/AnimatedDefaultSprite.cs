@@ -1,19 +1,23 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using RogueLike.Sprites;
+using RogueLike.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RogueLike.Sprites.RoomSprites
+namespace RogueLike.Sprites
 {
-    public class Plant1 : Sprite
+    class AnimatedDefaultSprite : Sprite
     {
-        public Plant1(Texture2D texture) : base(texture)
+        public AnimatedDefaultSprite(Dictionary<string, Animation> animations) : base(animations)
         {
-            LayerOrigin = -10;
+
+        }
+        public override void Update(GameTime gameTime)
+        {
+            _animationManager.Update(gameTime, Layer);
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
