@@ -95,7 +95,7 @@ namespace RogueLike.Sprites
         }
         public void UpdateHitbox()
         {
-            _hitbox = new Rectangle(Rectangle.X + 2 * Scale, Rectangle.Y + 25 * Scale, 7 * Scale, 3 * Scale);
+            _hitbox = new Rectangle(Rectangle.X + 13 * Scale, Rectangle.Y + 27 * Scale, 12 * Scale, 5 * Scale);
         }
         public void OnCollide(Sprite sprite)
         {

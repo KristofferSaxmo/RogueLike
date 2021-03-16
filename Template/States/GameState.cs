@@ -32,19 +32,19 @@ namespace RogueLike.States
                 _roomManager.CreateRoom(
                     defaultTex,
                     new Vector2(0, 0),
-                    new Vector2(30, 30)),
+                    new Vector2(50, 5)),
 
                 new Player(new Dictionary<string, Animation>()
                 {
-                    { "WalkLeft", new Animation(_content.Load<Texture2D>("player/player_walk_left"), 4, 0.2f) },
-                    { "WalkRight", new Animation(_content.Load<Texture2D>("player/player_walk_right"), 4, 0.2f) },
-                    { "IdleLeft", new Animation(_content.Load<Texture2D>("player/player_idle_left"), 1, 0.2f) },
-                    { "IdleRight", new Animation(_content.Load<Texture2D>("player/player_idle_right"), 1, 0.2f) }
+                    { "WalkLeft", new Animation(_content.Load<Texture2D>("player/player_run_left"), 4, 0.1f) },
+                    { "WalkRight", new Animation(_content.Load<Texture2D>("player/player_run_right"), 4, 0.1f) },
+                    { "IdleLeft", new Animation(_content.Load<Texture2D>("player/player_idle_left"), 5, 0.2f) },
+                    { "IdleRight", new Animation(_content.Load<Texture2D>("player/player_idle_right"), 5, 0.2f) }
                 })
                 {
                     Health = 3,
                     Position = new Vector2(_roomManager.CurrentRoom.Area.X + _roomManager.CurrentRoom.Area.Center.X, _roomManager.CurrentRoom.Area.Y + _roomManager.CurrentRoom.Area.Center.Y),
-                    Speed = 10,
+                    Speed = 7,
                     Input = new Input()
                     {
                         Left = Keys.A,
