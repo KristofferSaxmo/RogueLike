@@ -164,11 +164,6 @@ namespace RogueLike.States
 
             spriteBatch.Begin(SpriteSortMode.FrontToBack, null, SamplerState.PointClamp, null, null, null, Camera.Transform);
 
-            foreach (var sprite in _onScreenSprites)
-            {
-                sprite.Draw(gameTime, spriteBatch);
-            }
-
             if (_roomManager.CurrentRoom != null)
             {
                 spriteBatch.Draw(_defaultTex, _roomManager.CurrentRoom.GrassRec, Room.Grass);
@@ -176,6 +171,11 @@ namespace RogueLike.States
                 {
                     spriteBatch.Draw(_defaultTex, _roomManager.CurrentRoom.GrassRec2, Room.Grass);
                 }
+            }
+
+            foreach (var sprite in _onScreenSprites)
+            {
+                sprite.Draw(gameTime, spriteBatch);
             }
 
             spriteBatch.End();
