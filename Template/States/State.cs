@@ -10,13 +10,17 @@ namespace RogueLike.States
 
         protected ContentManager _content;
 
-        public State(Game1 game, ContentManager content)
+        protected Texture2D _defaultTex;
+
+        public State(Game1 game, ContentManager content, Texture2D defaultTex)
         {
             _game = game;
 
             _content = content;
+
+            _defaultTex = defaultTex;
         }
-        public abstract void LoadContent(Texture2D defaultTex);
+        public abstract void LoadContent();
         public abstract void Update(GameTime gameTime);
         public abstract void UpdateCamera(Camera camera);
         public abstract void Draw(GameTime gameTime, SpriteBatch spriteBatch);

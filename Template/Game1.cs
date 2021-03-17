@@ -46,8 +46,8 @@ namespace RogueLike
             _defaultTex = new Texture2D(GraphicsDevice, 1, 1);
             _defaultTex.SetData(new Color[1] { Color.White });
 
-            _currentState = new MenuState(this, Content);
-            _currentState.LoadContent(_defaultTex);
+            _currentState = new MenuState(this, Content, _defaultTex);
+            _currentState.LoadContent();
             _nextState = null;
         }
         protected override void UnloadContent()
@@ -59,7 +59,7 @@ namespace RogueLike
             if (_nextState != null)
             {
                 _currentState = _nextState;
-                _currentState.LoadContent(_defaultTex);
+                _currentState.LoadContent();
 
                 _nextState = null;
             }

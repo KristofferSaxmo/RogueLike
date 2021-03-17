@@ -47,9 +47,9 @@ namespace RogueLike.Managers
             };
         }
 
-        public Room CreateRoom(Texture2D defaultTex, Vector2 position, Vector2 roomSize)
+        public Room CreateRoom(Vector2 position, Vector2 roomSize)
         {
-            CurrentRoom = new Room(_textures, defaultTex, position, roomSize, 96);
+            CurrentRoom = new Room(_textures, position, roomSize, 96);
             return CurrentRoom;
         }
     }

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using RogueLike.Managers;
 using RogueLike.Models;
+using RogueLike.Rooms;
 using RogueLike.Sprites;
 using RogueLike.Sprites.RoomSprites;
 using System.Collections.Generic;
@@ -13,18 +14,22 @@ namespace RogueLike.States
 {
     public class GameState : State
     {
+        private Quadtree _quad;
         private SpriteFont _font;
         private RoomManager _roomManager;
         private GUIManager _guiManager;
         private List<Sprite> _sprites;
+        private IEnumerable<Sprite> _onScreenSprites;
+        private Rectangle _screenRectangle;
+        private List<Sprite> _returnSprites = new List<Sprite>();
         private List<Player> _players;
         private Camera _camera;
 
-        public GameState(Game1 game, ContentManager content) : base(game, content)
+        public GameState(Game1 game, ContentManager content, Texture2D defaultTex) : base(game, content, defaultTex)
         {
 
         }
-        public override void LoadContent(Texture2D defaultTex)
+        public override void LoadContent()
         {
             _roomManager = new RoomManager(_content);
             _guiManager = new GUIManager(_content);
@@ -32,9 +37,8 @@ namespace RogueLike.States
             _sprites = new List<Sprite>()
             {
                 _roomManager.CreateRoom(
-                    defaultTex,
                     new Vector2(0, 0),
-                    new Vector2(50, 5)),
+                    new Vector2(130, 130)),
 
                 new Player(new Dictionary<string, Animation>()
                 {
@@ -62,22 +66,30 @@ namespace RogueLike.States
                     },
                 },
             };
+            _quad = new Quadtree(0, _roomManager.CurrentRoom.Area);
             _players = _sprites.Where(c => c is Player).Select(c => (Player)c).ToList();
+
+            AddChildren();
         }
         public override void Update(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-                _game.ChangeState(new MenuState(_game, _content));
+                _game.ChangeState(new MenuState(_game, _content, _defaultTex));
 
             if(_players[0].IsDead)
-                _game.ChangeState(new MenuState(_game, _content));
+                _game.ChangeState(new MenuState(_game, _content, _defaultTex));
+
+            _screenRectangle = new Rectangle((int)_players[0].Position.X - Game1.ScreenWidth / 2 - 100,
+                                             (int)_players[0].Position.Y - Game1.ScreenHeight / 2 - 100,
+                                             Game1.ScreenWidth + 200,
+                                             Game1.ScreenHeight + 200);
 
             foreach (var sprite in _sprites)
                 sprite.Update(gameTime);
 
-            DetectCollisions();
+            _onScreenSprites = _sprites.Where(sprite => sprite.Rectangle.Intersects(_screenRectangle));
 
-            AddChildren();
+            DetectCollisions();
 
             RemoveSprites();
 
@@ -85,18 +97,26 @@ namespace RogueLike.States
         }
         public void DetectCollisions()
         {
-            var collidableSprites = _sprites.Where(c => c is ICollidable);
+            var collidableSprites = _onScreenSprites.Where(c => c is ICollidable);
 
             foreach (var sprite in collidableSprites)
             {
                 ((ICollidable)sprite).UpdateHitbox();
             }
 
+            _quad.Clear();
+            foreach (var sprite in collidableSprites)
+            {
+                _quad.Insert(sprite);
+            }
+
             foreach (var spriteA in collidableSprites)
             {
-                foreach (var spriteB in collidableSprites)
+                _returnSprites.Clear();
+                _quad.Retrieve(_returnSprites, spriteA);
+
+                foreach (var spriteB in _returnSprites)
                 {
-                    // Don't do anything if they're the same sprite!
                     if (spriteA == spriteB)
                         continue;
 
@@ -141,11 +161,21 @@ namespace RogueLike.States
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
+
             spriteBatch.Begin(SpriteSortMode.FrontToBack, null, SamplerState.PointClamp, null, null, null, Camera.Transform);
 
-            foreach (var sprite in _sprites)
+            foreach (var sprite in _onScreenSprites)
             {
                 sprite.Draw(gameTime, spriteBatch);
+            }
+
+            if (_roomManager.CurrentRoom != null)
+            {
+                spriteBatch.Draw(_defaultTex, _roomManager.CurrentRoom.GrassRec, Room.Grass);
+                if (_roomManager.CurrentRoom.IsWater)
+                {
+                    spriteBatch.Draw(_defaultTex, _roomManager.CurrentRoom.GrassRec2, Room.Grass);
+                }
             }
 
             spriteBatch.End();

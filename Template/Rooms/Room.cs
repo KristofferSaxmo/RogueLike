@@ -13,16 +13,13 @@ namespace RogueLike.Rooms
 {
     public class Room : Sprite
     {
-        public Vector2 RoomSize { get; set; }
-        public int TileSize { get; set; }
-        public bool IsWater { get; set; }
-        public Rectangle Area { get; set; }
-
-        private Color _grass = new Color(36, 73, 67);
-
-        private Color _water = new Color(61, 61, 126);
-
-        private Rectangle _grassRec, _grassRec2;
+        public static Color Grass = new Color(36, 73, 67);
+        public Vector2 RoomSize { get; }
+        public Rectangle GrassRec { get; }
+        public Rectangle GrassRec2 { get; }
+        public int TileSize { get; }
+        public bool IsWater { get; }
+        public Rectangle Area { get; }
 
         private int[,] _map;
         /// <summary>
@@ -33,10 +30,10 @@ namespace RogueLike.Rooms
 
         private Dictionary<string, Texture2D> _textures;
 
-        public Room(Dictionary<string, Texture2D> defaultTex, Texture2D texture, Vector2 position, Vector2 roomSize, int tileSize)
+        public Room(Dictionary<string, Texture2D> textures, Vector2 position, Vector2 roomSize, int tileSize)
         {
-            _textures = defaultTex;
-            _texture = texture;
+            _textures = textures;
+            _texture = _textures["LeftWall"];
             Position = position;
             _map = new int[(int)roomSize.X, (int)roomSize.Y];
             RoomSize = roomSize;
@@ -48,13 +45,13 @@ namespace RogueLike.Rooms
             else
                 IsWater = false;
 
-            _grassRec = new Rectangle(
+            GrassRec = new Rectangle(
                 (int)Position.X,
                 (int)Position.Y - 20,
                 (_map.GetLength(0) - 1) * tileSize,
                 _map.GetLength(1) * tileSize + 1);
 
-            _grassRec2 = new Rectangle(
+            GrassRec2 = new Rectangle(
                     (int)Position.X - 10 * tileSize,
                     (int)Position.Y + (int)roomSize.Y * tileSize - 70,
                     ((int)roomSize.X - 1) * tileSize + 22 * tileSize,
@@ -380,14 +377,6 @@ namespace RogueLike.Rooms
         private float RandomYPos(int y, int minRandom, int maxRandom)
         {
             return Position.Y + y * TileSize + Game1.Random.Next(minRandom, maxRandom);
-        }
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(_texture, _grassRec, _grass);
-            if (IsWater)
-            {
-                spriteBatch.Draw(_texture, _grassRec2, _grass);
-            }
         }
     }
 }

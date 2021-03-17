@@ -12,11 +12,11 @@ namespace RogueLike.States
     {
         private List<Component> _components;
 
-        public MenuState(Game1 game, ContentManager content) : base(game, content)
+        public MenuState(Game1 game, ContentManager content, Texture2D defaultTex) : base(game, content, defaultTex)
         {
         }
 
-        public override void LoadContent(Texture2D defaultTex)
+        public override void LoadContent()
         {
             var buttonTexture = _content.Load<Texture2D>("misc/button");
             var buttonFont = _content.Load<SpriteFont>("misc/font");
@@ -42,7 +42,7 @@ namespace RogueLike.States
 
         private void Button_Play_Clicked(object sender, EventArgs args)
         {
-            _game.ChangeState(new GameState(_game, _content));
+            _game.ChangeState(new GameState(_game, _content, _defaultTex));
         }
 
         private void Button_Quit_Clicked(object sender, EventArgs args)

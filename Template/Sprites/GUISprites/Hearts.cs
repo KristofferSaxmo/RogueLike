@@ -13,7 +13,6 @@ namespace RogueLike.Sprites.GUISprites
         private Rectangle _fullHeart, _halfHeart, _emptyHeart;
         private Rectangle _heart1, _heart2, _heart3;
         private int heartCount = 3;
-        private int _playerHealth;
         public Hearts(Texture2D texture) : base(texture)
         {
             Scale = 5;
