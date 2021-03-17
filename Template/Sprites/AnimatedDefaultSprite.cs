@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RogueLike.Sprites
 {
-    class AnimatedDefaultSprite : Sprite
+    public class AnimatedDefaultSprite : Sprite
     {
         public AnimatedDefaultSprite(Dictionary<string, Animation> animations) : base(animations)
         {

@@ -37,7 +37,7 @@ namespace RogueLike.Managers
         {
             _animation = animation;
             Scale = scale;
-            _animation.Size = new Point(_animation.Texture.Width * Scale / _animation.FrameCount, _animation.Texture.Height * Scale * _animation.FrameCount / _animation.FrameCount);
+            _animation.Size = new Point(_animation.Texture.Width * Scale / _animation.FrameCount, _animation.Texture.Height * Scale);
         }
 
         public void Play(Animation animation)
@@ -47,7 +47,7 @@ namespace RogueLike.Managers
 
             _animation = animation;
 
-            _animation.Size = new Point(_animation.Texture.Width * Scale / _animation.FrameCount, _animation.Texture.Height * Scale * _animation.FrameCount / _animation.FrameCount);
+            _animation.Size = new Point(_animation.Texture.Width * Scale / _animation.FrameCount, _animation.Texture.Height * Scale);
 
             _animation.CurrentFrame = 0;
 

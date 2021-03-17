@@ -15,6 +15,7 @@ namespace RogueLike.States
     {
         private SpriteFont _font;
         private RoomManager _roomManager;
+        private GUIManager _guiManager;
         private List<Sprite> _sprites;
         private List<Player> _players;
         private Camera _camera;
@@ -26,6 +27,7 @@ namespace RogueLike.States
         public override void LoadContent(Texture2D defaultTex)
         {
             _roomManager = new RoomManager(_content);
+            _guiManager = new GUIManager(_content);
 
             _sprites = new List<Sprite>()
             {
@@ -48,7 +50,7 @@ namespace RogueLike.States
                     { "AttackLeft3", new Animation(_content.Load<Texture2D>("player/player_attack_left3"), 5, 0.1f) { IsLooping = false } }
                 })
                 {
-                    Health = 3,
+                    Health = 6,
                     Position = new Vector2(_roomManager.CurrentRoom.Area.X + _roomManager.CurrentRoom.Area.Center.X, _roomManager.CurrentRoom.Area.Y + _roomManager.CurrentRoom.Area.Center.Y),
                     Speed = 7,
                     Input = new Input()
@@ -67,6 +69,9 @@ namespace RogueLike.States
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 _game.ChangeState(new MenuState(_game, _content));
 
+            if(_players[0].IsDead)
+                _game.ChangeState(new MenuState(_game, _content));
+
             foreach (var sprite in _sprites)
                 sprite.Update(gameTime);
 
@@ -75,6 +80,8 @@ namespace RogueLike.States
             AddChildren();
 
             RemoveSprites();
+
+            _guiManager.Update(gameTime);
         }
         public void DetectCollisions()
         {
@@ -129,10 +136,7 @@ namespace RogueLike.States
         }
         public override void UpdateCamera(Camera camera)
         {
-            foreach(Player player in _players)
-            {
-                camera.Follow(player);
-            }
+            camera.Follow(_players[0]);
             _camera = camera;
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -145,6 +149,13 @@ namespace RogueLike.States
             }
 
             spriteBatch.End();
+
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);
+
+            _guiManager.Draw(gameTime, spriteBatch, _players[0].Health);
+
+            spriteBatch.End();
+
         }
     }
 }

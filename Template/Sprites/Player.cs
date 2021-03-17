@@ -24,7 +24,6 @@ namespace RogueLike.Sprites
         private int _lastAttack = 0;
 
         private bool _isFacingLeft;
-
         public bool IsDead
         {
             get { return Health <= 0; }

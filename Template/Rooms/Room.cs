@@ -22,7 +22,7 @@ namespace RogueLike.Rooms
 
         private Color _water = new Color(61, 61, 126);
 
-        private Rectangle _grassRec, _grassRec2, _waterRec;
+        private Rectangle _grassRec, _grassRec2;
 
         private int[,] _map;
         /// <summary>
@@ -53,12 +53,6 @@ namespace RogueLike.Rooms
                 (int)Position.Y - 20,
                 (_map.GetLength(0) - 1) * tileSize,
                 _map.GetLength(1) * tileSize + 1);
-
-            _waterRec = new Rectangle(
-                (int)Position.X - 10 * tileSize,
-                (int)Position.Y + (int)roomSize.Y * tileSize,
-                ((int)roomSize.X - 1) * tileSize + 22 * tileSize,
-                1000);
 
             _grassRec2 = new Rectangle(
                     (int)Position.X - 10 * tileSize,
@@ -393,7 +387,6 @@ namespace RogueLike.Rooms
             if (IsWater)
             {
                 spriteBatch.Draw(_texture, _grassRec2, _grass);
-                spriteBatch.Draw(_texture, _waterRec, _water);
             }
         }
     }
