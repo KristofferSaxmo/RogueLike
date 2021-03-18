@@ -61,47 +61,43 @@ namespace RogueLike.Sprites.GUISprites
         }
         public void Draw(SpriteBatch spriteBatch, int playerHealth)
         {
-            if (playerHealth == 0)
+            switch (playerHealth)
             {
-                spriteBatch.Draw(_texture, _heart1, _emptyHeart, Color);
-                spriteBatch.Draw(_texture, _heart2, _emptyHeart, Color);
-                spriteBatch.Draw(_texture, _heart3, _emptyHeart, Color);
-            }
-            else if (playerHealth == 1)
-            {
-                spriteBatch.Draw(_texture, _heart1, _halfHeart, Color);
-                spriteBatch.Draw(_texture, _heart2, _emptyHeart, Color);
-                spriteBatch.Draw(_texture, _heart3, _emptyHeart, Color);
-            }
-            else if (playerHealth == 2)
-            {
-                spriteBatch.Draw(_texture, _heart1, _fullHeart, Color);
-                spriteBatch.Draw(_texture, _heart2, _emptyHeart, Color);
-                spriteBatch.Draw(_texture, _heart3, _emptyHeart, Color);
-            }
-            else if (playerHealth == 3)
-            {
-                spriteBatch.Draw(_texture, _heart1, _fullHeart, Color);
-                spriteBatch.Draw(_texture, _heart2, _halfHeart, Color);
-                spriteBatch.Draw(_texture, _heart3, _emptyHeart, Color);
-            }
-            else if (playerHealth == 4)
-            {
-                spriteBatch.Draw(_texture, _heart1, _fullHeart, Color);
-                spriteBatch.Draw(_texture, _heart2, _fullHeart, Color);
-                spriteBatch.Draw(_texture, _heart3, _emptyHeart, Color);
-            }
-            else if (playerHealth == 5)
-            {
-                spriteBatch.Draw(_texture, _heart1, _fullHeart, Color);
-                spriteBatch.Draw(_texture, _heart2, _fullHeart, Color);
-                spriteBatch.Draw(_texture, _heart3, _halfHeart, Color);
-            }
-            else if (playerHealth == 6)
-            {
-                spriteBatch.Draw(_texture, _heart1, _fullHeart, Color);
-                spriteBatch.Draw(_texture, _heart2, _fullHeart, Color);
-                spriteBatch.Draw(_texture, _heart3, _fullHeart, Color);
+                case 0:
+                    spriteBatch.Draw(_texture, _heart1, _emptyHeart, Color);
+                    spriteBatch.Draw(_texture, _heart2, _emptyHeart, Color);
+                    spriteBatch.Draw(_texture, _heart3, _emptyHeart, Color);
+                    break;
+                case 1:
+                    spriteBatch.Draw(_texture, _heart1, _halfHeart, Color);
+                    spriteBatch.Draw(_texture, _heart2, _emptyHeart, Color);
+                    spriteBatch.Draw(_texture, _heart3, _emptyHeart, Color);
+                    break;
+                case 2:
+                    spriteBatch.Draw(_texture, _heart1, _fullHeart, Color);
+                    spriteBatch.Draw(_texture, _heart2, _emptyHeart, Color);
+                    spriteBatch.Draw(_texture, _heart3, _emptyHeart, Color);
+                    break;
+                case 3:
+                    spriteBatch.Draw(_texture, _heart1, _fullHeart, Color);
+                    spriteBatch.Draw(_texture, _heart2, _halfHeart, Color);
+                    spriteBatch.Draw(_texture, _heart3, _emptyHeart, Color);
+                    break;
+                case 4:
+                    spriteBatch.Draw(_texture, _heart1, _fullHeart, Color);
+                    spriteBatch.Draw(_texture, _heart2, _fullHeart, Color);
+                    spriteBatch.Draw(_texture, _heart3, _emptyHeart, Color);
+                    break;
+                case 5:
+                    spriteBatch.Draw(_texture, _heart1, _fullHeart, Color);
+                    spriteBatch.Draw(_texture, _heart2, _fullHeart, Color);
+                    spriteBatch.Draw(_texture, _heart3, _halfHeart, Color);
+                    break;
+                case 6:
+                    spriteBatch.Draw(_texture, _heart1, _fullHeart, Color);
+                    spriteBatch.Draw(_texture, _heart2, _fullHeart, Color);
+                    spriteBatch.Draw(_texture, _heart3, _fullHeart, Color);
+                    break;
             }
         }
     }

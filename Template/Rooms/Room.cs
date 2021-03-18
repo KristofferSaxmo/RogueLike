@@ -57,7 +57,12 @@ namespace RogueLike.Rooms
                     ((int)roomSize.X - 1) * tileSize + 22 * tileSize,
                     1000);
 
-            #region Create Room
+            CreateRoom(roomSize);
+            FillRoom(roomSize);
+        }
+
+        private void CreateRoom(Vector2 roomSize)
+        {
             for (int i = 0; i < (int)roomSize.X; i++) // Tile X
             {
                 for (int j = 0; j < (int)roomSize.Y; j++) // Tile Y
@@ -66,228 +71,241 @@ namespace RogueLike.Rooms
                         _map[i, j] = 1;
                 }
             }
-            #endregion
+        }
 
-            #region Fill Room
-
-            #region Water Room
+        private void FillRoom(Vector2 roomSize)
+        {
             if (IsWater)
             {
-                for (int x = -10; x < roomSize.X + 10; x++)
-                {
-                    for (int y = (int)roomSize.Y; y < (int)roomSize.Y + 5; y++)
-                    {
-                        Children.Add(new AnimatedDefaultSprite(new Dictionary<string, Animation>() { { "Animation", new Animation(_textures["Water-Sheet"], 32, 0.1f) } })
-                        {
-                            Position = new Vector2(RandomXPos(x, 0, 0), RandomYPos(y, 144, 144)),
-                            Parent = this
-                        });
-                    }
-                    // Water
-                    Children.Add(new WaterEdge(new Dictionary<string, Animation>() { { "Animation", new Animation(_textures["WaterEdge-Sheet"], 32, 0.1f) } })
-                    {
-                        Position = new Vector2(RandomXPos(x, 0, 0), RandomYPos((int)roomSize.Y - 1, 144, 144)),
-                        Parent = this
-                    });
-                    // Left water walls
-                    if (x < roomSize.X / 2 && x < 0)
-                    {
-                        Children.Add(new Wall(_textures["LeftWall"])
-                        {
-                            Position = new Vector2(RandomXPos(x, 0, 0), Position.Y + ((int)roomSize.Y - 1) * TileSize - 5),
-                            Parent = this
-                        });
-                        Children.Add(new Wall(_textures["LeftWall"])
-                        {
-                            Position = new Vector2(RandomXPos(x, 48, 48), Position.Y + ((int)roomSize.Y - 1) * TileSize - 25),
-                            Parent = this
-                        });
-                    }
-                    // Right water walls
-                    else if (x >= roomSize.X - 1)
-                    {
-                        Children.Add(new Wall(_textures["RightWall"])
-                        {
-                            Position = new Vector2(RandomXPos(x, 0, 0), Position.Y + ((int)roomSize.Y - 1) * TileSize - 5),
-                            Parent = this
-                        });
-                        Children.Add(new Wall(_textures["RightWall"])
-                        {
-                            Position = new Vector2(RandomXPos(x, 48, 48), Position.Y + ((int)roomSize.Y - 1) * TileSize - 25),
-                            Parent = this
-                        });
-                    }
-                }
+                CreateWater(roomSize);
             }
-            #endregion
 
             for (int x = 0; x < (int)roomSize.X; x++) // Tile X
             {
                 for (int y = 0; y < (int)roomSize.Y; y++) // Tile Y
                 {
-                    #region Create Walls
                     if (_map[x, y] == 1) // If it's a wall
                     {
-                        // Left Walls
-                        if (x == 0)
-                        {
-                            Children.Add(new Wall(_textures["LeftWall"])
-                            {
-                                Position = new Vector2(RandomXPos(x, 0, 0), RandomYPos(y, 0, 0)),
-                                Parent = this
-                            });
-                            Children.Add(new Wall(_textures["LeftWall"])
-                            {
-                                Position = new Vector2(RandomXPos(x, 30, 30), Position.Y + y * TileSize - 48),
-                                Parent = this
-                            });
-                        }
-                        // Right Walls
-                        else if (x == roomSize.X - 1)
-                        {
-                            Children.Add(new Wall(_textures["RightWall"])
-                            {
-                                Position = new Vector2(RandomXPos(x, 30, 30), RandomYPos(y, 0, 0)),
-                                Parent = this
-                            });
-                            Children.Add(new Wall(_textures["RightWall"])
-                            {
-                                Position = new Vector2(RandomXPos(x, 0, 0), Position.Y + y * TileSize - 48),
-                                Parent = this
-                            });
-                        }
-                        // Top Walls
-                        if (y == 0 && x != roomSize.X - 1)
-                        {
-                            if (x < roomSize.X / 2)
-                            {
-                                Children.Add(new Wall(_textures["LeftWall"])
-                                {
-                                    Position = new Vector2(RandomXPos(x, 0, 0), RandomYPos(y - 1, 50, 50)),
-                                    Parent = this
-                                });
-                                Children.Add(new Wall(_textures["LeftWall"])
-                                {
-                                    Position = new Vector2(RandomXPos(x, 48, 48), RandomYPos(y - 1, 30, 30)),
-                                    Parent = this
-                                });
-                            }
-                            else
-                            {
-                                Children.Add(new Wall(_textures["RightWall"])
-                                {
-                                    Position = new Vector2(RandomXPos(x, 0, 0), RandomYPos(y - 1, 50, 50)),
-                                    Parent = this
-                                });
-                                Children.Add(new Wall(_textures["RightWall"])
-                                {
-                                    Position = new Vector2(RandomXPos(x, 48, 48), RandomYPos(y - 1, 30, 30)),
-                                    Parent = this
-                                });
-                            }
-                        }
-                        // Bottom Walls
-                        else if (y == roomSize.Y - 1 && !IsWater)
-                        {
-                            if (x < roomSize.X / 2)
-                            {
-                                Children.Add(new Wall(_textures["LeftWall"])
-                                {
-                                    Position = new Vector2(RandomXPos(x, 0, 0), RandomYPos(y, 48, 48)),
-                                    Parent = this,
-                                    Color = Color.Black
-                                });
-                                Children.Add(new Wall(_textures["LeftWall"])
-                                {
-                                    Position = new Vector2(RandomXPos(x, 48, 48), RandomYPos(y, 18, 18)),
-                                    Parent = this,
-                                    Color = Color.Black
-                                });
-                            }
-                            else
-                            {
-                                Children.Add(new Wall(_textures["RightWall"])
-                                {
-                                    Position = new Vector2(RandomXPos(x, 0, 0), RandomYPos(y, 48, 48)),
-                                    Parent = this,
-                                    Color = Color.Black
-                                });
-                                Children.Add(new Wall(_textures["RightWall"])
-                                {
-                                    Position = new Vector2(RandomXPos(x, 48, 48), RandomYPos(y, 18, 18)),
-                                    Parent = this,
-                                    Color = Color.Black
-                                });
-                            }
-                        }
+                        CreateWalls(roomSize, x, y);
                     }
-                    #endregion
 
-                    #region Create Other
                     else if (_map[x, y] == 0)
                     {
-                        if (Game1.Random.Next(100) < 30) // 30%
-                            Children.Add(new Tree(_textures["Tree"], _textures["TreeShadow"])
-                            {
-                                Position = RandomPosition(x, y, 50),
-                                Parent = this
-                            });
-
-                        if (Game1.Random.Next(100) < 15) // 15%
-                            Children.Add(new Plant1(_textures["Plant1"])
-                            {
-                                Position = RandomPosition(x, y, 50),
-                                Parent = this
-                            });
-
-                        if (Game1.Random.Next(100) < 30) // 30%
-                            Children.Add(new DefaultSprite(_textures["Plant2"])
-                            {
-                                Position = RandomPosition(x, y, 50),
-                                Parent = this
-                            });
-
-                        if (Game1.Random.Next(100) < 15) // 15%
-                            Children.Add(new PlantAnimation(new Dictionary<string, Animation>() { { "Animation", new Animation(_textures["Plant-Sheet"], 4, 0.5f) } })
-                            {
-                                Position = RandomPosition(x, y, 50),
-                                Parent = this
-                            });
-
-                        if (Game1.Random.Next(100) < 20) // 20%
-                            Children.Add(new Rock1(_textures["Rock1"], _textures["Rock1Shadow"])
-                            {
-                                Position = RandomPosition(x, y, 50),
-                                Parent = this
-                            });
-
-                        if (Game1.Random.Next(100) < 30) // 30%
-                            Children.Add(new DefaultSprite(_textures["Rock2"])
-                            {
-                                Position = RandomPosition(x, y, 50),
-                                Parent = this
-                            });
-
-                        if (Game1.Random.Next(100) < 10) // 10%
-                            Children.Add(new DefaultSprite(_textures["Mushroom"])
-                            {
-                                Position = RandomPosition(x, y, 50),
-                                Parent = this
-                            });
-
-                        if (Game1.Random.Next(100) < 2) // 2%
-                            Children.Add(new DefaultSprite(_textures["Mud"])
-                            {
-                                Position = RandomPosition(x, y, 50),
-                                Parent = this
-                            });
+                        CreateOther(x, y);
                     }
-                    #endregion
                 }
             }
 
-                    #region Outside Tree Tops
-                    if (IsWater)
+            CreateTreeTops(roomSize);
+        }
+
+        private void CreateWater(Vector2 roomSize)
+        {
+            for (int x = -10; x < roomSize.X + 10; x++)
+            {
+                for (int y = (int)roomSize.Y; y < (int)roomSize.Y + 5; y++)
+                {
+                    Children.Add(new AnimatedDefaultSprite(new Dictionary<string, Animation>() { { "Animation", new Animation(_textures["Water-Sheet"], 32, 0.1f) } })
+                    {
+                        Position = new Vector2(RandomXPos(x, 0, 0), RandomYPos(y, 144, 144)),
+                        Parent = this
+                    });
+                }
+                // Water
+                Children.Add(new WaterEdge(new Dictionary<string, Animation>() { { "Animation", new Animation(_textures["WaterEdge-Sheet"], 32, 0.1f) } })
+                {
+                    Position = new Vector2(RandomXPos(x, 0, 0), RandomYPos((int)roomSize.Y - 1, 144, 144)),
+                    Parent = this
+                });
+                // Left water walls
+                if (x < roomSize.X / 2 && x < 0)
+                {
+                    Children.Add(new Wall(_textures["LeftWall"])
+                    {
+                        Position = new Vector2(RandomXPos(x, 0, 0), Position.Y + ((int)roomSize.Y - 1) * TileSize - 5),
+                        Parent = this
+                    });
+                    Children.Add(new Wall(_textures["LeftWall"])
+                    {
+                        Position = new Vector2(RandomXPos(x, 48, 48), Position.Y + ((int)roomSize.Y - 1) * TileSize - 25),
+                        Parent = this
+                    });
+                }
+                // Right water walls
+                else if (x >= roomSize.X - 1)
+                {
+                    Children.Add(new Wall(_textures["RightWall"])
+                    {
+                        Position = new Vector2(RandomXPos(x, 0, 0), Position.Y + ((int)roomSize.Y - 1) * TileSize - 5),
+                        Parent = this
+                    });
+                    Children.Add(new Wall(_textures["RightWall"])
+                    {
+                        Position = new Vector2(RandomXPos(x, 48, 48), Position.Y + ((int)roomSize.Y - 1) * TileSize - 25),
+                        Parent = this
+                    });
+                }
+            }
+        }
+
+        private void CreateWalls(Vector2 roomSize, int x, int y)
+        {
+            // Left Walls
+            if (x == 0)
+            {
+                Children.Add(new Wall(_textures["LeftWall"])
+                {
+                    Position = new Vector2(RandomXPos(x, 0, 0), RandomYPos(y, 0, 0)),
+                    Parent = this
+                });
+                Children.Add(new Wall(_textures["LeftWall"])
+                {
+                    Position = new Vector2(RandomXPos(x, 30, 30), Position.Y + y * TileSize - 48),
+                    Parent = this
+                });
+            }
+            // Right Walls
+            else if (x == roomSize.X - 1)
+            {
+                Children.Add(new Wall(_textures["RightWall"])
+                {
+                    Position = new Vector2(RandomXPos(x, 30, 30), RandomYPos(y, 0, 0)),
+                    Parent = this
+                });
+                Children.Add(new Wall(_textures["RightWall"])
+                {
+                    Position = new Vector2(RandomXPos(x, 0, 0), Position.Y + y * TileSize - 48),
+                    Parent = this
+                });
+            }
+            // Top Walls
+            if (y == 0 && x != roomSize.X - 1)
+            {
+                if (x < roomSize.X / 2)
+                {
+                    Children.Add(new Wall(_textures["LeftWall"])
+                    {
+                        Position = new Vector2(RandomXPos(x, 0, 0), RandomYPos(y - 1, 50, 50)),
+                        Parent = this
+                    });
+                    Children.Add(new Wall(_textures["LeftWall"])
+                    {
+                        Position = new Vector2(RandomXPos(x, 48, 48), RandomYPos(y - 1, 30, 30)),
+                        Parent = this
+                    });
+                }
+                else
+                {
+                    Children.Add(new Wall(_textures["RightWall"])
+                    {
+                        Position = new Vector2(RandomXPos(x, 0, 0), RandomYPos(y - 1, 50, 50)),
+                        Parent = this
+                    });
+                    Children.Add(new Wall(_textures["RightWall"])
+                    {
+                        Position = new Vector2(RandomXPos(x, 48, 48), RandomYPos(y - 1, 30, 30)),
+                        Parent = this
+                    });
+                }
+            }
+            // Bottom Walls
+            else if (y == roomSize.Y - 1 && !IsWater)
+            {
+                if (x < roomSize.X / 2)
+                {
+                    Children.Add(new Wall(_textures["LeftWall"])
+                    {
+                        Position = new Vector2(RandomXPos(x, 0, 0), RandomYPos(y, 48, 48)),
+                        Parent = this,
+                        Color = Color.Black
+                    });
+                    Children.Add(new Wall(_textures["LeftWall"])
+                    {
+                        Position = new Vector2(RandomXPos(x, 48, 48), RandomYPos(y, 18, 18)),
+                        Parent = this,
+                        Color = Color.Black
+                    });
+                }
+                else
+                {
+                    Children.Add(new Wall(_textures["RightWall"])
+                    {
+                        Position = new Vector2(RandomXPos(x, 0, 0), RandomYPos(y, 48, 48)),
+                        Parent = this,
+                        Color = Color.Black
+                    });
+                    Children.Add(new Wall(_textures["RightWall"])
+                    {
+                        Position = new Vector2(RandomXPos(x, 48, 48), RandomYPos(y, 18, 18)),
+                        Parent = this,
+                        Color = Color.Black
+                    });
+                }
+            }
+        }
+
+        private void CreateOther(int x, int y)
+        {
+            if (Game1.Random.Next(100) < 30) // 30%
+                Children.Add(new Tree(_textures["Tree"], _textures["TreeShadow"])
+                {
+                    Position = RandomPosition(x, y, 50),
+                    Parent = this
+                });
+
+            if (Game1.Random.Next(100) < 15) // 15%
+                Children.Add(new Plant1(_textures["Plant1"])
+                {
+                    Position = RandomPosition(x, y, 50),
+                    Parent = this
+                });
+
+            if (Game1.Random.Next(100) < 30) // 30%
+                Children.Add(new DefaultSprite(_textures["Plant2"])
+                {
+                    Position = RandomPosition(x, y, 50),
+                    Parent = this
+                });
+
+            if (Game1.Random.Next(100) < 15) // 15%
+                Children.Add(new PlantAnimation(new Dictionary<string, Animation>() { { "Animation", new Animation(_textures["Plant-Sheet"], 4, 0.5f) } })
+                {
+                    Position = RandomPosition(x, y, 50),
+                    Parent = this
+                });
+
+            if (Game1.Random.Next(100) < 20) // 20%
+                Children.Add(new Rock1(_textures["Rock1"], _textures["Rock1Shadow"])
+                {
+                    Position = RandomPosition(x, y, 50),
+                    Parent = this
+                });
+
+            if (Game1.Random.Next(100) < 30) // 30%
+                Children.Add(new DefaultSprite(_textures["Rock2"])
+                {
+                    Position = RandomPosition(x, y, 50),
+                    Parent = this
+                });
+
+            if (Game1.Random.Next(100) < 10) // 10%
+                Children.Add(new DefaultSprite(_textures["Mushroom"])
+                {
+                    Position = RandomPosition(x, y, 50),
+                    Parent = this
+                });
+
+            if (Game1.Random.Next(100) < 2) // 2%
+                Children.Add(new DefaultSprite(_textures["Mud"])
+                {
+                    Position = RandomPosition(x, y, 50),
+                    Parent = this
+                });
+        }
+
+        private void CreateTreeTops(Vector2 roomSize)
+        {
+            if (IsWater)
             {
                 for (int x = -10; x < (int)roomSize.X + 10; x++) // Tile X
                 {
@@ -298,74 +316,64 @@ namespace RogueLike.Rooms
                         {
                             if (Game1.Random.Next(100) <= 50)
                             {
-                                int random = Game1.Random.Next(3);
-
-                                if (random == 0)
-                                    Children.Add(new DefaultSprite(_textures["TreeTop1"])
-                                    {
-                                        Position = RandomPosition(x, y, 48),
-                                        Parent = this
-                                    });
-                                else if (random == 1)
-                                    Children.Add(new DefaultSprite(_textures["TreeTop2"])
-                                    {
-                                        Position = RandomPosition(x, y, 48),
-                                        Parent = this
-                                    });
-                                else
-                                    Children.Add(new DefaultSprite(_textures["TreeTop3"])
-                                    {
-                                        Position = RandomPosition(x, y, 48),
-                                        Parent = this
-                                    });
+                                RandomTreeTops(x, y);
                             }
                         }
                     }
                 }
+                return;
             }
-            else
+            
+            for (int x = -10; x < (int)roomSize.X + 10; x++) // Tile X
             {
-                for (int x = -10; x < (int)roomSize.X + 10; x++) // Tile X
+                for (int y = -10; y < (int)roomSize.Y + 10; y++) // Tile Y
                 {
-                    for (int y = -10; y < (int)roomSize.Y + 10; y++) // Tile Y
+                    if (x < 0 || x > (int)roomSize.X - 1 ||
+                    y < -1 || y > (int)roomSize.Y - 1)
                     {
-                        if (x < 0 || x > (int)roomSize.X - 1 ||
-                        y < -1 || y > (int)roomSize.Y - 1)
+                        if (Game1.Random.Next(100) <= 50)
                         {
-                            if (Game1.Random.Next(100) <= 50)
-                            {
-                                int random = Game1.Random.Next(3);
-
-                                if (random == 0)
-                                    Children.Add(new DefaultSprite(_textures["TreeTop1"])
-                                    {
-                                        Position = RandomPosition(x, y, 48),
-                                        Parent = this,
-                                        LayerOrigin = 50
-                                    });
-                                else if (random == 1)
-                                    Children.Add(new DefaultSprite(_textures["TreeTop2"])
-                                    {
-                                        Position = RandomPosition(x, y, 48),
-                                        Parent = this,
-                                        LayerOrigin = 50
-                                    });
-                                else
-                                    Children.Add(new DefaultSprite(_textures["TreeTop3"])
-                                    {
-                                        Position = RandomPosition(x, y, 48),
-                                        Parent = this,
-                                        LayerOrigin = 50
-                                    });
-                            }
+                            RandomTreeTops(x, y);
                         }
                     }
                 }
             }
-            #endregion
-
-            #endregion
         }
+
+        private void RandomTreeTops(int x, int y)
+        {
+            int random = Game1.Random.Next(3);
+
+            switch (random)
+            {
+                case 0:
+                    Children.Add(new DefaultSprite(_textures["TreeTop1"])
+                    {
+                        Position = RandomPosition(x, y, 48),
+                        Parent = this,
+                        LayerOrigin = 50
+                    });
+                    break;
+                case 1:
+                    Children.Add(new DefaultSprite(_textures["TreeTop2"])
+                    {
+                        Position = RandomPosition(x, y, 48),
+                        Parent = this,
+                        LayerOrigin = 50
+                    });
+                    break;
+                case 2:
+                    Children.Add(new DefaultSprite(_textures["TreeTop3"])
+                    {
+                        Position = RandomPosition(x, y, 48),
+                        Parent = this,
+                        LayerOrigin = 50
+                    });
+                    break;
+            }
+        }
+
+
         private Vector2 RandomPosition(int x, int y, int maxRandom)
         {
             return new Vector2(Position.X + x * TileSize + Game1.Random.Next(maxRandom), Position.Y + y * TileSize + Game1.Random.Next(maxRandom));
