@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using RogueLike.Managers;
 using RogueLike.Models;
 using RogueLike.Rooms;
+using RogueLike.Sprites.RoomSprites;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,17 +14,13 @@ namespace RogueLike.Sprites
     {
         private KeyboardState _currentKey;
 
-        private KeyboardState _previousKey;
-
-        public Vector2 VelocityTest { get; set; }
-
         private MouseState _currentMouse;
-
-        private MouseState _previousMouse;
 
         private Vector2 _direction;
 
         private int _attackCooldown;
+
+        private int _collisionCooldown;
 
         private int _lastAttack = 0;
 
@@ -150,15 +147,10 @@ namespace RogueLike.Sprites
 
         public override void Update(GameTime gameTime)
         {
-            if (IsDead)
-                return;
 
             _animationManager.Update(gameTime, Layer);
 
-            _previousKey = _currentKey;
             _currentKey = Keyboard.GetState();
-
-            _previousMouse = _currentMouse;
             _currentMouse = Mouse.GetState();
 
             if (_currentMouse.LeftButton == ButtonState.Pressed)
@@ -166,8 +158,9 @@ namespace RogueLike.Sprites
 
             if (IsAttacking())
             {
-                Velocity = new Vector2(Velocity.X * 0.9f, Velocity.Y * 0.9f);
+                Velocity = new Vector2(Velocity.X * 0.9f, Velocity.Y * 0.9f); // Friction
             }
+
             else
             {
                 Move();
@@ -178,13 +171,13 @@ namespace RogueLike.Sprites
                 _attackCooldown++;
             else
                 _lastAttack = 0;
+
+            if (_collisionCooldown > 0)
+                _collisionCooldown--;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (IsDead)
-                return;
-
             base.Draw(gameTime, spriteBatch);
         }
 
@@ -195,8 +188,16 @@ namespace RogueLike.Sprites
 
         public void OnCollide(Sprite sprite)
         {
-            if (IsDead)
+
+            if (_collisionCooldown != 0)
                 return;
+
+            //if (sprite is Enemy)
+            //{
+            //    Health--;
+            //    _collisionCooldown = 60;
+            //}
+
         }
 
         public bool IsAttacking()

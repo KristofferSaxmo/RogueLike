@@ -15,7 +15,6 @@ namespace RogueLike.States
     public class GameState : State
     {
         private Quadtree _quad;
-        private SpriteFont _font;
         private RoomManager _roomManager;
         private GUIManager _guiManager;
         private List<Sprite> _sprites;
@@ -23,7 +22,6 @@ namespace RogueLike.States
         private Rectangle _screenRectangle;
         private List<Sprite> _returnSprites = new List<Sprite>();
         private List<Player> _players;
-        private Camera _camera;
 
         public GameState(Game1 game, ContentManager content, Texture2D defaultTex) : base(game, content, defaultTex)
         {
@@ -55,7 +53,7 @@ namespace RogueLike.States
                 })
                 {
                     Health = 6,
-                    Position = new Vector2(_roomManager.CurrentRoom.Area.X + _roomManager.CurrentRoom.Area.Center.X, _roomManager.CurrentRoom.Area.Y + _roomManager.CurrentRoom.Area.Center.Y),
+                    Position = new Vector2(_roomManager.CurrentRoom.Area.X + _roomManager.CurrentRoom.Area.Center.X, _roomManager.CurrentRoom.Area.Y + _roomManager.CurrentRoom.Area.Height - 300),
                     Speed = 7,
                     Input = new Input()
                     {
@@ -157,7 +155,6 @@ namespace RogueLike.States
         public override void UpdateCamera(Camera camera)
         {
             camera.Follow(_players[0]);
-            _camera = camera;
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {

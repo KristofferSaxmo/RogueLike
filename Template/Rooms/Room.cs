@@ -45,17 +45,15 @@ namespace RogueLike.Rooms
             else
                 IsWater = false;
 
-            GrassRec = new Rectangle(
-                (int)Position.X,
-                (int)Position.Y - 20,
-                (_map.GetLength(0) - 1) * tileSize,
-                _map.GetLength(1) * tileSize + 1);
+            GrassRec = new Rectangle((int)Position.X,
+                                     (int)Position.Y - 20,
+                                     (_map.GetLength(0) - 1) * tileSize,
+                                     _map.GetLength(1) * tileSize + 1);
 
-            GrassRec2 = new Rectangle(
-                    (int)Position.X - 10 * tileSize,
-                    (int)Position.Y + (int)roomSize.Y * tileSize - 70,
-                    ((int)roomSize.X - 1) * tileSize + 22 * tileSize,
-                    1000);
+            GrassRec2 = new Rectangle((int)Position.X - 10 * tileSize,
+                                      (int)Position.Y + (int)roomSize.Y * tileSize - 70,
+                                      ((int)roomSize.X - 1) * tileSize + 22 * tileSize,
+                                      1000);
 
             CreateRoom(roomSize);
             
@@ -247,7 +245,7 @@ namespace RogueLike.Rooms
 
         private void CreateOther(int x, int y)
         {
-            if (Game1.Random.Next(100) < 30) // 30%
+            if (Game1.Random.Next(100) < 20) // 20%
                 Children.Add(new Tree(_textures["Tree"], _textures["TreeShadow"])
                 {
                     Position = RandomPosition(x, y, 50),
@@ -275,7 +273,7 @@ namespace RogueLike.Rooms
                     Parent = this
                 });
 
-            if (Game1.Random.Next(100) < 20) // 20%
+            if (Game1.Random.Next(100) < 15) // 15%
                 Children.Add(new Rock1(_textures["Rock1"], _textures["Rock1Shadow"])
                 {
                     Position = RandomPosition(x, y, 50),

@@ -58,7 +58,6 @@ namespace RogueLike.Sprites
                     _animationManager.Rotation = value;
             }
         }
-        public Vector2 Direction { get; set; }
         public float Speed { get; set; }
         public float Transparency { get; set; }
         public int Health { get; set; }
@@ -120,12 +119,13 @@ namespace RogueLike.Sprites
         {
             _texture = texture;
 
-            Children = new List<Sprite>();
-
-            Children.Add(_shadow = new Shadow(shadowTexture)
+            Children = new List<Sprite>
             {
-                Parent = this
-            });
+                (_shadow = new Shadow(shadowTexture)
+                {
+                    Parent = this
+                })
+            };
 
             Color = Color.White;
 
