@@ -15,9 +15,13 @@ namespace RogueLike.Sprites
 
         private KeyboardState _previousKey;
 
+        public Vector2 VelocityTest { get; set; }
+
         private MouseState _currentMouse;
 
         private MouseState _previousMouse;
+
+        private Vector2 _direction;
 
         private int _attackCooldown;
 
@@ -35,58 +39,73 @@ namespace RogueLike.Sprites
         }
         public void Attack()
         {
-            if (_lastAttack == 0)
+            if (_lastAttack == 0) // Lose all movement speed before attacking
                 Velocity = Vector2.Zero;
 
-            if (_isFacingLeft)
+            _direction = Camera.GetWorldPosition(new Vector2(_currentMouse.X, _currentMouse.Y)) - Position;
+            _direction.Normalize();
+
+            // If mouse is left of player
+            if (Camera.GetWorldPosition(new Vector2(_currentMouse.X, _currentMouse.Y)).X < Rectangle.X)
             {
-                if (!IsAttacking() && (_lastAttack == 0 || _lastAttack == 3))
-                {
-                    _animationManager.Play(_animations["AttackLeft1"]);
-                    _attackCooldown = 0;
-                    _lastAttack = 1;
-                    Velocity = new Vector2(-7, 0);
-                }
-                else if (!IsAttacking() && _lastAttack == 1)
-                {
-                    _animationManager.Play(_animations["AttackLeft2"]);
-                    _attackCooldown = 0;
-                    _lastAttack = 2;
-                    Velocity = new Vector2(-7, 0);
-                }
-                else if (!IsAttacking() && _lastAttack == 2)
-                {
-                    _animationManager.Play(_animations["AttackLeft3"]);
-                    _attackCooldown = 0;
-                    _lastAttack = 3;
-                    Velocity = new Vector2(-10, 0);
-                }
+                AttackLeft();
+                return;
             }
-            else
+
+            // If mouse is right of player
+            AttackRight();
+        }
+
+        private void AttackLeft()
+        {
+            if (!IsAttacking() && (_lastAttack == 0 || _lastAttack == 3))
             {
-                if (!IsAttacking() && (_lastAttack == 0 || _lastAttack == 3))
-                {
-                    _animationManager.Play(_animations["AttackRight1"]);
-                    _attackCooldown = 0;
-                    _lastAttack = 1;
-                    Velocity = new Vector2(7, 0);
-                }
-                else if (!IsAttacking() && _lastAttack == 1)
-                {
-                    _animationManager.Play(_animations["AttackRight2"]);
-                    _attackCooldown = 0;
-                    _lastAttack = 2;
-                    Velocity = new Vector2(7, 0);
-                }
-                else if (!IsAttacking() && _lastAttack == 2)
-                {
-                    _animationManager.Play(_animations["AttackRight3"]);
-                    _attackCooldown = 0;
-                    _lastAttack = 3;
-                    Velocity = new Vector2(10, 0);
-                }
+                _animationManager.Play(_animations["AttackLeft1"]);
+                _attackCooldown = 0;
+                _lastAttack = 1;
+                Velocity = _direction * 5;
+            }
+            else if (!IsAttacking() && _lastAttack == 1)
+            {
+                _animationManager.Play(_animations["AttackLeft2"]);
+                _attackCooldown = 0;
+                _lastAttack = 2;
+                Velocity = _direction * 5;
+            }
+            else if (!IsAttacking() && _lastAttack == 2)
+            {
+                _animationManager.Play(_animations["AttackLeft3"]);
+                _attackCooldown = 0;
+                _lastAttack = 3;
+                Velocity = _direction * 15;
             }
         }
+
+        private void AttackRight()
+        {
+            if (!IsAttacking() && (_lastAttack == 0 || _lastAttack == 3))
+            {
+                _animationManager.Play(_animations["AttackRight1"]);
+                _attackCooldown = 0;
+                _lastAttack = 1;
+                Velocity = _direction * 5;
+            }
+            else if (!IsAttacking() && _lastAttack == 1)
+            {
+                _animationManager.Play(_animations["AttackRight2"]);
+                _attackCooldown = 0;
+                _lastAttack = 2;
+                Velocity = _direction * 5;
+            }
+            else if (!IsAttacking() && _lastAttack == 2)
+            {
+                _animationManager.Play(_animations["AttackRight3"]);
+                _attackCooldown = 0;
+                _lastAttack = 3;
+                Velocity = _direction * 15;
+            }
+        }
+
         public void Move()
         {
             Velocity = Vector2.Zero;
@@ -103,6 +122,7 @@ namespace RogueLike.Sprites
             if (_currentKey.IsKeyDown(Input.Down))
                 Velocity = new Vector2(Velocity.X, Velocity.Y + Speed);
         }
+
         public void ChangeAnimation()
         {
             if (Velocity.X < 0)
@@ -127,6 +147,7 @@ namespace RogueLike.Sprites
             else if (!_isFacingLeft && !IsAttacking())
                 _animationManager.Play(_animations["IdleRight"]);
         }
+
         public override void Update(GameTime gameTime)
         {
             if (IsDead)
@@ -145,23 +166,7 @@ namespace RogueLike.Sprites
 
             if (IsAttacking())
             {
-                //Camera.GetWorldPosition(new Vector2(_currentMouse.X, _currentMouse.Y)).X < Rectangle.X + Rectangle.Width / 200
-
-                if (Velocity.X > Vector2.Zero.X)
-                    Velocity -= new Vector2(0.5f, 0);
-                else if (Velocity.X < Vector2.Zero.X)
-                        Velocity += new Vector2(0.5f, 0);
-
-                if (Velocity.Y > Vector2.Zero.Y)
-                    Velocity -= new Vector2(0, 0.5f);
-                else if (Velocity.Y < Vector2.Zero.Y)
-                    Velocity -= new Vector2(0, 0.5f);
-
-                if (Velocity.X < 0.1f && Velocity.X > -0.5f)
-                    Velocity = new Vector2(0, Velocity.Y);
-
-                if (Velocity.Y < 0.1f && Velocity.Y > -0.5f)
-                    Velocity = new Vector2(Velocity.X, 0);
+                Velocity = new Vector2(Velocity.X * 0.9f, Velocity.Y * 0.9f);
             }
             else
             {
@@ -173,8 +178,8 @@ namespace RogueLike.Sprites
                 _attackCooldown++;
             else
                 _lastAttack = 0;
-
         }
+
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             if (IsDead)
@@ -182,15 +187,18 @@ namespace RogueLike.Sprites
 
             base.Draw(gameTime, spriteBatch);
         }
+
         public void UpdateHitbox()
         {
             _hitbox = new Rectangle(Rectangle.X + 29 * Scale, Rectangle.Y + 33 * Scale, 12 * Scale, 4 * Scale);
         }
+
         public void OnCollide(Sprite sprite)
         {
             if (IsDead)
                 return;
         }
+
         public bool IsAttacking()
         {
             if (_animationManager.CurrentAnimation == _animations["AttackLeft1"] ||

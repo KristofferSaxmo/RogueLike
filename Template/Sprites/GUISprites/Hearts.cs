@@ -42,19 +42,19 @@ namespace RogueLike.Sprites.GUISprites
                 height);
 
             _heart1 = new Rectangle(
-                (int)Position.X + (texture.Width * Scale / heartCount * 0),
+                (int)Position.X + (texture.Width * Scale / heartCount * 0 + Scale * 0),
                 (int)Position.Y,
                 texture.Width * Scale / heartCount,
                 texture.Height * Scale);
 
             _heart2 = new Rectangle(
-                (int)Position.X + (texture.Width * Scale / heartCount * 1),
+                (int)Position.X + (texture.Width * Scale / heartCount * 1 + Scale * 1),
                 (int)Position.Y,
                 texture.Width * Scale / heartCount,
                 texture.Height * Scale);
 
             _heart3 = new Rectangle(
-                (int)Position.X + (texture.Width * Scale / heartCount * 2),
+                (int)Position.X + (texture.Width * Scale / heartCount * 2 + Scale * 2),
                 (int)Position.Y,
                 texture.Width * Scale / heartCount,
                 texture.Height * Scale);

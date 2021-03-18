@@ -33,7 +33,7 @@ namespace RogueLike.Rooms
         public Room(Dictionary<string, Texture2D> textures, Vector2 position, Vector2 roomSize, int tileSize)
         {
             _textures = textures;
-            _texture = _textures["LeftWall"];
+            _texture = _textures["LeftWall"]; // Room måste ha en textur även om den inte ritas
             Position = position;
             _map = new int[(int)roomSize.X, (int)roomSize.Y];
             RoomSize = roomSize;
@@ -58,6 +58,7 @@ namespace RogueLike.Rooms
                     1000);
 
             CreateRoom(roomSize);
+            
             FillRoom(roomSize);
         }
 
