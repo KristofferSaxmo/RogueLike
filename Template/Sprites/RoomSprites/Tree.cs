@@ -25,7 +25,7 @@ namespace RogueLike.Sprites.RoomSprites
         }
         public void OnCollide(Sprite sprite)
         {
-            throw new NotImplementedException();
+
         }
     }
 }

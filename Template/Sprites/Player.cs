@@ -34,7 +34,7 @@ namespace RogueLike.Sprites
         {
             LayerOrigin = 28;
         }
-        public void Attack()
+        private void Attack()
         {
             if (_lastAttack == 0) // Lose all movement speed before attacking
                 Velocity = Vector2.Zero;
@@ -103,7 +103,7 @@ namespace RogueLike.Sprites
             }
         }
 
-        public void Move()
+        private void Move()
         {
             Velocity = Vector2.Zero;
 
@@ -120,7 +120,7 @@ namespace RogueLike.Sprites
                 Velocity = new Vector2(Velocity.X, Velocity.Y + Speed);
         }
 
-        public void ChangeAnimation()
+        private void ChangeAnimation()
         {
             if (Velocity.X < 0)
             {
@@ -147,7 +147,6 @@ namespace RogueLike.Sprites
 
         public override void Update(GameTime gameTime)
         {
-
             _animationManager.Update(gameTime, Layer);
 
             _currentKey = Keyboard.GetState();
@@ -192,15 +191,14 @@ namespace RogueLike.Sprites
             if (_collisionCooldown != 0)
                 return;
 
-            //if (sprite is Enemy)
-            //{
-            //    Health--;
-            //    _collisionCooldown = 60;
-            //}
-
+            if (sprite is Enemy)
+            {
+                Health--;
+                _collisionCooldown = 60;
+            }
         }
 
-        public bool IsAttacking()
+        private bool IsAttacking()
         {
             if (_animationManager.CurrentAnimation == _animations["AttackLeft1"] ||
                 _animationManager.CurrentAnimation == _animations["AttackLeft2"] ||

@@ -85,6 +85,7 @@
     <Compile Include="Quadtree.cs" />
     <Compile Include="Rooms\Room.cs" />
     <Compile Include="Sprites\AnimatedDefaultSprite.cs" />
+    <Compile Include="Sprites\Lightning.cs" />
     <Compile Include="Sprites\Enemy.cs" />
     <Compile Include="Sprites\GUISprites\Hearts.cs" />
     <Compile Include="Sprites\ICollidable.cs" />

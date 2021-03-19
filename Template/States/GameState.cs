@@ -17,6 +17,7 @@ namespace RogueLike.States
         private Quadtree _quad;
         private RoomManager _roomManager;
         private GUIManager _guiManager;
+        private EnemyManager _enemyManager;
         private List<Sprite> _sprites;
         private IEnumerable<Sprite> _onScreenSprites;
         private Rectangle _screenRectangle;
@@ -31,12 +32,14 @@ namespace RogueLike.States
         {
             _roomManager = new RoomManager(_content);
             _guiManager = new GUIManager(_content);
+            _enemyManager = new EnemyManager(_content);
 
             _sprites = new List<Sprite>()
             {
                 _roomManager.CreateRoom(
                     new Vector2(0, 0),
-                    new Vector2(130, 130)),
+                    new Vector2(130, 130),
+                    _enemyManager),
 
                 new Player(new Dictionary<string, Animation>()
                 {
@@ -66,8 +69,6 @@ namespace RogueLike.States
             };
             _quad = new Quadtree(0, _roomManager.CurrentRoom.Area);
             _players = _sprites.Where(c => c is Player).Select(c => (Player)c).ToList();
-
-            AddChildren();
         }
         public override void Update(GameTime gameTime)
         {
@@ -85,7 +86,14 @@ namespace RogueLike.States
             foreach (var sprite in _sprites)
                 sprite.Update(gameTime);
 
+            foreach (Enemy enemy in _sprites.Where(sprite => sprite is Enemy))
+            {
+                enemy.Update(gameTime, _players[0].Position);
+            }
+
             _onScreenSprites = _sprites.Where(sprite => sprite.Rectangle.Intersects(_screenRectangle));
+
+            AddChildren();
 
             DetectCollisions();
 
@@ -118,14 +126,17 @@ namespace RogueLike.States
                     if (spriteA == spriteB)
                         continue;
 
-                    if (spriteA.Parent == spriteB.Parent)
+                    if (spriteA.Parent is Room && spriteB.Parent is Room)
                         continue;
 
                     if (spriteA.Layer == spriteB.Layer)
                         spriteA.Position = new Vector2(spriteA.Position.X, spriteA.Position.Y);
 
                     if (spriteA.Intersects(spriteB))
+                    {
                         ((ICollidable)spriteA).OnCollide(spriteB);
+                        ((ICollidable)spriteB).OnCollide(spriteA);
+                    }
                 }
                 spriteA.Position += spriteA.Velocity;
             }
@@ -162,6 +173,7 @@ namespace RogueLike.States
             spriteBatch.Begin(SpriteSortMode.FrontToBack, null, SamplerState.PointClamp, null, null, null, Camera.Transform);
 
             spriteBatch.Draw(_defaultTex, _roomManager.CurrentRoom.GrassRec, Room.Grass);
+
             if (_roomManager.CurrentRoom.IsWater)
             {
                 spriteBatch.Draw(_defaultTex, _roomManager.CurrentRoom.GrassRec2, Room.Grass);
@@ -170,6 +182,16 @@ namespace RogueLike.States
             foreach (var sprite in _onScreenSprites)
             {
                 sprite.Draw(gameTime, spriteBatch);
+                //spriteBatch.Draw(_defaultTex, sprite.Hitbox, null, Color.Blue, sprite.Rotation, sprite.Origin, SpriteEffects.None, 1f);
+            }
+
+            foreach (Enemy enemy in _sprites.Where(sprite => sprite is Enemy))
+            {
+                spriteBatch.Draw(_defaultTex, enemy.AttackRectangle, Color.Red);
+            }
+            foreach (Enemy enemy in _sprites.Where(sprite => sprite is Enemy))
+            {
+                spriteBatch.Draw(_defaultTex, enemy.Rectangle, Color.Blue);
             }
 
             spriteBatch.End();

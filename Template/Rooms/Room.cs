@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using RogueLike.Managers;
 using RogueLike.Models;
 using RogueLike.Sprites;
 using RogueLike.Sprites.RoomSprites;
@@ -13,6 +15,9 @@ namespace RogueLike.Rooms
 {
     public class Room : Sprite
     {
+        private Dictionary<string, Texture2D> _textures;
+        private EnemyManager _enemyManager; 
+
         public static Color Grass = new Color(36, 73, 67);
         public Vector2 RoomSize { get; }
         public Rectangle GrassRec { get; }
@@ -28,17 +33,16 @@ namespace RogueLike.Rooms
         /// 2 = Possible Door
         /// </summary>
 
-        private Dictionary<string, Texture2D> _textures;
-
-        public Room(Dictionary<string, Texture2D> textures, Vector2 position, Vector2 roomSize, int tileSize)
+        public Room(Dictionary<string, Texture2D> textures, Vector2 position, Vector2 roomSize, EnemyManager enemyManager)
         {
+            _enemyManager = enemyManager;
             _textures = textures;
             _texture = _textures["LeftWall"]; // Room måste ha en textur även om den inte ritas
             Position = position;
             _map = new int[(int)roomSize.X, (int)roomSize.Y];
             RoomSize = roomSize;
-            TileSize = tileSize;
-            Area = new Rectangle((int)position.X, (int)position.Y, (int)roomSize.X * tileSize, (int)roomSize.Y * tileSize);
+            TileSize = 96;
+            Area = new Rectangle((int)position.X, (int)position.Y, (int)roomSize.X * TileSize, (int)roomSize.Y * TileSize);
 
             if (Game1.Random.Next(2) == 0) // 50% chance for water
                 IsWater = true;
@@ -47,12 +51,12 @@ namespace RogueLike.Rooms
 
             GrassRec = new Rectangle((int)Position.X,
                                      (int)Position.Y - 20,
-                                     (_map.GetLength(0) - 1) * tileSize,
-                                     _map.GetLength(1) * tileSize + 1);
+                                     (_map.GetLength(0) - 1) * TileSize,
+                                     _map.GetLength(1) * TileSize + 1);
 
-            GrassRec2 = new Rectangle((int)Position.X - 10 * tileSize,
-                                      (int)Position.Y + (int)roomSize.Y * tileSize - 70,
-                                      ((int)roomSize.X - 1) * tileSize + 22 * tileSize,
+            GrassRec2 = new Rectangle((int)Position.X - 10 * TileSize,
+                                      (int)Position.Y + (int)roomSize.Y * TileSize - 70,
+                                      ((int)roomSize.X - 1) * TileSize + 22 * TileSize,
                                       1000);
 
             CreateRoom(roomSize);
@@ -245,6 +249,9 @@ namespace RogueLike.Rooms
 
         private void CreateOther(int x, int y)
         {
+            if (Game1.Random.Next(100) < 1) // 1%
+                Children.Add(_enemyManager.CreateEnemy(RandomPosition(x, y, 50)));
+
             if (Game1.Random.Next(100) < 20) // 20%
                 Children.Add(new Tree(_textures["Tree"], _textures["TreeShadow"])
                 {

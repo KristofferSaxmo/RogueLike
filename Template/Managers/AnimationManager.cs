@@ -9,7 +9,7 @@ using RogueLike.Models;
 
 namespace RogueLike.Managers
 {
-    public class AnimationManager : ICloneable
+    public class AnimationManager
     {
         private Animation _animation;
 
@@ -37,7 +37,6 @@ namespace RogueLike.Managers
         {
             _animation = animation;
             Scale = scale;
-            _animation.Size = new Point(_animation.Texture.Width * Scale / _animation.FrameCount, _animation.Texture.Height * Scale);
         }
 
         public void Play(Animation animation)
@@ -46,8 +45,6 @@ namespace RogueLike.Managers
                 return;
 
             _animation = animation;
-
-            _animation.Size = new Point(_animation.Texture.Width * Scale / _animation.FrameCount, _animation.Texture.Height * Scale);
 
             _animation.CurrentFrame = 0;
 
@@ -88,32 +85,22 @@ namespace RogueLike.Managers
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            if (_animation == null)
-                return;
-
-            int width = _animation.Texture.Width / _animation.FrameCount;
-            int height = _animation.Texture.Height;
-            int row = _animation.CurrentFrame / _animation.FrameCount;
-            int column = _animation.CurrentFrame % _animation.FrameCount;
-
-            Rectangle sourceRectangle = new Rectangle(
-                width * column,
-                height * row,
-                width,
-                height);
-
-            Rectangle destinationRectangle = new Rectangle(Position.ToPoint(), _animation.Size);
-
-            spriteBatch.Draw(_animation.Texture, destinationRectangle, sourceRectangle, Color.White, Rotation, Origin, SpriteEffects.None, Layer);
-        }
-
-        public object Clone()
-        {
-            var animationManager = this.MemberwiseClone() as AnimationManager;
-
-            animationManager._animation = animationManager._animation.Clone() as Animation;
-
-            return animationManager;
+            spriteBatch.Draw(
+              _animation.Texture,
+              Position,
+              new Rectangle(
+                _animation.CurrentFrame * _animation.FrameWidth,
+                0,
+                _animation.FrameWidth,
+                _animation.FrameHeight
+                ),
+              Color.White,
+              0f,
+              Origin,
+              Scale,
+              SpriteEffects.None,
+              Layer
+              );
         }
     }
 }

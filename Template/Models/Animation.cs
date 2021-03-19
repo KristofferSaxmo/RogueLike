@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RogueLike.Models
 {
-    public class Animation : ICloneable
+    public class Animation
     {
         public int CurrentFrame { get; set; }
 
@@ -23,8 +23,6 @@ namespace RogueLike.Models
         public bool IsLooping { get; set; }
 
         public Texture2D Texture { get; private set; }
-        
-        public Point Size { get; set; }
 
         public Animation(Texture2D texture, int frameCount, float frameSpeed)
         {
@@ -35,11 +33,6 @@ namespace RogueLike.Models
             IsLooping = true;
 
             FrameSpeed = frameSpeed;
-        }
-
-        public object Clone()
-        {
-            return this.MemberwiseClone();
         }
     }
 }

@@ -11,24 +11,60 @@ namespace RogueLike.Sprites
 {
     public class Enemy : Sprite, ICollidable
     {
-        public Enemy(Dictionary<string, Animation> animations) : base(animations)
+        private Vector2 _playerPos;
+        private Vector2 _startingPos;
+        private bool _isFacingLeft;
+        private int _attackCooldown;
+        public Rectangle AttackRectangle
         {
-
+            get
+            {
+                return new Rectangle(Rectangle.X - 300,
+                                     Rectangle.Y + Rectangle.Height / 2 - 300,
+                                     600,
+                                     600);
+            }
+        }
+        public Rectangle FollowRectangle
+        {
+            get
+            {
+                return new Rectangle(Rectangle.X - 500,
+                                     Rectangle.Y + Rectangle.Height / 2 - 500,
+                                     1000,
+                                     1000);
+            }
+        }
+        public Enemy(Dictionary<string, Animation> animations, Texture2D shadowTexture) : base(animations, shadowTexture)
+        {
+            LayerOrigin = 35;
+            _startingPos = Position;
         }
 
-        public void Attack()
+        private void Attack()
         {
-
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            Attack();
+            
         }
 
         private void FollowPlayer()
         {
-            
+
+        }
+
+        private void Roam()
+        {
+
+        }
+
+        private void ChangeAnimation()
+        {
+
+        }
+
+        public void Update(GameTime gameTime, Vector2 playerPos)
+        {
+            _animationManager.Update(gameTime, Layer);
+            _playerPos = playerPos;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -38,12 +74,12 @@ namespace RogueLike.Sprites
 
         public void UpdateHitbox()
         {
-            throw new NotImplementedException();
+            _hitbox = new Rectangle(Rectangle.X + 9 * Scale, Rectangle.Y + 26 * Scale, 16 * Scale, 21 * Scale);
         }
 
         public void OnCollide(Sprite sprite)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

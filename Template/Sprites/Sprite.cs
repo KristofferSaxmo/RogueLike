@@ -8,10 +8,11 @@ using System.Linq;
 
 namespace RogueLike.Sprites
 {
-    public class Sprite : Component, ICloneable
+    public class Sprite : Component
     {
         #region Fields
         protected Dictionary<string, Animation> _animations;
+        protected Animation _animation;
         protected AnimationManager _animationManager;
         protected Shadow _shadow;
         protected Texture2D _texture;
@@ -88,6 +89,9 @@ namespace RogueLike.Sprites
 
                 if (_animationManager != null)
                 {
+                    if(_animation != null)
+                        return new Rectangle((int)Position.X, (int)Position.Y, _animation.FrameWidth * Scale, _animation.FrameHeight * Scale);
+
                     var animation = _animations.FirstOrDefault().Value;
 
                     return new Rectangle((int)Position.X, (int)Position.Y, animation.FrameWidth * Scale, animation.FrameHeight * Scale);
@@ -114,7 +118,7 @@ namespace RogueLike.Sprites
 
             if (texture != null)
                 Origin = new Vector2(_texture.Width / 2, _texture.Height / 2);
-        }
+        } // Sprite
         public Sprite(Texture2D texture, Texture2D shadowTexture)
         {
             _texture = texture;
@@ -131,7 +135,21 @@ namespace RogueLike.Sprites
 
             if (texture != null)
                 Origin = new Vector2(_texture.Width / 2, _texture.Height / 2);
-        }
+        } // Sprite with shadow
+        public Sprite(Animation animation)
+        {
+            _texture = null;
+
+            Children = new List<Sprite>();
+
+            _animation = animation;
+
+            _animationManager = new AnimationManager(animation, Scale);
+
+            Color = Color.White;
+
+            Origin = new Vector2(animation.FrameWidth / 2, animation.FrameHeight / 2);
+        } // Animated sprite
         public Sprite(Dictionary<string, Animation> animations)
         {
             _texture = null;
@@ -147,7 +165,29 @@ namespace RogueLike.Sprites
             Color = Color.White;
 
             Origin = new Vector2(animation.FrameWidth / 2, animation.FrameHeight / 2);
-        }
+        } // Animated sprite dictionary
+        public Sprite(Dictionary<string, Animation> animations, Texture2D shadowTexture)
+        {
+            _texture = null;
+
+            Children = new List<Sprite>
+            {
+                (_shadow = new Shadow(shadowTexture)
+                {
+                    Parent = this
+                })
+            };
+
+            _animations = animations;
+
+            var animation = _animations.FirstOrDefault().Value;
+
+            _animationManager = new AnimationManager(animation, Scale);
+
+            Color = Color.White;
+
+            Origin = new Vector2(animation.FrameWidth / 2, animation.FrameHeight / 2);
+        } // Animated sprite dictionary with shadow
         public Sprite()
         {
             Children = new List<Sprite>();
@@ -167,18 +207,6 @@ namespace RogueLike.Sprites
             else if (_animationManager != null)
                 _animationManager.Draw(spriteBatch);
         }
-        public object Clone()
-        {
-            var sprite = this.MemberwiseClone() as Sprite;
-
-            if (_animations != null)
-            {
-                sprite._animations = this._animations.ToDictionary(c => c.Key, v => v.Value.Clone() as Animation);
-                sprite._animationManager = sprite._animationManager.Clone() as AnimationManager;
-            }
-
-            return sprite;
-        }
 
         #region Collision
         public bool Intersects(Sprite sprite)
@@ -196,6 +224,9 @@ namespace RogueLike.Sprites
                 Velocity = new Vector2(Velocity.X, 0);
                 return true;
             }
+
+            if (Hitbox.Intersects(sprite.Hitbox))
+                return true;
 
             return false;
         }
