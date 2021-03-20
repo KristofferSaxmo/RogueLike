@@ -13,8 +13,9 @@ namespace RogueLike.Sprites
     {
         public Lightning(Animation animation) : base(animation)
         {
-
+            LayerOrigin = 153;
         }
+        
         public override void Update(GameTime gameTime)
         {
             if (_animationManager.CurrentAnimation == null)
@@ -25,6 +26,7 @@ namespace RogueLike.Sprites
 
             _animationManager.Update(gameTime, Layer);
         }
+
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             base.Draw(gameTime, spriteBatch);

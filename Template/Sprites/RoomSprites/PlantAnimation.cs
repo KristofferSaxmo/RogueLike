@@ -14,7 +14,7 @@ namespace RogueLike.Sprites.RoomSprites
     {
         public PlantAnimation(Dictionary<string, Animation> animations) : base(animations)
         {
-            LayerOrigin = -10;
+            LayerOrigin = 17;
         }
         public override void Update(GameTime gameTime)
         {

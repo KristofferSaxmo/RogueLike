@@ -28,6 +28,7 @@ namespace RogueLike.States
         {
 
         }
+
         public override void LoadContent()
         {
             _roomManager = new RoomManager(_content);
@@ -38,7 +39,7 @@ namespace RogueLike.States
             {
                 _roomManager.CreateRoom(
                     new Vector2(0, 0),
-                    new Vector2(130, 130),
+                    new Vector2(100, 100),
                     _enemyManager),
 
                 new Player(new Dictionary<string, Animation>()
@@ -67,40 +68,11 @@ namespace RogueLike.States
                     },
                 },
             };
+
             _quad = new Quadtree(0, _roomManager.CurrentRoom.Area);
             _players = _sprites.Where(c => c is Player).Select(c => (Player)c).ToList();
         }
-        public override void Update(GameTime gameTime)
-        {
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-                _game.ChangeState(new MenuState(_game, _content, _defaultTex));
-
-            if(_players[0].IsDead)
-                _game.ChangeState(new MenuState(_game, _content, _defaultTex));
-
-            _screenRectangle = new Rectangle((int)_players[0].Position.X - Game1.ScreenWidth / 2 - 100,
-                                             (int)_players[0].Position.Y - Game1.ScreenHeight / 2 - 100,
-                                             Game1.ScreenWidth + 200,
-                                             Game1.ScreenHeight + 200);
-
-            foreach (var sprite in _sprites)
-                sprite.Update(gameTime);
-
-            foreach (Enemy enemy in _sprites.Where(sprite => sprite is Enemy))
-            {
-                enemy.Update(gameTime, _players[0].Position);
-            }
-
-            _onScreenSprites = _sprites.Where(sprite => sprite.Rectangle.Intersects(_screenRectangle));
-
-            AddChildren();
-
-            DetectCollisions();
-
-            RemoveSprites();
-
-            _guiManager.Update(gameTime);
-        }
+        
         public void DetectCollisions()
         {
             var collidableSprites = _onScreenSprites.Where(c => c is ICollidable);
@@ -127,7 +99,12 @@ namespace RogueLike.States
                         continue;
 
                     if (spriteA.Parent is Room && spriteB.Parent is Room)
-                        continue;
+                    {
+                        if (spriteA is Enemy && spriteB is Enemy) { } // Enemies can collide with enemies
+
+                        else // Enemies can't collide with room objects
+                            continue;
+                    }
 
                     if (spriteA.Layer == spriteB.Layer)
                         spriteA.Position = new Vector2(spriteA.Position.X, spriteA.Position.Y);
@@ -141,6 +118,7 @@ namespace RogueLike.States
                 spriteA.Position += spriteA.Velocity;
             }
         }
+
         public void AddChildren()
         {
             for (int i = 0; i < _sprites.Count; i++)
@@ -152,6 +130,7 @@ namespace RogueLike.States
                 sprite.Children = new List<Sprite>();
             }
         }
+
         public void RemoveSprites()
         {
             for (int i = 0; i < _sprites.Count; i++)
@@ -163,10 +142,44 @@ namespace RogueLike.States
                 }
             }
         }
+
         public override void UpdateCamera(Camera camera)
         {
             camera.Follow(_players[0]);
         }
+
+        public override void Update(GameTime gameTime)
+        {
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+                _game.ChangeState(new MenuState(_game, _content, _defaultTex));
+
+            if (_players[0].IsDead)
+                _game.ChangeState(new MenuState(_game, _content, _defaultTex));
+
+            _screenRectangle = new Rectangle((int)_players[0].Position.X - Game1.ScreenWidth / 2 - 100,
+                                             (int)_players[0].Position.Y - Game1.ScreenHeight / 2 - 100,
+                                             Game1.ScreenWidth + 200,
+                                             Game1.ScreenHeight + 200);
+
+            foreach (var sprite in _sprites)
+                sprite.Update(gameTime);
+
+            foreach (Enemy enemy in _sprites.Where(enemy => enemy is Enemy))
+            {
+                enemy.Update(gameTime, _players[0].Position);
+            }
+
+            _onScreenSprites = _sprites.Where(sprite => sprite.Rectangle.Intersects(_screenRectangle));
+
+            AddChildren();
+
+            DetectCollisions();
+
+            RemoveSprites();
+
+            _guiManager.Update(gameTime);
+        }
+
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
 
@@ -182,16 +195,9 @@ namespace RogueLike.States
             foreach (var sprite in _onScreenSprites)
             {
                 sprite.Draw(gameTime, spriteBatch);
-                //spriteBatch.Draw(_defaultTex, sprite.Hitbox, null, Color.Blue, sprite.Rotation, sprite.Origin, SpriteEffects.None, 1f);
-            }
 
-            foreach (Enemy enemy in _sprites.Where(sprite => sprite is Enemy))
-            {
-                spriteBatch.Draw(_defaultTex, enemy.AttackRectangle, Color.Red);
-            }
-            foreach (Enemy enemy in _sprites.Where(sprite => sprite is Enemy))
-            {
-                spriteBatch.Draw(_defaultTex, enemy.Rectangle, Color.Blue);
+                // Shows the Y position of LayerOrigin. Only for testing
+                //spriteBatch.Draw(_defaultTex, sprite.LayerOriginTestRectangle, Color.Blue); 
             }
 
             spriteBatch.End();

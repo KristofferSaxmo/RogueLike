@@ -20,7 +20,7 @@ namespace RogueLike.Sprites
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, Rectangle, null, Color, Rotation, Origin, SpriteEffects.None, 0f);
+            spriteBatch.Draw(_texture, Rectangle, null, Color, 0f, Origin, SpriteEffects.None, 0f);
         }
     }
 }

@@ -9,7 +9,7 @@ using RogueLike.Models;
 
 namespace RogueLike.Managers
 {
-    public class AnimationManager
+    public class AnimationManager : ICloneable
     {
         private Animation _animation;
 
@@ -28,8 +28,6 @@ namespace RogueLike.Managers
         public Vector2 Origin { get; set; }
 
         public Vector2 Position { get; set; }
-
-        public float Rotation { get; set; }
 
         public int Scale { get; set; }
 
@@ -85,6 +83,9 @@ namespace RogueLike.Managers
 
         public void Draw(SpriteBatch spriteBatch)
         {
+            if (_animation == null)
+                return;
+
             spriteBatch.Draw(
               _animation.Texture,
               Position,
@@ -101,6 +102,15 @@ namespace RogueLike.Managers
               SpriteEffects.None,
               Layer
               );
+        }
+
+        public object Clone()
+        {
+            var animationManager = this.MemberwiseClone() as AnimationManager;
+
+            animationManager._animation = animationManager._animation.Clone() as Animation;
+
+            return animationManager;
         }
     }
 }

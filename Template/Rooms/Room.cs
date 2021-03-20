@@ -250,7 +250,7 @@ namespace RogueLike.Rooms
         private void CreateOther(int x, int y)
         {
             if (Game1.Random.Next(100) < 1) // 1%
-                Children.Add(_enemyManager.CreateEnemy(RandomPosition(x, y, 50)));
+                Children.Add(_enemyManager.CreateEnemy(RandomPosition(x, y, 50), this));
 
             if (Game1.Random.Next(100) < 20) // 20%
                 Children.Add(new Tree(_textures["Tree"], _textures["TreeShadow"])
@@ -260,8 +260,9 @@ namespace RogueLike.Rooms
                 });
 
             if (Game1.Random.Next(100) < 15) // 15%
-                Children.Add(new Plant1(_textures["Plant1"])
+                Children.Add(new DefaultSprite(_textures["Plant1"])
                 {
+                    LayerOrigin = 17,
                     Position = RandomPosition(x, y, 50),
                     Parent = this
                 });
@@ -378,7 +379,6 @@ namespace RogueLike.Rooms
                     break;
             }
         }
-
 
         private Vector2 RandomPosition(int x, int y, int maxRandom)
         {

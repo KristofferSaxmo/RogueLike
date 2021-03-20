@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace RogueLike.Sprites
 {
-    public class Sprite : Component
+    public class Sprite : Component, ICloneable
     {
         #region Fields
         protected Dictionary<string, Animation> _animations;
@@ -20,7 +20,6 @@ namespace RogueLike.Sprites
         protected int _scale = 3;
         protected Vector2 _origin;
         protected Vector2 _position;
-        protected float _rotation;
         #endregion
 
         #region Properties
@@ -48,27 +47,23 @@ namespace RogueLike.Sprites
             }
         }
         public Vector2 Velocity { get; set; }
-        public float Rotation
-        {
-            get { return _rotation; }
-            set
-            {
-                _rotation = value;
-
-                if (_animationManager != null)
-                    _animationManager.Rotation = value;
-            }
-        }
         public float Speed { get; set; }
-        public float Transparency { get; set; }
         public int Health { get; set; }
         public int Damage { get; set; }
-        public float LayerOrigin { get; set; }
+        public int LayerOrigin { get; set; }
+
+        public Rectangle LayerOriginTestRectangle // Shows the Y position of LayerOrigin. Only for testing
+        {
+            get
+            {
+                return new Rectangle((int)Position.X - 100, (int)Position.Y + LayerOrigin, 200, 1);
+            }
+        }
         public float Layer
         {
             get
             {
-                return MathHelper.Clamp((10000 + Position.Y + LayerOrigin) / 1000000, 0.0f, 1.0f);
+                return MathHelper.Clamp((100000 + Position.Y + LayerOrigin) / 10000000, 0.0f, 1.0f);
             }
         }
         public Color Color { get; set; }
@@ -201,11 +196,24 @@ namespace RogueLike.Sprites
         {
             if (_texture != null)
             {
-                spriteBatch.Draw(_texture, Rectangle, null, Color, Rotation, Origin, SpriteEffects.None, Layer);
+                spriteBatch.Draw(_texture, Rectangle, null, Color, 0f, Origin, SpriteEffects.None, Layer);
             }
 
             else if (_animationManager != null)
                 _animationManager.Draw(spriteBatch);
+        }
+
+        public object Clone()
+        {
+            var sprite = this.MemberwiseClone() as Sprite;
+
+            if (_animations != null)
+            {
+                sprite._animations = this._animations.ToDictionary(c => c.Key, v => v.Value.Clone() as Animation);
+                sprite._animationManager = sprite._animationManager.Clone() as AnimationManager;
+            }
+
+            return sprite;
         }
 
         #region Collision

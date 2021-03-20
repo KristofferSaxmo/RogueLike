@@ -32,7 +32,7 @@ namespace RogueLike.Sprites
         public Input Input { get; set; }
         public Player(Dictionary<string, Animation> animations) : base(animations)
         {
-            LayerOrigin = 28;
+            LayerOrigin = 57;
         }
         private void Attack()
         {
@@ -157,7 +157,7 @@ namespace RogueLike.Sprites
 
             if (IsAttacking())
             {
-                Velocity = new Vector2(Velocity.X * 0.9f, Velocity.Y * 0.9f); // Friction
+                Velocity = new Vector2(Velocity.X * 0.9f, Velocity.Y * 0.9f); // Friction when attacking
             }
 
             else

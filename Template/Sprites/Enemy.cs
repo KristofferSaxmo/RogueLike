@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using RogueLike.Managers;
 using RogueLike.Models;
+using RogueLike.Structs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,59 +14,125 @@ namespace RogueLike.Sprites
     public class Enemy : Sprite, ICollidable
     {
         private Vector2 _playerPos;
+
         private Vector2 _startingPos;
-        private bool _isFacingLeft;
+
+        private bool _isFacingLeft, _isRoaming;
+
         private int _attackCooldown;
-        public Rectangle AttackRectangle
+
+        private Vector2 _direction;
+
+        private Lightning _lightningPrefab;
+
+        private Animation _lightningPrefaba;
+
+        public Circle AttackCircle
         {
             get
             {
-                return new Rectangle(Rectangle.X - 300,
-                                     Rectangle.Y + Rectangle.Height / 2 - 300,
-                                     600,
-                                     600);
+                return new Circle(new Vector2(Rectangle.X, Rectangle.Y + Rectangle.Height / 2 - 48), 300);
             }
         }
-        public Rectangle FollowRectangle
+
+        public Circle FollowCircle
         {
             get
             {
-                return new Rectangle(Rectangle.X - 500,
-                                     Rectangle.Y + Rectangle.Height / 2 - 500,
-                                     1000,
-                                     1000);
+                return new Circle(new Vector2(Rectangle.X, Rectangle.Y + Rectangle.Height / 2 - 48), 600);
             }
         }
+
         public Enemy(Dictionary<string, Animation> animations, Texture2D shadowTexture) : base(animations, shadowTexture)
         {
             LayerOrigin = 35;
             _startingPos = Position;
+            _lightningPrefab = new Lightning(_animations["GhostLightning"]);
+            _lightningPrefaba = _animations["GhostLightning"];
         }
 
         private void Attack()
         {
-            
+            Velocity = Vector2.Zero;
+
+            if (_isFacingLeft)
+                _animationManager.Play(_animations["GhostAttackLeft"]);
+            else
+                _animationManager.Play(_animations["GhostAttackRight"]);
+
+            Animation test = _lightningPrefaba.Clone() as Animation;
+
+            Children.Add(new Lightning(test)
+            {
+                Position = new Vector2(_playerPos.X, _playerPos.Y - 99),
+                Parent = this,
+            });
+
+
+            // Lightning lightning = _lightningPrefab.Clone() as Lightning;
+            // 
+            // lightning.Position = new Vector2(_playerPos.X, _playerPos.Y - 99);
+            // lightning.Parent = this;
+            // 
+            // Children.Add(lightning)
+
+            _attackCooldown = 150;
         }
 
         private void FollowPlayer()
         {
+            _direction = _playerPos - Position;
+            _direction.Normalize();
 
+            Velocity = _direction * Speed;
         }
 
         private void Roam()
         {
+            Velocity = Vector2.Zero;
+            if (_isRoaming)
+                return;
+
 
         }
 
         private void ChangeAnimation()
         {
-
+            if (Position.X > _playerPos.X)
+            {
+                _animationManager.Play(_animations["GhostLeft"]);
+                _isFacingLeft = true;
+            }
+            else if (Position.X < _playerPos.X)
+            {
+                _animationManager.Play(_animations["GhostRight"]);
+                _isFacingLeft = false;
+            }
         }
 
         public void Update(GameTime gameTime, Vector2 playerPos)
         {
             _animationManager.Update(gameTime, Layer);
+
             _playerPos = playerPos;
+
+            if (!InAnimation())
+            {
+                if (AttackCircle.Contains(_playerPos) && _attackCooldown == 0)
+                    Attack();
+
+                else if (FollowCircle.Contains(_playerPos))
+                    FollowPlayer();
+
+                else
+                    Roam();
+            }
+
+            if (!InAnimation())
+                ChangeAnimation();
+
+            if (_attackCooldown > 0)
+                _attackCooldown--;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -80,6 +148,16 @@ namespace RogueLike.Sprites
         public void OnCollide(Sprite sprite)
         {
             
+        }
+        private bool InAnimation()
+        {
+            if (_animationManager.CurrentAnimation == _animations["GhostAttackLeft"] ||
+                _animationManager.CurrentAnimation == _animations["GhostAttackRight"] ||
+                _animationManager.CurrentAnimation == _animations["GhostDeathLeft"] ||
+                _animationManager.CurrentAnimation == _animations["GhostDeathRight"])
+                return true;
+
+            return false;
         }
     }
 }

@@ -94,7 +94,6 @@
     <Compile Include="Sprites\RoomSprites\TelepadCrystal.cs" />
     <Compile Include="Sprites\RoomSprites\TelepadBase.cs" />
     <Compile Include="Sprites\RoomSprites\Tree.cs" />
-    <Compile Include="Sprites\RoomSprites\Plant1.cs" />
     <Compile Include="Sprites\DefaultSprite.cs" />
     <Compile Include="Sprites\RoomSprites\PlantAnimation.cs" />
     <Compile Include="Sprites\RoomSprites\Rock1.cs" />
@@ -105,6 +104,7 @@
     <Compile Include="States\GameState.cs" />
     <Compile Include="States\MenuState.cs" />
     <Compile Include="States\State.cs" />
+    <Compile Include="Structs\Circle.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
