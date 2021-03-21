@@ -18,7 +18,7 @@ namespace RogueLike.Sprites
 
         private Vector2 _startingPos;
 
-        private bool _isFacingLeft, _isRoaming;
+        private bool _isFacingLeft, _isRoaming, _isDying;
 
         private int _attackCooldown;
 
@@ -66,14 +66,6 @@ namespace RogueLike.Sprites
                 Parent = this,
             });
 
-
-            // Lightning lightning = _lightningPrefab.Clone() as Lightning;
-            // 
-            // lightning.Position = new Vector2(_playerPos.X, _playerPos.Y - 99);
-            // lightning.Parent = this;
-            // 
-            // Children.Add(lightning)
-
             _attackCooldown = 150;
         }
 
@@ -110,7 +102,13 @@ namespace RogueLike.Sprites
 
         public void Update(GameTime gameTime, Vector2 playerPos)
         {
+            if (_isDying && _animationManager.CurrentAnimation.CurrentFrame >= _animations["GhostDeathLeft"].FrameCount - 1)
+                IsRemoved = true;
+
             _animationManager.Update(gameTime, Layer);
+
+            if (_isDying)
+                return;
 
             _playerPos = playerPos;
 
@@ -140,12 +138,41 @@ namespace RogueLike.Sprites
 
         public void UpdateHurtbox()
         {
-            _hurtbox = new Rectangle(Rectangle.X + 9 * Scale, Rectangle.Y + 26 * Scale, 16 * Scale, 21 * Scale);
+            if (!_isDying)
+            {
+                _hurtbox = new Rectangle(Rectangle.X + 9 * Scale, Rectangle.Y + 26 * Scale, 16 * Scale, 21 * Scale);
+                return;
+            }
+
+            _hurtbox = Rectangle.Empty;    
         }
 
         public void OnCollide(Sprite sprite)
         {
-            
+            _isDying = _animationManager.CurrentAnimation == _animations["GhostDeathLeft"] || _animationManager.CurrentAnimation == _animations["GhostDeathRight"];
+
+            if (_isDying)
+                return;
+
+            if (sprite is Player)
+            {
+                Health--;
+                _animationManager.Color = new Color(255, 255, 255, 0);
+            }
+
+            if (Health <= 0)
+            {
+                if (_isFacingLeft)
+                {
+                    _animationManager.Play(_animations["GhostDeathLeft"]);
+                    return;
+                }
+
+                _animationManager.Play(_animations["GhostDeathRight"]);
+
+                Velocity = Vector2.Zero;
+            }
+
         }
         private bool InAnimation()
         {

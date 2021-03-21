@@ -44,7 +44,7 @@ namespace RogueLike.States
             {
                 _roomManager.CreateRoom(
                     new Vector2(0, 0),
-                    new Vector2(10, 10),
+                    new Vector2(100, 100),
                     _enemyManager),
 
                 new Player(new Dictionary<string, Animation>()
@@ -94,14 +94,19 @@ namespace RogueLike.States
                 ((IHitbox)sprite).UpdateHitbox();
             }
 
-            UseQaudTree(hurtboxSprites, hitboxSprites);
+            UseQuadtree(hurtboxSprites, hitboxSprites);
         }
 
-        private void UseQaudTree(IEnumerable<Sprite> hurtboxSprites, IEnumerable<Sprite> lightnings)
+        private void UseQuadtree(IEnumerable<Sprite> hurtboxSprites, IEnumerable<Sprite> hitboxSprites)
         {
             _quad.Clear();
 
             foreach (var sprite in hurtboxSprites)
+            {
+                _quad.Insert(sprite);
+            }
+
+            foreach (var sprite in hitboxSprites)
             {
                 _quad.Insert(sprite);
             }
@@ -114,25 +119,32 @@ namespace RogueLike.States
 
                 foreach (var spriteB in _returnSprites)
                 {
+                    if (!(spriteB is IHurtbox))
+                        continue;
+
                     if (spriteA == spriteB)
                         continue;
 
                     if (spriteA.Parent is Room && spriteB.Parent is Room)
                     {
-                        if (spriteA is Enemy && spriteB is Enemy) { } // Enemies can collide with other enemies
-
-                        else // Enemies can't collide with room objects
+                        if (!(spriteA is Enemy && spriteB is Enemy)) // Enemies can collide with each other
                             continue;
                     }
 
                     spriteA.Intersects(spriteB);
                 }
 
-                foreach (var lightning in lightnings)
+                foreach (var spriteC in _returnSprites)
                 {
-                    if (lightning.Hitbox.Intersects(spriteA.Hurtbox))
+                    if (!(spriteC is IHitbox))
+                        continue;
+
+                    if (spriteA == spriteC)
+                        continue;
+
+                    if (spriteC.Hitbox.Intersects(spriteA.Hurtbox))
                     {
-                        ((IHurtbox)spriteA).OnCollide(lightning);
+                        ((IHurtbox)spriteA).OnCollide(spriteC);
                     }
                 }
 
@@ -218,15 +230,19 @@ namespace RogueLike.States
                 sprite.Draw(gameTime, spriteBatch);
 
                 // Shows the Y position of LayerOrigin. Only for testing
-                //spriteBatch.Draw(_defaultTex, sprite.LayerOriginTestRectangle, Color.Blue); 
-
-                spriteBatch.Draw(_defaultTex, sprite.Hurtbox, Color.Blue);
+                //spriteBatch.Draw(_defaultTex, sprite.LayerOriginTestRectangle, Color.Black); 
             }
 
+            // Shows Hitboxes. Only for testing
             foreach (IHitbox sprite in _onScreenSprites.Where(c => c is IHitbox))
             {
-                spriteBatch.Draw(_defaultTex, ((Sprite)sprite).Rectangle, Color.White);
                 spriteBatch.Draw(_defaultTex, ((Sprite)sprite).Hitbox, Color.Red);
+            }
+
+            //Shows Hurtboxes. Only for testing
+            foreach (IHurtbox sprite in _onScreenSprites.Where(c => c is IHurtbox))
+            {
+                spriteBatch.Draw(_defaultTex, ((Sprite)sprite).Hurtbox, Color.Blue);
             }
 
             spriteBatch.End();

@@ -15,6 +15,7 @@ namespace RogueLike.Sprites.RoomSprites
         {
             LayerOrigin = -1000;
         }
+
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             base.Draw(gameTime, spriteBatch);

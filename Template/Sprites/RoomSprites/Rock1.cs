@@ -27,7 +27,7 @@ namespace RogueLike.Sprites.RoomSprites
 
         public void UpdateHurtbox()
         {
-            _hurtbox = new Rectangle(Rectangle.X + 2 * Scale, Rectangle.Y + 7 * Scale, 14 * Scale, 2 * Scale);
+            _hurtbox = new Rectangle(Rectangle.X + 2 * Scale, Rectangle.Y + 7 * Scale, 14 * Scale, 3 * Scale);
         }
     }
 }

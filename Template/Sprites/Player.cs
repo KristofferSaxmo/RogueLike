@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace RogueLike.Sprites
 {
-    public class Player : Sprite, IHurtbox
+    public class Player : Sprite, IHurtbox, IHitbox
     {
         private KeyboardState _currentKey;
 
@@ -26,15 +26,19 @@ namespace RogueLike.Sprites
         private int _lastAttack = 0;
 
         private bool _isFacingLeft;
+
         public bool IsDead
         {
             get { return Health <= 0; }
         }
+
         public Input Input { get; set; }
+
         public Player(Dictionary<string, Animation> animations) : base(animations)
         {
             LayerOrigin = 57;
         }
+
         private void Attack()
         {
             if (_lastAttack == 0) // Lose all movement speed before attacking
@@ -47,11 +51,13 @@ namespace RogueLike.Sprites
             if (Camera.GetWorldPosition(new Vector2(_currentMouse.X, _currentMouse.Y)).X < Rectangle.X)
             {
                 AttackLeft();
+                _isFacingLeft = true;
                 return;
             }
 
             // If mouse is right of player
             AttackRight();
+            _isFacingLeft = false;
         }
 
         private void AttackLeft()
@@ -184,6 +190,26 @@ namespace RogueLike.Sprites
         public void UpdateHurtbox()
         {
             _hurtbox = new Rectangle(Rectangle.X + 29 * Scale, Rectangle.Y + 33 * Scale, 12 * Scale, 4 * Scale);
+        }
+
+        public void UpdateHitbox()
+        {
+            _hitbox = Rectangle.Empty;
+
+            if (IsAttacking())
+            {
+                if (_isFacingLeft)
+                {
+                    if (_animationManager.CurrentAnimation == _animations["AttackLeft1"] && _animationManager.CurrentAnimation.CurrentFrame == 4)
+                        _hitbox = new Rectangle(Rectangle.X, Rectangle.Y + 3 * Scale, 28 * Scale, 34 * Scale);
+
+                    else if (_animationManager.CurrentAnimation == _animations["AttackLeft2"] && _animationManager.CurrentAnimation.CurrentFrame == 3)
+                        _hitbox = new Rectangle(Rectangle.X + 5 * Scale, Rectangle.Y, 49 * Scale, 36 * Scale);
+
+                    else if (_animationManager.CurrentAnimation == _animations["AttackLeft3"])
+                        _hitbox = new Rectangle(Rectangle.X, Rectangle.Y + 19 * Scale, 18 * Scale, 4 * Scale);
+                }
+            }
         }
 
         public void OnCollide(Sprite sprite)

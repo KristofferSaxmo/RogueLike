@@ -15,14 +15,17 @@ namespace RogueLike.Sprites.RoomSprites
         {
             LayerOrigin = 71;
         }
+
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             base.Draw(gameTime, spriteBatch);
         }
+
         public void UpdateHurtbox()
         {
-            _hurtbox = new Rectangle(Rectangle.X + 9 * Scale, Rectangle.Y + 53 * Scale, 11 * Scale, 7 * Scale);
+            _hurtbox = new Rectangle(Rectangle.X + 5 * Scale, Rectangle.Y + 53 * Scale, 11 * Scale, 7 * Scale);
         }
+        
         public void OnCollide(Sprite sprite)
         {
 

@@ -146,7 +146,7 @@ namespace RogueLike.Sprites
 
             _animationManager = new AnimationManager(animation, Scale);
 
-            Color = Color.White;
+            _animationManager.Color = Color.White;
 
             Origin = new Vector2(animation.FrameWidth / 2, animation.FrameHeight / 2);
         } // Animated sprite
@@ -162,7 +162,7 @@ namespace RogueLike.Sprites
 
             _animationManager = new AnimationManager(animation, Scale);
 
-            Color = Color.White;
+            _animationManager.Color = Color.White;
 
             Origin = new Vector2(animation.FrameWidth / 2, animation.FrameHeight / 2);
         } // Animated sprite dictionary
@@ -184,7 +184,7 @@ namespace RogueLike.Sprites
 
             _animationManager = new AnimationManager(animation, Scale);
 
-            Color = Color.White;
+            _animationManager.Color = Color.White;
 
             Origin = new Vector2(animation.FrameWidth / 2, animation.FrameHeight / 2);
         } // Animated sprite dictionary with shadow
@@ -245,7 +245,7 @@ namespace RogueLike.Sprites
         }
         protected bool IsTouchingLeft(Sprite sprite)
         {
-            return Hurtbox.Right + Velocity.X > sprite.Hurtbox.Left &&
+            return Hurtbox.Right + Velocity.X > sprite.Hurtbox.Left + sprite.Velocity.X &&
               Hurtbox.Left < sprite.Hurtbox.Left &&
               Hurtbox.Bottom > sprite.Hurtbox.Top &&
               Hurtbox.Top < sprite.Hurtbox.Bottom;
@@ -253,7 +253,7 @@ namespace RogueLike.Sprites
 
         protected bool IsTouchingRight(Sprite sprite)
         {
-            return Hurtbox.Left + Velocity.X < sprite.Hurtbox.Right &&
+            return Hurtbox.Left + Velocity.X < sprite.Hurtbox.Right + sprite.Velocity.X &&
               Hurtbox.Right > sprite.Hurtbox.Right &&
               Hurtbox.Bottom > sprite.Hurtbox.Top &&
               Hurtbox.Top < sprite.Hurtbox.Bottom;
@@ -261,7 +261,7 @@ namespace RogueLike.Sprites
 
         protected bool IsTouchingTop(Sprite sprite)
         {
-            return Hurtbox.Bottom + Velocity.Y > sprite.Hurtbox.Top &&
+            return Hurtbox.Bottom + Velocity.Y > sprite.Hurtbox.Top + sprite.Velocity.Y &&
               Hurtbox.Top < sprite.Hurtbox.Top &&
               Hurtbox.Right > sprite.Hurtbox.Left &&
               Hurtbox.Left < sprite.Hurtbox.Right;
@@ -269,7 +269,7 @@ namespace RogueLike.Sprites
 
         protected bool IsTouchingBottom(Sprite sprite)
         {
-            return Hurtbox.Top + Velocity.Y < sprite.Hurtbox.Bottom &&
+            return Hurtbox.Top + Velocity.Y < sprite.Hurtbox.Bottom + sprite.Velocity.Y &&
               Hurtbox.Bottom > sprite.Hurtbox.Bottom &&
               Hurtbox.Right > sprite.Hurtbox.Left &&
               Hurtbox.Left < sprite.Hurtbox.Right;

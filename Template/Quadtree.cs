@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using RogueLike.Interfaces;
 using RogueLike.Sprites;
 using System;
 using System.Collections.Generic;
@@ -60,6 +61,15 @@ namespace RogueLike
         */
         private int GetIndex(Sprite sprite)
         {
+            if (sprite is IHurtbox)
+                return GetHurtboxIndex(sprite);
+
+            else
+                return GetHitboxIndex(sprite);
+        }
+
+        private int GetHurtboxIndex(Sprite sprite)
+        {
             int index = -1;
             double verticalMidpoint = _bounds.X + (_bounds.Width / 2);
             double horizontalMidpoint = _bounds.X + (_bounds.Height / 2);
@@ -83,6 +93,45 @@ namespace RogueLike
             }
             // Object can completely fit within the right quadrants
             else if (sprite.Hurtbox.X > verticalMidpoint)
+            {
+                if (topQuadrant)
+                {
+                    index = 0;
+                }
+                else if (bottomQuadrant)
+                {
+                    index = 3;
+                }
+            }
+
+            return index;
+        }
+
+        private int GetHitboxIndex(Sprite sprite)
+        {
+            int index = -1;
+            double verticalMidpoint = _bounds.X + (_bounds.Width / 2);
+            double horizontalMidpoint = _bounds.X + (_bounds.Height / 2);
+
+            // Object can completely fit within the top quadrants
+            bool topQuadrant = (sprite.Hitbox.Y < horizontalMidpoint && sprite.Hitbox.Y + sprite.Hitbox.Height < horizontalMidpoint);
+            // Object can completely fit within the bottom quadrants
+            bool bottomQuadrant = (sprite.Hitbox.Y > horizontalMidpoint);
+
+            // Object can completely fit within the left quadrants
+            if (sprite.Hitbox.X < verticalMidpoint && sprite.Hitbox.X + sprite.Hitbox.Width < verticalMidpoint)
+            {
+                if (topQuadrant)
+                {
+                    index = 1;
+                }
+                else if (bottomQuadrant)
+                {
+                    index = 2;
+                }
+            }
+            // Object can completely fit within the right quadrants
+            else if (sprite.Hitbox.X > verticalMidpoint)
             {
                 if (topQuadrant)
                 {

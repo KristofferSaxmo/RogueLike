@@ -23,6 +23,8 @@ namespace RogueLike.Managers
             }
         }
 
+        public Color Color { get; set; }
+
         public float Layer { get; set; }
 
         public Vector2 Origin { get; set; }
@@ -61,6 +63,9 @@ namespace RogueLike.Managers
 
         public void Update(GameTime gameTime, float layer)
         {
+            if (_animation == null)
+                return;
+
             Layer = layer;
 
             _timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -95,7 +100,7 @@ namespace RogueLike.Managers
                 _animation.FrameWidth,
                 _animation.FrameHeight
                 ),
-              Color.White,
+              Color,
               0f,
               Origin,
               Scale,
