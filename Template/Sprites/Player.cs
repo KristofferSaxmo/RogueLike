@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using RogueLike.Interfaces;
 using RogueLike.Managers;
 using RogueLike.Models;
 using RogueLike.Rooms;
@@ -10,7 +11,7 @@ using System.Linq;
 
 namespace RogueLike.Sprites
 {
-    public class Player : Sprite, ICollidable
+    public class Player : Sprite, IHurtbox
     {
         private KeyboardState _currentKey;
 
@@ -180,18 +181,17 @@ namespace RogueLike.Sprites
             base.Draw(gameTime, spriteBatch);
         }
 
-        public void UpdateHitbox()
+        public void UpdateHurtbox()
         {
-            _hitbox = new Rectangle(Rectangle.X + 29 * Scale, Rectangle.Y + 33 * Scale, 12 * Scale, 4 * Scale);
+            _hurtbox = new Rectangle(Rectangle.X + 29 * Scale, Rectangle.Y + 33 * Scale, 12 * Scale, 4 * Scale);
         }
 
         public void OnCollide(Sprite sprite)
         {
-
             if (_collisionCooldown != 0)
                 return;
 
-            if (sprite is Enemy)
+            if (sprite is Lightning)
             {
                 Health--;
                 _collisionCooldown = 60;

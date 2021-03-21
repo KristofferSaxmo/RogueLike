@@ -74,6 +74,7 @@
     <Compile Include="Component.cs" />
     <Compile Include="Controls\Button.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="Interfaces\IHitbox.cs" />
     <Compile Include="Managers\AnimationManager.cs" />
     <Compile Include="Managers\EnemyManager.cs" />
     <Compile Include="Managers\GUIManager.cs" />
@@ -88,7 +89,7 @@
     <Compile Include="Sprites\Lightning.cs" />
     <Compile Include="Sprites\Enemy.cs" />
     <Compile Include="Sprites\GUISprites\Hearts.cs" />
-    <Compile Include="Sprites\ICollidable.cs" />
+    <Compile Include="Interfaces\IHurtbox.cs" />
     <Compile Include="Sprites\Player.cs" />
     <Compile Include="Sprites\RoomSprites\Stump.cs" />
     <Compile Include="Sprites\RoomSprites\TelepadCrystal.cs" />

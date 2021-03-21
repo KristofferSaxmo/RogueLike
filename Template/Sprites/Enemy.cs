@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using RogueLike.Managers;
+using RogueLike.Interfaces;
 using RogueLike.Models;
 using RogueLike.Structs;
 using System;
@@ -11,8 +11,9 @@ using System.Threading.Tasks;
 
 namespace RogueLike.Sprites
 {
-    public class Enemy : Sprite, ICollidable
+    public class Enemy : Sprite, IHurtbox
     {
+
         private Vector2 _playerPos;
 
         private Vector2 _startingPos;
@@ -22,8 +23,6 @@ namespace RogueLike.Sprites
         private int _attackCooldown;
 
         private Vector2 _direction;
-
-        private Lightning _lightningPrefab;
 
         private Animation _lightningPrefaba;
 
@@ -47,7 +46,6 @@ namespace RogueLike.Sprites
         {
             LayerOrigin = 35;
             _startingPos = Position;
-            _lightningPrefab = new Lightning(_animations["GhostLightning"]);
             _lightningPrefaba = _animations["GhostLightning"];
         }
 
@@ -60,9 +58,9 @@ namespace RogueLike.Sprites
             else
                 _animationManager.Play(_animations["GhostAttackRight"]);
 
-            Animation test = _lightningPrefaba.Clone() as Animation;
+            Animation lightning = _lightningPrefaba.Clone() as Animation;
 
-            Children.Add(new Lightning(test)
+            Children.Add(new Lightning(lightning)
             {
                 Position = new Vector2(_playerPos.X, _playerPos.Y - 99),
                 Parent = this,
@@ -124,7 +122,7 @@ namespace RogueLike.Sprites
                 else if (FollowCircle.Contains(_playerPos))
                     FollowPlayer();
 
-                else
+                else if (!_isRoaming)
                     Roam();
             }
 
@@ -140,9 +138,9 @@ namespace RogueLike.Sprites
             base.Draw(gameTime, spriteBatch);
         }
 
-        public void UpdateHitbox()
+        public void UpdateHurtbox()
         {
-            _hitbox = new Rectangle(Rectangle.X + 9 * Scale, Rectangle.Y + 26 * Scale, 16 * Scale, 21 * Scale);
+            _hurtbox = new Rectangle(Rectangle.X + 9 * Scale, Rectangle.Y + 26 * Scale, 16 * Scale, 21 * Scale);
         }
 
         public void OnCollide(Sprite sprite)

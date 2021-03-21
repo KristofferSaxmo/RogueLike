@@ -10,8 +10,8 @@ namespace RogueLike
 {
     public class Quadtree
     {
-        private readonly int _maxObjects = 10;
-        private readonly int _maxLevels = 5;
+        private readonly int _maxObjects = 5;
+        private readonly int _maxLevels = 20;
 
         private int _level;
         private List<Sprite> _sprites;
@@ -65,12 +65,12 @@ namespace RogueLike
             double horizontalMidpoint = _bounds.X + (_bounds.Height / 2);
 
             // Object can completely fit within the top quadrants
-            bool topQuadrant = (sprite.Hitbox.Y < horizontalMidpoint && sprite.Hitbox.Y + sprite.Hitbox.Height < horizontalMidpoint);
+            bool topQuadrant = (sprite.Hurtbox.Y < horizontalMidpoint && sprite.Hurtbox.Y + sprite.Hurtbox.Height < horizontalMidpoint);
             // Object can completely fit within the bottom quadrants
-            bool bottomQuadrant = (sprite.Hitbox.Y > horizontalMidpoint);
+            bool bottomQuadrant = (sprite.Hurtbox.Y > horizontalMidpoint);
 
             // Object can completely fit within the left quadrants
-            if (sprite.Hitbox.X < verticalMidpoint && sprite.Hitbox.X + sprite.Hitbox.Width < verticalMidpoint)
+            if (sprite.Hurtbox.X < verticalMidpoint && sprite.Hurtbox.X + sprite.Hurtbox.Width < verticalMidpoint)
             {
                 if (topQuadrant)
                 {
@@ -82,7 +82,7 @@ namespace RogueLike
                 }
             }
             // Object can completely fit within the right quadrants
-            else if (sprite.Hitbox.X > verticalMidpoint)
+            else if (sprite.Hurtbox.X > verticalMidpoint)
             {
                 if (topQuadrant)
                 {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using RogueLike.Sprites;
+using RogueLike.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RogueLike.Sprites.RoomSprites
 {
-    public class Rock1 : Sprite, ICollidable
+    public class Rock1 : Sprite, IHurtbox
     {
         public Rock1(Texture2D texture, Texture2D shadowTexture) : base(texture, shadowTexture)
         {
@@ -25,9 +25,9 @@ namespace RogueLike.Sprites.RoomSprites
             
         }
 
-        public void UpdateHitbox()
+        public void UpdateHurtbox()
         {
-            _hitbox = new Rectangle(Rectangle.X + 2 * Scale, Rectangle.Y + 7 * Scale, 14 * Scale, 2 * Scale);
+            _hurtbox = new Rectangle(Rectangle.X + 2 * Scale, Rectangle.Y + 7 * Scale, 14 * Scale, 2 * Scale);
         }
     }
 }

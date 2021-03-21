@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using RogueLike.Interfaces;
 using RogueLike.Managers;
 using RogueLike.Models;
 using RogueLike.Rooms;
@@ -14,6 +15,8 @@ namespace RogueLike.States
 {
     public class GameState : State
     {
+        #region Fields
+
         private Quadtree _quad;
         private RoomManager _roomManager;
         private GUIManager _guiManager;
@@ -23,6 +26,8 @@ namespace RogueLike.States
         private Rectangle _screenRectangle;
         private List<Sprite> _returnSprites = new List<Sprite>();
         private List<Player> _players;
+
+        #endregion
 
         public GameState(Game1 game, ContentManager content, Texture2D defaultTex) : base(game, content, defaultTex)
         {
@@ -39,7 +44,7 @@ namespace RogueLike.States
             {
                 _roomManager.CreateRoom(
                     new Vector2(0, 0),
-                    new Vector2(100, 100),
+                    new Vector2(10, 10),
                     _enemyManager),
 
                 new Player(new Dictionary<string, Animation>()
@@ -75,22 +80,36 @@ namespace RogueLike.States
         
         public void DetectCollisions()
         {
-            var collidableSprites = _onScreenSprites.Where(c => c is ICollidable);
+            var hurtboxSprites = _onScreenSprites.Where(c => c is IHurtbox);
 
-            foreach (var sprite in collidableSprites)
+            var hitboxSprites = _onScreenSprites.Where(c => c is IHitbox);
+
+            foreach (var sprite in hurtboxSprites)
             {
-                ((ICollidable)sprite).UpdateHitbox();
+                ((IHurtbox)sprite).UpdateHurtbox();
             }
 
+            foreach (var sprite in hitboxSprites)
+            {
+                ((IHitbox)sprite).UpdateHitbox();
+            }
+
+            UseQaudTree(hurtboxSprites, hitboxSprites);
+        }
+
+        private void UseQaudTree(IEnumerable<Sprite> hurtboxSprites, IEnumerable<Sprite> lightnings)
+        {
             _quad.Clear();
-            foreach (var sprite in collidableSprites)
+
+            foreach (var sprite in hurtboxSprites)
             {
                 _quad.Insert(sprite);
             }
 
-            foreach (var spriteA in collidableSprites)
+            foreach (var spriteA in hurtboxSprites)
             {
                 _returnSprites.Clear();
+
                 _quad.Retrieve(_returnSprites, spriteA);
 
                 foreach (var spriteB in _returnSprites)
@@ -100,21 +119,23 @@ namespace RogueLike.States
 
                     if (spriteA.Parent is Room && spriteB.Parent is Room)
                     {
-                        if (spriteA is Enemy && spriteB is Enemy) { } // Enemies can collide with enemies
+                        if (spriteA is Enemy && spriteB is Enemy) { } // Enemies can collide with other enemies
 
                         else // Enemies can't collide with room objects
                             continue;
                     }
 
-                    if (spriteA.Layer == spriteB.Layer)
-                        spriteA.Position = new Vector2(spriteA.Position.X, spriteA.Position.Y);
+                    spriteA.Intersects(spriteB);
+                }
 
-                    if (spriteA.Intersects(spriteB))
+                foreach (var lightning in lightnings)
+                {
+                    if (lightning.Hitbox.Intersects(spriteA.Hurtbox))
                     {
-                        ((ICollidable)spriteA).OnCollide(spriteB);
-                        ((ICollidable)spriteB).OnCollide(spriteA);
+                        ((IHurtbox)spriteA).OnCollide(lightning);
                     }
                 }
+
                 spriteA.Position += spriteA.Velocity;
             }
         }
@@ -198,6 +219,14 @@ namespace RogueLike.States
 
                 // Shows the Y position of LayerOrigin. Only for testing
                 //spriteBatch.Draw(_defaultTex, sprite.LayerOriginTestRectangle, Color.Blue); 
+
+                spriteBatch.Draw(_defaultTex, sprite.Hurtbox, Color.Blue);
+            }
+
+            foreach (IHitbox sprite in _onScreenSprites.Where(c => c is IHitbox))
+            {
+                spriteBatch.Draw(_defaultTex, ((Sprite)sprite).Rectangle, Color.White);
+                spriteBatch.Draw(_defaultTex, ((Sprite)sprite).Hitbox, Color.Red);
             }
 
             spriteBatch.End();

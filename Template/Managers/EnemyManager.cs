@@ -21,6 +21,7 @@ namespace RogueLike.Managers
         public EnemyManager(ContentManager content)
         {
             _ghostShadow = content.Load<Texture2D>("enemies/ghost/ghost-shadow");
+            
             _ghostAnimations = new Dictionary<string, Animation>()
             {
                 { "GhostLeft", new Animation(content.Load<Texture2D>("enemies/ghost/ghost_left"), 5, 0.15f) },
@@ -29,8 +30,9 @@ namespace RogueLike.Managers
                 { "GhostAttackRight", new Animation(content.Load<Texture2D>("enemies/ghost/ghost_attack_right"), 9, 0.15f) { IsLooping = false } },
                 { "GhostDeathLeft", new Animation(content.Load<Texture2D>("enemies/ghost/ghost_death_left"), 11, 0.15f) { IsLooping = false } },
                 { "GhostDeathRight", new Animation(content.Load<Texture2D>("enemies/ghost/ghost_death_right"), 11, 0.15f) { IsLooping = false } },
-                { "GhostLightning", new Animation(content.Load<Texture2D>("enemies/ghost/ghost_lightning"), 10, 0.15f) { IsLooping = false } }
+                { "GhostLightning", new Animation(content.Load<Texture2D>("enemies/ghost/ghost_lightning"), 10, 0.10f) { IsLooping = false } }
             };
+
             _enemyPrefab = new Enemy(_ghostAnimations, _ghostShadow)
             {
                 Health = 6,

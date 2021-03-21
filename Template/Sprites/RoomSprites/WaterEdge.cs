@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using RogueLike.Interfaces;
 using RogueLike.Models;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace RogueLike.Sprites.RoomSprites
 {
-    public class WaterEdge : Sprite, ICollidable
+    public class WaterEdge : Sprite, IHurtbox
     {
         public WaterEdge(Dictionary<string, Animation> animations) : base(animations)
         {
@@ -23,9 +24,9 @@ namespace RogueLike.Sprites.RoomSprites
         {
             base.Draw(gameTime, spriteBatch);
         }
-        public void UpdateHitbox()
+        public void UpdateHurtbox()
         {
-            _hitbox = Rectangle;
+            _hurtbox = Rectangle;
         }
         public void OnCollide(Sprite sprite)
         {

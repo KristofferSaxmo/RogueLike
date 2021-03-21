@@ -16,6 +16,7 @@ namespace RogueLike.Sprites
         protected AnimationManager _animationManager;
         protected Shadow _shadow;
         protected Texture2D _texture;
+        protected Rectangle _hurtbox;
         protected Rectangle _hitbox;
         protected int _scale = 3;
         protected Vector2 _origin;
@@ -94,6 +95,10 @@ namespace RogueLike.Sprites
 
                 throw new Exception("Unknown sprite");
             }
+        }
+        public Rectangle Hurtbox
+        {
+            get { return new Rectangle(_hurtbox.X - (int)Origin.X * Scale, _hurtbox.Y - (int)Origin.Y * Scale, _hurtbox.Width, _hurtbox.Height); }
         }
         public Rectangle Hitbox
         {
@@ -233,41 +238,41 @@ namespace RogueLike.Sprites
                 return true;
             }
 
-            if (Hitbox.Intersects(sprite.Hitbox))
+            if (Hurtbox.Intersects(sprite.Hurtbox))
                 return true;
 
             return false;
         }
         protected bool IsTouchingLeft(Sprite sprite)
         {
-            return Hitbox.Right + Velocity.X > sprite.Hitbox.Left &&
-              Hitbox.Left < sprite.Hitbox.Left &&
-              Hitbox.Bottom > sprite.Hitbox.Top &&
-              Hitbox.Top < sprite.Hitbox.Bottom;
+            return Hurtbox.Right + Velocity.X > sprite.Hurtbox.Left &&
+              Hurtbox.Left < sprite.Hurtbox.Left &&
+              Hurtbox.Bottom > sprite.Hurtbox.Top &&
+              Hurtbox.Top < sprite.Hurtbox.Bottom;
         }
 
         protected bool IsTouchingRight(Sprite sprite)
         {
-            return Hitbox.Left + Velocity.X < sprite.Hitbox.Right &&
-              Hitbox.Right > sprite.Hitbox.Right &&
-              Hitbox.Bottom > sprite.Hitbox.Top &&
-              Hitbox.Top < sprite.Hitbox.Bottom;
+            return Hurtbox.Left + Velocity.X < sprite.Hurtbox.Right &&
+              Hurtbox.Right > sprite.Hurtbox.Right &&
+              Hurtbox.Bottom > sprite.Hurtbox.Top &&
+              Hurtbox.Top < sprite.Hurtbox.Bottom;
         }
 
         protected bool IsTouchingTop(Sprite sprite)
         {
-            return Hitbox.Bottom + Velocity.Y > sprite.Hitbox.Top &&
-              Hitbox.Top < sprite.Hitbox.Top &&
-              Hitbox.Right > sprite.Hitbox.Left &&
-              Hitbox.Left < sprite.Hitbox.Right;
+            return Hurtbox.Bottom + Velocity.Y > sprite.Hurtbox.Top &&
+              Hurtbox.Top < sprite.Hurtbox.Top &&
+              Hurtbox.Right > sprite.Hurtbox.Left &&
+              Hurtbox.Left < sprite.Hurtbox.Right;
         }
 
         protected bool IsTouchingBottom(Sprite sprite)
         {
-            return Hitbox.Top + Velocity.Y < sprite.Hitbox.Bottom &&
-              Hitbox.Bottom > sprite.Hitbox.Bottom &&
-              Hitbox.Right > sprite.Hitbox.Left &&
-              Hitbox.Left < sprite.Hitbox.Right;
+            return Hurtbox.Top + Velocity.Y < sprite.Hurtbox.Bottom &&
+              Hurtbox.Bottom > sprite.Hurtbox.Bottom &&
+              Hurtbox.Right > sprite.Hurtbox.Left &&
+              Hurtbox.Left < sprite.Hurtbox.Right;
         }
         #endregion
         #endregion
