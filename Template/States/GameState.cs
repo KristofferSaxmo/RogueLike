@@ -230,7 +230,7 @@ namespace RogueLike.States
                 sprite.Draw(gameTime, spriteBatch);
 
                 // Shows the Y position of LayerOrigin. Only for testing
-                spriteBatch.Draw(_defaultTex, sprite.LayerOriginTestRectangle, Color.Black); 
+                //spriteBatch.Draw(_defaultTex, sprite.LayerOriginTestRectangle, Color.Black); 
             }
 
             //Shows Hurtboxes. Only for testing
