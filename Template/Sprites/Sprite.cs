@@ -11,19 +11,22 @@ namespace RogueLike.Sprites
     public class Sprite : Component, ICloneable
     {
         #region Fields
+
         protected Dictionary<string, Animation> _animations;
         protected Animation _animation;
         protected AnimationManager _animationManager;
         protected Shadow _shadow;
         protected Texture2D _texture;
         protected Rectangle _hurtbox;
-        protected Rectangle _hitbox;
+        protected Rectangle _rectangle;
         protected int _scale = 3;
         protected Vector2 _origin;
         protected Vector2 _position;
+
         #endregion
 
         #region Properties
+
         public List<Sprite> Children { get; set; }
         public Vector2 Position
         {
@@ -52,7 +55,6 @@ namespace RogueLike.Sprites
         public int Health { get; set; }
         public int Damage { get; set; }
         public int LayerOrigin { get; set; }
-
         public Rectangle LayerOriginTestRectangle // Shows the Y position of LayerOrigin. Only for testing
         {
             get
@@ -85,7 +87,7 @@ namespace RogueLike.Sprites
 
                 if (_animationManager != null)
                 {
-                    if(_animation != null)
+                    if (_animation != null)
                         return new Rectangle((int)Position.X, (int)Position.Y, _animation.FrameWidth * Scale, _animation.FrameHeight * Scale);
 
                     var animation = _animations.FirstOrDefault().Value;
@@ -93,21 +95,29 @@ namespace RogueLike.Sprites
                     return new Rectangle((int)Position.X, (int)Position.Y, animation.FrameWidth * Scale, animation.FrameHeight * Scale);
                 }
 
+                if (this is Hitbox)
+                {
+                    return new Rectangle(_rectangle.X - (int)Origin.X * Scale, (int)_rectangle.Y - (int)Origin.Y * Scale, _rectangle.Width, _rectangle.Height);
+                }
+
                 throw new Exception("Unknown sprite");
             }
+            set
+            {
+                _rectangle = value;
+            }
         }
+
         public Rectangle Hurtbox
         {
             get { return new Rectangle(_hurtbox.X - (int)Origin.X * Scale, _hurtbox.Y - (int)Origin.Y * Scale, _hurtbox.Width, _hurtbox.Height); }
         }
-        public Rectangle Hitbox
-        {
-            get { return new Rectangle(_hitbox.X - (int)Origin.X * Scale, _hitbox.Y - (int)Origin.Y * Scale, _hitbox.Width, _hitbox.Height); }
-        }
         public Sprite Parent;
+
         #endregion
 
         #region Methods
+
         public Sprite(Texture2D texture)
         {
             _texture = texture;
@@ -222,6 +232,7 @@ namespace RogueLike.Sprites
         }
 
         #region Collision
+
         public bool Intersects(Sprite sprite)
         {
             if ((Velocity.X > 0 && IsTouchingLeft(sprite)) ||
@@ -243,9 +254,10 @@ namespace RogueLike.Sprites
 
             return false;
         }
+
         protected bool IsTouchingLeft(Sprite sprite)
         {
-            return Hurtbox.Right + Velocity.X > sprite.Hurtbox.Left + sprite.Velocity.X &&
+            return Hurtbox.Right + Velocity.X > sprite.Hurtbox.Left &&
               Hurtbox.Left < sprite.Hurtbox.Left &&
               Hurtbox.Bottom > sprite.Hurtbox.Top &&
               Hurtbox.Top < sprite.Hurtbox.Bottom;
@@ -253,7 +265,7 @@ namespace RogueLike.Sprites
 
         protected bool IsTouchingRight(Sprite sprite)
         {
-            return Hurtbox.Left + Velocity.X < sprite.Hurtbox.Right + sprite.Velocity.X &&
+            return Hurtbox.Left + Velocity.X < sprite.Hurtbox.Right &&
               Hurtbox.Right > sprite.Hurtbox.Right &&
               Hurtbox.Bottom > sprite.Hurtbox.Top &&
               Hurtbox.Top < sprite.Hurtbox.Bottom;
@@ -261,7 +273,7 @@ namespace RogueLike.Sprites
 
         protected bool IsTouchingTop(Sprite sprite)
         {
-            return Hurtbox.Bottom + Velocity.Y > sprite.Hurtbox.Top + sprite.Velocity.Y &&
+            return Hurtbox.Bottom + Velocity.Y > sprite.Hurtbox.Top &&
               Hurtbox.Top < sprite.Hurtbox.Top &&
               Hurtbox.Right > sprite.Hurtbox.Left &&
               Hurtbox.Left < sprite.Hurtbox.Right;
@@ -269,12 +281,14 @@ namespace RogueLike.Sprites
 
         protected bool IsTouchingBottom(Sprite sprite)
         {
-            return Hurtbox.Top + Velocity.Y < sprite.Hurtbox.Bottom + sprite.Velocity.Y &&
+            return Hurtbox.Top + Velocity.Y < sprite.Hurtbox.Bottom &&
               Hurtbox.Bottom > sprite.Hurtbox.Bottom &&
               Hurtbox.Right > sprite.Hurtbox.Left &&
               Hurtbox.Left < sprite.Hurtbox.Right;
         }
+
         #endregion
+
         #endregion
     }
 }

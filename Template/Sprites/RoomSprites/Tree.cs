@@ -23,10 +23,10 @@ namespace RogueLike.Sprites.RoomSprites
 
         public void UpdateHurtbox()
         {
-            _hurtbox = new Rectangle(Rectangle.X + 5 * Scale, Rectangle.Y + 53 * Scale, 11 * Scale, 7 * Scale);
+            _hurtbox = new Rectangle(Rectangle.X + 7 * Scale, Rectangle.Y + 53 * Scale, 15 * Scale, 7 * Scale);
         }
-        
-        public void OnCollide(Sprite sprite)
+
+        public void OnCollide(Hitbox hitbox)
         {
 
         }

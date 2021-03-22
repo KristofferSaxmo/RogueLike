@@ -35,7 +35,7 @@ namespace RogueLike.Managers
 
             _enemyPrefab = new Enemy(_ghostAnimations, _ghostShadow)
             {
-                Health = 2,
+                Health = 1,
                 Speed = 3
             };
         }

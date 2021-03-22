@@ -22,6 +22,8 @@ namespace RogueLike.Sprites
 
         private int _attackCooldown;
 
+        private int _collisionCooldown;
+
         private Vector2 _direction;
 
         private Animation _lightningPrefaba;
@@ -44,7 +46,7 @@ namespace RogueLike.Sprites
 
         public Enemy(Dictionary<string, Animation> animations, Texture2D shadowTexture) : base(animations, shadowTexture)
         {
-            LayerOrigin = 35;
+            LayerOrigin = 62;
             _startingPos = Position;
             _lightningPrefaba = _animations["GhostLightning"];
         }
@@ -108,7 +110,10 @@ namespace RogueLike.Sprites
             _animationManager.Update(gameTime, Layer);
 
             if (_isDying)
+            {
+                Velocity = Vector2.Zero;
                 return;
+            }
 
             _playerPos = playerPos;
 
@@ -129,6 +134,9 @@ namespace RogueLike.Sprites
 
             if (_attackCooldown > 0)
                 _attackCooldown--;
+
+            if (_collisionCooldown > 0)
+                _collisionCooldown--;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -147,17 +155,17 @@ namespace RogueLike.Sprites
             _hurtbox = Rectangle.Empty;    
         }
 
-        public void OnCollide(Sprite sprite)
+        public void OnCollide(Hitbox hitbox)
         {
             _isDying = _animationManager.CurrentAnimation == _animations["GhostDeathLeft"] || _animationManager.CurrentAnimation == _animations["GhostDeathRight"];
 
-            if (_isDying)
+            if (_isDying || _collisionCooldown != 0)
                 return;
 
-            if (sprite is Player)
+            if (hitbox.Parent is Player)
             {
                 Health--;
-                _animationManager.Color = new Color(255, 255, 255, 0);
+                _collisionCooldown = 10;
             }
 
             if (Health <= 0)

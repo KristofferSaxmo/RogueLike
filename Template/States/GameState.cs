@@ -44,7 +44,7 @@ namespace RogueLike.States
             {
                 _roomManager.CreateRoom(
                     new Vector2(0, 0),
-                    new Vector2(100, 100),
+                    new Vector2(100, 100), // Room size
                     _enemyManager),
 
                 new Player(new Dictionary<string, Animation>()
@@ -82,22 +82,22 @@ namespace RogueLike.States
         {
             var hurtboxSprites = _onScreenSprites.Where(c => c is IHurtbox);
 
-            var hitboxSprites = _onScreenSprites.Where(c => c is IHitbox);
-
             foreach (var sprite in hurtboxSprites)
             {
                 ((IHurtbox)sprite).UpdateHurtbox();
             }
 
-            foreach (var sprite in hitboxSprites)
+            foreach (var sprite in _onScreenSprites.Where(c => c is IHitbox))
             {
                 ((IHitbox)sprite).UpdateHitbox();
             }
 
-            UseQuadtree(hurtboxSprites, hitboxSprites);
+            var hitboxes = _onScreenSprites.Where(c => c is Hitbox);
+
+            UseQuadtree(hurtboxSprites, hitboxes);
         }
 
-        private void UseQuadtree(IEnumerable<Sprite> hurtboxSprites, IEnumerable<Sprite> hitboxSprites)
+        private void UseQuadtree(IEnumerable<Sprite> hurtboxSprites, IEnumerable<Sprite> hitboxes)
         {
             _quad.Clear();
 
@@ -106,7 +106,7 @@ namespace RogueLike.States
                 _quad.Insert(sprite);
             }
 
-            foreach (var sprite in hitboxSprites)
+            foreach (var sprite in hitboxes)
             {
                 _quad.Insert(sprite);
             }
@@ -136,15 +136,15 @@ namespace RogueLike.States
 
                 foreach (var spriteC in _returnSprites)
                 {
-                    if (!(spriteC is IHitbox))
+                    if (!(spriteC is Hitbox))
                         continue;
 
                     if (spriteA == spriteC)
                         continue;
 
-                    if (spriteC.Hitbox.Intersects(spriteA.Hurtbox))
+                    if (spriteC.Rectangle.Intersects(spriteA.Hurtbox))
                     {
-                        ((IHurtbox)spriteA).OnCollide(spriteC);
+                        ((IHurtbox)spriteA).OnCollide((Hitbox)spriteC);
                     }
                 }
 
@@ -197,7 +197,7 @@ namespace RogueLike.States
             foreach (var sprite in _sprites)
                 sprite.Update(gameTime);
 
-            foreach (Enemy enemy in _sprites.Where(enemy => enemy is Enemy))
+            foreach (Enemy enemy in _sprites.Where(sprite => sprite is Enemy))
             {
                 enemy.Update(gameTime, _players[0].Position);
             }
@@ -230,20 +230,14 @@ namespace RogueLike.States
                 sprite.Draw(gameTime, spriteBatch);
 
                 // Shows the Y position of LayerOrigin. Only for testing
-                //spriteBatch.Draw(_defaultTex, sprite.LayerOriginTestRectangle, Color.Black); 
-            }
-
-            // Shows Hitboxes. Only for testing
-            foreach (IHitbox sprite in _onScreenSprites.Where(c => c is IHitbox))
-            {
-                spriteBatch.Draw(_defaultTex, ((Sprite)sprite).Hitbox, Color.Red);
+                spriteBatch.Draw(_defaultTex, sprite.LayerOriginTestRectangle, Color.Black); 
             }
 
             //Shows Hurtboxes. Only for testing
-            foreach (IHurtbox sprite in _onScreenSprites.Where(c => c is IHurtbox))
-            {
-                spriteBatch.Draw(_defaultTex, ((Sprite)sprite).Hurtbox, Color.Blue);
-            }
+            //foreach (IHurtbox sprite in _onScreenSprites.Where(c => c is IHurtbox))
+            //{
+            //    spriteBatch.Draw(_defaultTex, ((Sprite)sprite).Hurtbox, Color.Blue);
+            //}
 
             spriteBatch.End();
 

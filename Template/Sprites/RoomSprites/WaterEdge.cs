@@ -28,7 +28,7 @@ namespace RogueLike.Sprites.RoomSprites
         {
             _hurtbox = Rectangle;
         }
-        public void OnCollide(Sprite sprite)
+        public void OnCollide(Hitbox hitbox)
         {
             
         }

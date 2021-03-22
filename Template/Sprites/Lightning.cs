@@ -39,7 +39,7 @@ namespace RogueLike.Sprites
                 return;
 
             if (_animationManager.CurrentAnimation.CurrentFrame >= 6)
-                _hitbox = new Rectangle(Rectangle.X + 3 * Scale, Rectangle.Y + 101 * Scale, 23 * Scale, 11 * Scale);
+                Children.Add(new Hitbox(new Rectangle(Rectangle.X + 3 * Scale, Rectangle.Y + 101 * Scale, 23 * Scale, 11 * Scale), this));
         }
     }
 }

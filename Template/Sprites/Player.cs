@@ -194,30 +194,58 @@ namespace RogueLike.Sprites
 
         public void UpdateHitbox()
         {
-            _hitbox = Rectangle.Empty;
 
             if (IsAttacking())
             {
                 if (_isFacingLeft)
                 {
-                    if (_animationManager.CurrentAnimation == _animations["AttackLeft1"] && _animationManager.CurrentAnimation.CurrentFrame == 4)
-                        _hitbox = new Rectangle(Rectangle.X, Rectangle.Y + 3 * Scale, 28 * Scale, 34 * Scale);
+                    if (_animationManager.CurrentAnimation == _animations["AttackLeft1"] && _animationManager.CurrentAnimation.CurrentFrame == 3)
+                        Children.Add(new Hitbox(new Rectangle(Rectangle.X,
+                                                              Rectangle.Y + 3 * Scale,
+                                                              28 * Scale,
+                                                              34 * Scale), this));
 
                     else if (_animationManager.CurrentAnimation == _animations["AttackLeft2"] && _animationManager.CurrentAnimation.CurrentFrame == 3)
-                        _hitbox = new Rectangle(Rectangle.X + 5 * Scale, Rectangle.Y, 49 * Scale, 36 * Scale);
+                        Children.Add(new Hitbox(new Rectangle(Rectangle.X + 5 * Scale,
+                                                              Rectangle.Y,
+                                                              49 * Scale,
+                                                              36 * Scale), this));
 
                     else if (_animationManager.CurrentAnimation == _animations["AttackLeft3"])
-                        _hitbox = new Rectangle(Rectangle.X, Rectangle.Y + 19 * Scale, 18 * Scale, 4 * Scale);
+                        Children.Add(new Hitbox(new Rectangle(Rectangle.X,
+                                                              Rectangle.Y + 19 * Scale,
+                                                              18 * Scale,
+                                                              4 * Scale), this));
+
+                    return;
                 }
+
+                if (_animationManager.CurrentAnimation == _animations["AttackRight1"] && _animationManager.CurrentAnimation.CurrentFrame == 3)
+                    Children.Add(new Hitbox(new Rectangle(Rectangle.X + 41 * Scale,
+                                                          Rectangle.Y + 3 * Scale,
+                                                          28 * Scale,
+                                                          34 * Scale), this));
+
+                else if (_animationManager.CurrentAnimation == _animations["AttackRight2"] && _animationManager.CurrentAnimation.CurrentFrame == 3)
+                    Children.Add(new Hitbox(new Rectangle(Rectangle.X + 14 * Scale,
+                                                          Rectangle.Y,
+                                                          49 * Scale,
+                                                          36 * Scale), this));
+
+                else if (_animationManager.CurrentAnimation == _animations["AttackRight3"])
+                    Children.Add(new Hitbox(new Rectangle(Rectangle.X + 51 * Scale,
+                                                          Rectangle.Y + 19 * Scale,
+                                                          18 * Scale,
+                                                          4 * Scale), this));
             }
         }
 
-        public void OnCollide(Sprite sprite)
+        public void OnCollide(Hitbox hitbox)
         {
             if (_collisionCooldown != 0)
                 return;
 
-            if (sprite is Lightning)
+            if (hitbox.Parent is Lightning)
             {
                 Health--;
                 _collisionCooldown = 60;

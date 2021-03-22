@@ -20,7 +20,7 @@ namespace RogueLike.Sprites.RoomSprites
             base.Draw(gameTime, spriteBatch);
         }
 
-        public void OnCollide(Sprite sprite)
+        public void OnCollide(Hitbox hitbox)
         {
             
         }

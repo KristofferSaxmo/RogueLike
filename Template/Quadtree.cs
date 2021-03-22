@@ -61,11 +61,11 @@ namespace RogueLike
         */
         private int GetIndex(Sprite sprite)
         {
-            if (sprite is IHurtbox)
-                return GetHurtboxIndex(sprite);
+            if (sprite is Hitbox hitbox)
+                return GetHitboxIndex(hitbox);
 
             else
-                return GetHitboxIndex(sprite);
+                return GetHurtboxIndex(sprite);
         }
 
         private int GetHurtboxIndex(Sprite sprite)
@@ -107,19 +107,19 @@ namespace RogueLike
             return index;
         }
 
-        private int GetHitboxIndex(Sprite sprite)
+        private int GetHitboxIndex(Hitbox hitbox)
         {
             int index = -1;
             double verticalMidpoint = _bounds.X + (_bounds.Width / 2);
             double horizontalMidpoint = _bounds.X + (_bounds.Height / 2);
 
             // Object can completely fit within the top quadrants
-            bool topQuadrant = (sprite.Hitbox.Y < horizontalMidpoint && sprite.Hitbox.Y + sprite.Hitbox.Height < horizontalMidpoint);
+            bool topQuadrant = (hitbox.Rectangle.Y < horizontalMidpoint && hitbox.Rectangle.Y + hitbox.Rectangle.Height < horizontalMidpoint);
             // Object can completely fit within the bottom quadrants
-            bool bottomQuadrant = (sprite.Hitbox.Y > horizontalMidpoint);
+            bool bottomQuadrant = (hitbox.Rectangle.Y > horizontalMidpoint);
 
             // Object can completely fit within the left quadrants
-            if (sprite.Hitbox.X < verticalMidpoint && sprite.Hitbox.X + sprite.Hitbox.Width < verticalMidpoint)
+            if (hitbox.Rectangle.X < verticalMidpoint && hitbox.Rectangle.X + hitbox.Rectangle.Width < verticalMidpoint)
             {
                 if (topQuadrant)
                 {
@@ -131,7 +131,7 @@ namespace RogueLike
                 }
             }
             // Object can completely fit within the right quadrants
-            else if (sprite.Hitbox.X > verticalMidpoint)
+            else if (hitbox.Rectangle.X > verticalMidpoint)
             {
                 if (topQuadrant)
                 {
