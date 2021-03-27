@@ -3,11 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RogueLike.Interfaces;
 using RogueLike.Models;
 using RogueLike.Structs;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RogueLike.Sprites
 {
@@ -18,49 +14,36 @@ namespace RogueLike.Sprites
 
         private Vector2 _startingPos;
 
-        private bool _isFacingLeft, _isRoaming, _isDying;
+        private Vector2 _direction;
+
+        private bool _isFacingLeft;
+        private bool _isRoaming = false;
+        private bool _isDying;
 
         private int _attackCooldown;
 
         private int _collisionCooldown;
 
-        private Vector2 _direction;
+        private readonly Animation _lightningPrefab;
 
-        private Animation _lightningPrefaba;
+        public Circle AttackCircle => new Circle(new Vector2(Rectangle.X, Rectangle.Y + Rectangle.Height / 2 - 48), 300);
 
-        public Circle AttackCircle
-        {
-            get
-            {
-                return new Circle(new Vector2(Rectangle.X, Rectangle.Y + Rectangle.Height / 2 - 48), 300);
-            }
-        }
-
-        public Circle FollowCircle
-        {
-            get
-            {
-                return new Circle(new Vector2(Rectangle.X, Rectangle.Y + Rectangle.Height / 2 - 48), 600);
-            }
-        }
+        public Circle FollowCircle => new Circle(new Vector2(Rectangle.X, Rectangle.Y + Rectangle.Height / 2 - 48), 600);
 
         public Enemy(Dictionary<string, Animation> animations, Texture2D shadowTexture) : base(animations, shadowTexture)
         {
             LayerOrigin = 62;
             _startingPos = Position;
-            _lightningPrefaba = _animations["GhostLightning"];
+            _lightningPrefab = _animations["GhostLightning"];
         }
 
         private void Attack()
         {
             Velocity = Vector2.Zero;
 
-            if (_isFacingLeft)
-                _animationManager.Play(_animations["GhostAttackLeft"]);
-            else
-                _animationManager.Play(_animations["GhostAttackRight"]);
+            _animationManager.Play(_isFacingLeft ? _animations["GhostAttackLeft"] : _animations["GhostAttackRight"]);
 
-            Animation lightning = _lightningPrefaba.Clone() as Animation;
+            Animation lightning = _lightningPrefab.Clone() as Animation;
 
             Children.Add(new Lightning(lightning)
             {
@@ -139,11 +122,6 @@ namespace RogueLike.Sprites
                 _collisionCooldown--;
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            base.Draw(gameTime, spriteBatch);
-        }
-
         public void UpdateHurtbox()
         {
             if (!_isDying)
@@ -152,7 +130,7 @@ namespace RogueLike.Sprites
                 return;
             }
 
-            _hurtbox = Rectangle.Empty;    
+            _hurtbox = Rectangle.Empty;
         }
 
         public void OnCollide(Hitbox hitbox)
@@ -168,29 +146,24 @@ namespace RogueLike.Sprites
                 _collisionCooldown = 10;
             }
 
-            if (Health <= 0)
+            if (Health > 0) return;
+
+            if (_isFacingLeft)
             {
-                if (_isFacingLeft)
-                {
-                    _animationManager.Play(_animations["GhostDeathLeft"]);
-                    return;
-                }
-
-                _animationManager.Play(_animations["GhostDeathRight"]);
-
+                _animationManager.Play(_animations["GhostDeathLeft"]);
                 Velocity = Vector2.Zero;
+                return;
             }
 
+            _animationManager.Play(_animations["GhostDeathRight"]);
+            Velocity = Vector2.Zero;
         }
         private bool InAnimation()
         {
-            if (_animationManager.CurrentAnimation == _animations["GhostAttackLeft"] ||
-                _animationManager.CurrentAnimation == _animations["GhostAttackRight"] ||
-                _animationManager.CurrentAnimation == _animations["GhostDeathLeft"] ||
-                _animationManager.CurrentAnimation == _animations["GhostDeathRight"])
-                return true;
-
-            return false;
+            return _animationManager.CurrentAnimation == _animations["GhostAttackLeft"] ||
+                   _animationManager.CurrentAnimation == _animations["GhostAttackRight"] ||
+                   _animationManager.CurrentAnimation == _animations["GhostDeathLeft"] ||
+                   _animationManager.CurrentAnimation == _animations["GhostDeathRight"];
         }
     }
 }

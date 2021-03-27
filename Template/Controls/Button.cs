@@ -11,13 +11,13 @@ namespace RogueLike.Controls
 
         private MouseState _currentMouse;
 
-        private SpriteFont _font;
+        private readonly SpriteFont _font;
 
         private bool _isHovering;
 
         private MouseState _previousMouse;
 
-        private Texture2D _texture;
+        private readonly Texture2D _texture;
 
         #endregion
 
@@ -29,25 +29,13 @@ namespace RogueLike.Controls
 
         public float Layer { get; set; }
 
-        public Vector2 Origin
-        {
-            get
-            {
-                return new Vector2(_texture.Width / 2, _texture.Height / 2);
-            }
-        }
+        public Vector2 Origin => new Vector2(_texture.Width / 2, _texture.Height / 2);
 
         public Color PenColour { get; set; }
 
         public Vector2 Position { get; set; }
 
-        public Rectangle Rectangle
-        {
-            get
-            {
-                return new Rectangle((int)Position.X - ((int)Origin.X), (int)Position.Y - (int)Origin.Y, _texture.Width, _texture.Height);
-            }
-        }
+        public Rectangle Rectangle => new Rectangle((int)Position.X - ((int)Origin.X), (int)Position.Y - (int)Origin.Y, _texture.Width, _texture.Height);
 
         public string Text;
 
@@ -66,12 +54,12 @@ namespace RogueLike.Controls
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            var colour = Color.White;
+            var color = Color.White;
 
             if (_isHovering)
-                colour = Color.Gray;
+                color = Color.Gray;
 
-            spriteBatch.Draw(_texture, Position, null, colour, 0f, Origin, 1f, SpriteEffects.None, Layer);
+            spriteBatch.Draw(_texture, Position, null, color, 0f, Origin, 1f, SpriteEffects.None, Layer);
 
             if (!string.IsNullOrEmpty(Text))
             {

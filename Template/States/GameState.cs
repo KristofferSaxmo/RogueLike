@@ -7,7 +7,6 @@ using RogueLike.Managers;
 using RogueLike.Models;
 using RogueLike.Rooms;
 using RogueLike.Sprites;
-using RogueLike.Sprites.RoomSprites;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,12 +18,12 @@ namespace RogueLike.States
 
         private Quadtree _quad;
         private RoomManager _roomManager;
-        private GUIManager _guiManager;
+        private GuiManager _guiManager;
         private EnemyManager _enemyManager;
         private List<Sprite> _sprites;
         private IEnumerable<Sprite> _onScreenSprites;
         private Rectangle _screenRectangle;
-        private List<Sprite> _returnSprites = new List<Sprite>();
+        private readonly List<Sprite> _returnSprites = new List<Sprite>();
         private List<Player> _players;
 
         #endregion
@@ -37,7 +36,7 @@ namespace RogueLike.States
         public override void LoadContent()
         {
             _roomManager = new RoomManager(_content);
-            _guiManager = new GUIManager(_content);
+            _guiManager = new GuiManager(_content);
             _enemyManager = new EnemyManager(_content);
 
             _sprites = new List<Sprite>()
@@ -75,13 +74,13 @@ namespace RogueLike.States
             };
 
             _quad = new Quadtree(0, _roomManager.CurrentRoom.Area);
-            _players = _sprites.Where(c => c is Player).Select(c => (Player)c).ToList();
+            _players = _sprites.OfType<Player>().ToList();
         }
-        
+
         public void DetectCollisions()
         {
-            var hurtboxSprites = _onScreenSprites.Where(c => c is IHurtbox);
 
+            var hurtboxSprites = _onScreenSprites.Where(c => c is IHurtbox) as Sprite[] ?? _onScreenSprites.Where(c => c is IHurtbox).ToArray();
             foreach (var sprite in hurtboxSprites)
             {
                 ((IHurtbox)sprite).UpdateHurtbox();
@@ -97,7 +96,7 @@ namespace RogueLike.States
             UseQuadtree(hurtboxSprites, hitboxes);
         }
 
-        private void UseQuadtree(IEnumerable<Sprite> hurtboxSprites, IEnumerable<Sprite> hitboxes)
+        private void UseQuadtree(Sprite[] hurtboxSprites, IEnumerable<Sprite> hitboxes)
         {
             _quad.Clear();
 
@@ -168,11 +167,10 @@ namespace RogueLike.States
         {
             for (int i = 0; i < _sprites.Count; i++)
             {
-                if (_sprites[i].IsRemoved)
-                {
-                    _sprites.RemoveAt(i);
-                    i--;
-                }
+                if (!_sprites[i].IsRemoved) continue;
+
+                _sprites.RemoveAt(i);
+                i--;
             }
         }
 
@@ -210,7 +208,7 @@ namespace RogueLike.States
 
             RemoveSprites();
 
-            _guiManager.Update(gameTime);
+            _guiManager.Update();
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -243,7 +241,7 @@ namespace RogueLike.States
 
             spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);
 
-            _guiManager.Draw(gameTime, spriteBatch, _players[0].Health);
+            _guiManager.Draw(spriteBatch, _players[0].Health);
 
             spriteBatch.End();
 

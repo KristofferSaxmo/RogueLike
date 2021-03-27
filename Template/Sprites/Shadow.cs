@@ -1,10 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RogueLike.Sprites
 {
@@ -20,7 +15,7 @@ namespace RogueLike.Sprites
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, Rectangle, null, Color, 0f, Origin, SpriteEffects.None, 0f);
+            spriteBatch.Draw(Texture, Rectangle, null, Color, 0f, Origin, SpriteEffects.None, 0f);
         }
     }
 }

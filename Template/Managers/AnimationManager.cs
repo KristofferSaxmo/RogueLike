@@ -1,27 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using RogueLike.Models;
+using System;
 
 namespace RogueLike.Managers
 {
     public class AnimationManager : ICloneable
     {
-        private Animation _animation;
-
         private float _timer;
 
-        public Animation CurrentAnimation
-        {
-            get
-            {
-                return _animation;
-            }
-        }
+        public Animation CurrentAnimation { get; private set; }
 
         public Color Color { get; set; }
 
@@ -35,18 +23,18 @@ namespace RogueLike.Managers
 
         public AnimationManager(Animation animation, int scale)
         {
-            _animation = animation;
+            CurrentAnimation = animation;
             Scale = scale;
         }
 
         public void Play(Animation animation)
         {
-            if (_animation == animation)
+            if (CurrentAnimation == animation)
                 return;
 
-            _animation = animation;
+            CurrentAnimation = animation;
 
-            _animation.CurrentFrame = 0;
+            CurrentAnimation.CurrentFrame = 0;
 
             _timer = 0;
         }
@@ -55,50 +43,50 @@ namespace RogueLike.Managers
         {
             _timer = 0f;
 
-            _animation.CurrentFrame = 0;
+            CurrentAnimation.CurrentFrame = 0;
 
-            if (!_animation.IsLooping)
-                _animation = null;
+            if (!CurrentAnimation.IsLooping)
+                CurrentAnimation = null;
         }
 
         public void Update(GameTime gameTime, float layer)
         {
-            if (_animation == null)
+            if (CurrentAnimation == null)
                 return;
 
             Layer = layer;
 
             _timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (_timer > _animation.FrameSpeed)
+            if (!(_timer > CurrentAnimation.FrameSpeed)) return;
+            _timer = 0f;
+
+            CurrentAnimation.CurrentFrame++;
+
+            if (CurrentAnimation.CurrentFrame < CurrentAnimation.FrameCount) return;
+
+            if (CurrentAnimation.IsLooping)
             {
-                _timer = 0f;
-
-                _animation.CurrentFrame++;
-
-                if (_animation.CurrentFrame >= _animation.FrameCount)
-                {
-                    if (_animation.IsLooping)
-                        _animation.CurrentFrame = 0;
-                    else
-                        _animation = null;
-                }
+                CurrentAnimation.CurrentFrame = 0;
+                return;
             }
+
+            CurrentAnimation = null;
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            if (_animation == null)
+            if (CurrentAnimation == null)
                 return;
 
             spriteBatch.Draw(
-              _animation.Texture,
+              CurrentAnimation.Texture,
               Position,
               new Rectangle(
-                _animation.CurrentFrame * _animation.FrameWidth,
+                CurrentAnimation.CurrentFrame * CurrentAnimation.FrameWidth,
                 0,
-                _animation.FrameWidth,
-                _animation.FrameHeight
+                CurrentAnimation.FrameWidth,
+                CurrentAnimation.FrameHeight
                 ),
               Color,
               0f,
@@ -113,7 +101,7 @@ namespace RogueLike.Managers
         {
             var animationManager = this.MemberwiseClone() as AnimationManager;
 
-            animationManager._animation = animationManager._animation.Clone() as Animation;
+            animationManager.CurrentAnimation = animationManager.CurrentAnimation.Clone() as Animation;
 
             return animationManager;
         }

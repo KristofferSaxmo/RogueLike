@@ -1,23 +1,18 @@
 ﻿using Microsoft.Xna.Framework;
-using RogueLike.Interfaces;
 using RogueLike.Sprites;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RogueLike
 {
     public class Quadtree
     {
-        private readonly int _maxObjects = 5;
-        private readonly int _maxLevels = 20;
+        private const int MaxObjects = 5;
+        private const int MaxLevels = 20;
 
-        private int _level;
-        private List<Sprite> _sprites;
-        private Rectangle _bounds;
-        private Quadtree[] _nodes;
+        private readonly int _level;
+        private readonly List<Sprite> _sprites;
+        private readonly Rectangle _bounds;
+        private readonly Quadtree[] _nodes;
 
         public Quadtree(int pLevel, Rectangle pBounds)
         {
@@ -33,11 +28,10 @@ namespace RogueLike
 
             for (int i = 0; i < _nodes.Length; i++)
             {
-                if (_nodes[i] != null)
-                {
-                    _nodes[i].Clear();
-                    _nodes[i] = null;
-                }
+                if (_nodes[i] == null) continue;
+
+                _nodes[i].Clear();
+                _nodes[i] = null;
             }
         }
 
@@ -107,7 +101,7 @@ namespace RogueLike
             return index;
         }
 
-        private int GetHitboxIndex(Hitbox hitbox)
+        private int GetHitboxIndex(Sprite hitbox)
         {
             int index = -1;
             double verticalMidpoint = _bounds.X + (_bounds.Width / 2);
@@ -167,28 +161,28 @@ namespace RogueLike
 
             _sprites.Add(sprite);
 
-            if (_sprites.Count > _maxObjects && _level < _maxLevels)
-            {
-                if (_nodes[0] == null)
-                {
-                    Split();
-                }
+            if (_sprites.Count <= MaxObjects || _level >= MaxLevels) return;
 
-                int i = 0;
-                while (i < _sprites.Count)
+            if (_nodes[0] == null)
+            {
+                Split();
+            }
+
+            int i = 0;
+            while (i < _sprites.Count)
+            {
+                int index = GetIndex(_sprites[i]);
+                if (index != -1)
                 {
-                    int index = GetIndex(_sprites[i]);
-                    if (index != -1)
-                    {
-                        _nodes[index].Insert(_sprites[i]);
-                        _sprites.RemoveAt(i);
-                    }
-                    else
-                    {
-                        i++;
-                    }
+                    _nodes[index].Insert(_sprites[i]);
+                    _sprites.RemoveAt(i);
+                }
+                else
+                {
+                    i++;
                 }
             }
+
         }
 
         /*

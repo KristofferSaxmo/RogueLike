@@ -7,8 +7,8 @@ namespace RogueLike
 {
     public class Game1 : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        readonly GraphicsDeviceManager _graphics;
+        SpriteBatch _spriteBatch;
 
         public static Random Random = new Random();
 
@@ -24,14 +24,14 @@ namespace RogueLike
 
         public Game1()
         {
-            graphics = new GraphicsDeviceManager(this);
+            _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
         protected override void Initialize()
         {
-            graphics.PreferredBackBufferWidth = ScreenWidth;
-            graphics.PreferredBackBufferHeight = ScreenHeight;
-            graphics.ApplyChanges();
+            _graphics.PreferredBackBufferWidth = ScreenWidth;
+            _graphics.PreferredBackBufferHeight = ScreenHeight;
+            _graphics.ApplyChanges();
 
             _camera = new Camera();
 
@@ -41,7 +41,7 @@ namespace RogueLike
         }
         protected override void LoadContent()
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             _defaultTex = new Texture2D(GraphicsDevice, 1, 1);
             _defaultTex.SetData(new Color[1] { Color.White });
@@ -78,7 +78,7 @@ namespace RogueLike
         {
             GraphicsDevice.Clear(Color.Black);
 
-            _currentState.Draw(gameTime, spriteBatch);
+            _currentState.Draw(gameTime, _spriteBatch);
 
             base.Draw(gameTime);
         }

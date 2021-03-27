@@ -1,11 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RogueLike.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RogueLike.Sprites.RoomSprites
 {
@@ -15,14 +10,10 @@ namespace RogueLike.Sprites.RoomSprites
         {
             LayerOrigin = 2;
         }
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            base.Draw(gameTime, spriteBatch);
-        }
 
         public void OnCollide(Hitbox hitbox)
         {
-            
+
         }
 
         public void UpdateHurtbox()

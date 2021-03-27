@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using RogueLike.Controls;
-using RogueLike.Sprites;
 using System;
 using System.Collections.Generic;
 

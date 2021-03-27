@@ -2,11 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using RogueLike.Interfaces;
 using RogueLike.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RogueLike.Sprites
 {
@@ -16,7 +11,7 @@ namespace RogueLike.Sprites
         {
             LayerOrigin = 153;
         }
-        
+
         public override void Update(GameTime gameTime)
         {
             if (_animationManager.CurrentAnimation == null)
@@ -26,11 +21,6 @@ namespace RogueLike.Sprites
             }
 
             _animationManager.Update(gameTime, Layer);
-        }
-
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            base.Draw(gameTime, spriteBatch);
         }
 
         public void UpdateHitbox()

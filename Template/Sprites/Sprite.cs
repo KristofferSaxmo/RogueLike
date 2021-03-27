@@ -16,7 +16,7 @@ namespace RogueLike.Sprites
         protected Animation _animation;
         protected AnimationManager _animationManager;
         protected Shadow _shadow;
-        protected Texture2D _texture;
+        protected Texture2D Texture;
         protected Rectangle _hurtbox;
         protected Rectangle _rectangle;
         protected int _scale = 3;
@@ -80,9 +80,9 @@ namespace RogueLike.Sprites
         {
             get
             {
-                if (_texture != null)
+                if (Texture != null)
                 {
-                    return new Rectangle((int)Position.X, (int)Position.Y, _texture.Width * Scale, _texture.Height * Scale);
+                    return new Rectangle((int)Position.X, (int)Position.Y, Texture.Width * Scale, Texture.Height * Scale);
                 }
 
                 if (_animationManager != null)
@@ -102,10 +102,7 @@ namespace RogueLike.Sprites
 
                 throw new Exception("Unknown sprite");
             }
-            set
-            {
-                _rectangle = value;
-            }
+            set => _rectangle = value;
         }
 
         public Rectangle Hurtbox
@@ -120,18 +117,18 @@ namespace RogueLike.Sprites
 
         public Sprite(Texture2D texture)
         {
-            _texture = texture;
+            Texture = texture;
 
             Children = new List<Sprite>();
 
             Color = Color.White;
 
             if (texture != null)
-                Origin = new Vector2(_texture.Width / 2, _texture.Height / 2);
+                Origin = new Vector2(Texture.Width / 2, Texture.Height / 2);
         } // Sprite
         public Sprite(Texture2D texture, Texture2D shadowTexture)
         {
-            _texture = texture;
+            Texture = texture;
 
             Children = new List<Sprite>
             {
@@ -144,25 +141,23 @@ namespace RogueLike.Sprites
             Color = Color.White;
 
             if (texture != null)
-                Origin = new Vector2(_texture.Width / 2, _texture.Height / 2);
+                Origin = new Vector2(Texture.Width / 2, Texture.Height / 2);
         } // Sprite with shadow
         public Sprite(Animation animation)
         {
-            _texture = null;
+            Texture = null;
 
             Children = new List<Sprite>();
 
             _animation = animation;
 
-            _animationManager = new AnimationManager(animation, Scale);
-
-            _animationManager.Color = Color.White;
+            _animationManager = new AnimationManager(animation, Scale) { Color = Color.White };
 
             Origin = new Vector2(animation.FrameWidth / 2, animation.FrameHeight / 2);
         } // Animated sprite
         public Sprite(Dictionary<string, Animation> animations)
         {
-            _texture = null;
+            Texture = null;
 
             Children = new List<Sprite>();
 
@@ -170,15 +165,13 @@ namespace RogueLike.Sprites
 
             var animation = _animations.FirstOrDefault().Value;
 
-            _animationManager = new AnimationManager(animation, Scale);
-
-            _animationManager.Color = Color.White;
+            _animationManager = new AnimationManager(animation, Scale) { Color = Color.White };
 
             Origin = new Vector2(animation.FrameWidth / 2, animation.FrameHeight / 2);
         } // Animated sprite dictionary
         public Sprite(Dictionary<string, Animation> animations, Texture2D shadowTexture)
         {
-            _texture = null;
+            Texture = null;
 
             Children = new List<Sprite>
             {
@@ -192,9 +185,7 @@ namespace RogueLike.Sprites
 
             var animation = _animations.FirstOrDefault().Value;
 
-            _animationManager = new AnimationManager(animation, Scale);
-
-            _animationManager.Color = Color.White;
+            _animationManager = new AnimationManager(animation, Scale) { Color = Color.White };
 
             Origin = new Vector2(animation.FrameWidth / 2, animation.FrameHeight / 2);
         } // Animated sprite dictionary with shadow
@@ -209,9 +200,9 @@ namespace RogueLike.Sprites
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (_texture != null)
+            if (Texture != null)
             {
-                spriteBatch.Draw(_texture, Rectangle, null, Color, 0f, Origin, SpriteEffects.None, Layer);
+                spriteBatch.Draw(Texture, Rectangle, null, Color, 0f, Origin, SpriteEffects.None, Layer);
             }
 
             else if (_animationManager != null)
@@ -249,10 +240,7 @@ namespace RogueLike.Sprites
                 return true;
             }
 
-            if (Hurtbox.Intersects(sprite.Hurtbox))
-                return true;
-
-            return false;
+            return Hurtbox.Intersects(sprite.Hurtbox);
         }
 
         protected bool IsTouchingLeft(Sprite sprite)

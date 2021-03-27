@@ -2,17 +2,13 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using RogueLike.Rooms;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RogueLike.Managers
 {
     public class RoomManager
     {
-        private Dictionary<string, Texture2D> _textures;
+        private readonly Dictionary<string, Texture2D> _textures;
 
         public Room CurrentRoom { get; set; }
 

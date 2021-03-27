@@ -1,22 +1,17 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using RogueLike.Managers;
 using RogueLike.Models;
 using RogueLike.Sprites;
 using RogueLike.Sprites.RoomSprites;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RogueLike.Rooms
 {
     public class Room : Sprite
     {
-        private Dictionary<string, Texture2D> _textures;
-        private EnemyManager _enemyManager; 
+        private readonly Dictionary<string, Texture2D> _textures;
+        private readonly EnemyManager _enemyManager;
 
         public static Color Grass = new Color(36, 73, 67);
         public Vector2 RoomSize { get; }
@@ -26,7 +21,7 @@ namespace RogueLike.Rooms
         public bool IsWater { get; }
         public Rectangle Area { get; }
 
-        private int[,] _map;
+        private readonly int[,] _map;
         /// <summary>
         /// 0 = Empty
         /// 1 = Wall
@@ -37,7 +32,7 @@ namespace RogueLike.Rooms
         {
             _enemyManager = enemyManager;
             _textures = textures;
-            _texture = _textures["LeftWall"]; // Room måste ha en textur även om den inte ritas
+            Texture = _textures["LeftWall"]; // Room måste ha en textur även om den inte ritas
             Position = position;
             _map = new int[(int)roomSize.X, (int)roomSize.Y];
             RoomSize = roomSize;
@@ -60,7 +55,7 @@ namespace RogueLike.Rooms
                                       1000);
 
             CreateRoom(roomSize);
-            
+
             FillRoom(roomSize);
         }
 
@@ -330,7 +325,7 @@ namespace RogueLike.Rooms
                 }
                 return;
             }
-            
+
             for (int x = -10; x < (int)roomSize.X + 10; x++) // Tile X
             {
                 for (int y = -10; y < (int)roomSize.Y + 10; y++) // Tile Y

@@ -1,11 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RogueLike.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RogueLike.Sprites.RoomSprites
 {
@@ -14,11 +9,6 @@ namespace RogueLike.Sprites.RoomSprites
         public Tree(Texture2D texture, Texture2D shadowTexture) : base(texture, shadowTexture)
         {
             LayerOrigin = 71;
-        }
-
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            base.Draw(gameTime, spriteBatch);
         }
 
         public void UpdateHurtbox()

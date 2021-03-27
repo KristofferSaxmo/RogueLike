@@ -4,25 +4,19 @@ using Microsoft.Xna.Framework.Graphics;
 using RogueLike.Models;
 using RogueLike.Rooms;
 using RogueLike.Sprites;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RogueLike.Managers
 {
     public class EnemyManager
     {
-        private Texture2D _ghostShadow;
-        private Dictionary<string, Animation> _ghostAnimations;
-        private Enemy _enemyPrefab;
-        
+        private readonly Enemy _enemyPrefab;
+
         public EnemyManager(ContentManager content)
         {
-            _ghostShadow = content.Load<Texture2D>("enemies/ghost/ghost-shadow");
-            
-            _ghostAnimations = new Dictionary<string, Animation>()
+            var ghostShadow = content.Load<Texture2D>("enemies/ghost/ghost-shadow");
+
+            var ghostAnimations = new Dictionary<string, Animation>()
             {
                 { "GhostLeft", new Animation(content.Load<Texture2D>("enemies/ghost/ghost_left"), 5, 0.15f) },
                 { "GhostRight", new Animation(content.Load<Texture2D>("enemies/ghost/ghost_right"), 5, 0.15f) },
@@ -33,9 +27,9 @@ namespace RogueLike.Managers
                 { "GhostLightning", new Animation(content.Load<Texture2D>("enemies/ghost/ghost_lightning"), 10, 0.10f) { IsLooping = false } }
             };
 
-            _enemyPrefab = new Enemy(_ghostAnimations, _ghostShadow)
+            _enemyPrefab = new Enemy(ghostAnimations, ghostShadow)
             {
-                Health = 1,
+                Health = 5,
                 Speed = 3
             };
         }
