@@ -6,8 +6,8 @@ namespace RogueLike
 {
     public class Quadtree
     {
-        private const int MaxObjects = 5;
-        private const int MaxLevels = 20;
+        private const int MaxObjects = 100;
+        private const int MaxLevels = 1;
 
         private readonly int _level;
         private readonly List<Sprite> _sprites;

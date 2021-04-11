@@ -8,7 +8,7 @@ namespace RogueLike.Sprites.RoomSprites
     {
         public Wall(Texture2D texture) : base(texture)
         {
-            LayerOrigin = 58;
+            LayerOrigin = 83;
         }
 
         public void UpdateHurtbox()

@@ -16,6 +16,8 @@ namespace RogueLike.States
     {
         #region Fields
 
+        private KeyboardState _previousKeyboardState;
+        private bool _showHurtboxes = false;
         private Quadtree _quad;
         private RoomManager _roomManager;
         private GuiManager _guiManager;
@@ -77,7 +79,7 @@ namespace RogueLike.States
             _players = _sprites.OfType<Player>().ToList();
         }
 
-        public void DetectCollisions()
+        private void DetectCollisions()
         {
 
             var hurtboxSprites = _onScreenSprites.Where(c => c is IHurtbox) as Sprite[] ?? _onScreenSprites.Where(c => c is IHurtbox).ToArray();
@@ -151,7 +153,7 @@ namespace RogueLike.States
             }
         }
 
-        public void AddChildren()
+        private void AddChildren()
         {
             for (int i = 0; i < _sprites.Count; i++)
             {
@@ -163,7 +165,7 @@ namespace RogueLike.States
             }
         }
 
-        public void RemoveSprites()
+        private void RemoveSprites()
         {
             for (int i = 0; i < _sprites.Count; i++)
             {
@@ -209,6 +211,13 @@ namespace RogueLike.States
             RemoveSprites();
 
             _guiManager.Update();
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Enter) && !_previousKeyboardState.IsKeyDown(Keys.Enter))
+            {
+                _showHurtboxes = !_showHurtboxes;
+            }
+
+            _previousKeyboardState = Keyboard.GetState();
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -223,19 +232,26 @@ namespace RogueLike.States
                 spriteBatch.Draw(_defaultTex, _roomManager.CurrentRoom.GrassRec2, Room.Grass);
             }
 
-            foreach (var sprite in _onScreenSprites)
+            //Shows Hurtboxes. Only for testing
+            if (_showHurtboxes)
             {
-                sprite.Draw(gameTime, spriteBatch);
-
-                // Shows the Y position of LayerOrigin. Only for testing
-                //spriteBatch.Draw(_defaultTex, sprite.LayerOriginTestRectangle, Color.Black); 
+                foreach (var sprite1 in _onScreenSprites.Where(c => c is IHurtbox))
+                {
+                    var sprite = (IHurtbox)sprite1;
+                    spriteBatch.Draw(_defaultTex, ((Sprite)sprite).Hurtbox, Color.Blue);
+                }
             }
 
-            //Shows Hurtboxes. Only for testing
-            //foreach (IHurtbox sprite in _onScreenSprites.Where(c => c is IHurtbox))
-            //{
-            //    spriteBatch.Draw(_defaultTex, ((Sprite)sprite).Hurtbox, Color.Blue);
-            //}
+            else
+            {
+                foreach (var sprite in _onScreenSprites)
+                {
+                    sprite.Draw(gameTime, spriteBatch);
+
+                    // Shows the Y position of LayerOrigin. Only for testing
+                    //spriteBatch.Draw(_defaultTex, sprite.LayerOriginTestRectangle, Color.Black); 
+                }
+            }
 
             spriteBatch.End();
 

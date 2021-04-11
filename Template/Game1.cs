@@ -64,9 +64,9 @@ namespace RogueLike
                 _nextState = null;
             }
 
-            _currentState.Update(gameTime);
-
             _currentState.UpdateCamera(_camera);
+
+            _currentState.Update(gameTime);
 
             base.Update(gameTime);
         }

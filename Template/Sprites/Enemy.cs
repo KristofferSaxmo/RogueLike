@@ -126,7 +126,7 @@ namespace RogueLike.Sprites
         {
             if (!_isDying)
             {
-                _hurtbox = new Rectangle(Rectangle.X + 9 * Scale, Rectangle.Y + 26 * Scale, 16 * Scale, 21 * Scale);
+                _hurtbox = new Rectangle(Rectangle.X + 9 * Scale, Rectangle.Y + 31 * Scale, 16 * Scale, 16 * Scale);
                 return;
             }
 

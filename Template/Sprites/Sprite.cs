@@ -70,7 +70,7 @@ namespace RogueLike.Sprites
             }
         }
         public Color Color { get; set; }
-        public bool IsRemoved { get; set; }
+        public bool IsRemoved { get; protected set; }
         public int Scale
         {
             get { return _scale; }
@@ -226,24 +226,33 @@ namespace RogueLike.Sprites
 
         public bool Intersects(Sprite sprite)
         {
-            if ((Velocity.X > 0 && IsTouchingLeft(sprite)) ||
-                (Velocity.X < 0 & IsTouchingRight(sprite)))
+            if (Velocity.X > 0 && IsTouchingLeft(sprite))
             {
-                Velocity = new Vector2(0, Velocity.Y);
+                Velocity = new Vector2(sprite.Hurtbox.Left - Hurtbox.Right, Velocity.Y);
                 return true;
             }
 
-            if ((Velocity.Y > 0 && IsTouchingTop(sprite)) ||
-                (Velocity.Y < 0 & IsTouchingBottom(sprite)))
+            if (Velocity.X < 0 & IsTouchingRight(sprite))
             {
-                Velocity = new Vector2(Velocity.X, 0);
+                Velocity = new Vector2(sprite.Hurtbox.Right - Hurtbox.Left, Velocity.Y);
+                return true;
+            }
+
+            if (Velocity.Y > 0 && IsTouchingTop(sprite))
+            {
+                Velocity = new Vector2(Velocity.X, sprite.Hurtbox.Top - Hurtbox.Bottom);
+                return true;
+            }
+            if (Velocity.Y < 0 & IsTouchingBottom(sprite))
+            {
+                Velocity = new Vector2(Velocity.X, sprite.Hurtbox.Bottom - Hurtbox.Top);
                 return true;
             }
 
             return Hurtbox.Intersects(sprite.Hurtbox);
         }
 
-        protected bool IsTouchingLeft(Sprite sprite)
+        private bool IsTouchingLeft(Sprite sprite)
         {
             return Hurtbox.Right + Velocity.X > sprite.Hurtbox.Left &&
               Hurtbox.Left < sprite.Hurtbox.Left &&
@@ -251,7 +260,7 @@ namespace RogueLike.Sprites
               Hurtbox.Top < sprite.Hurtbox.Bottom;
         }
 
-        protected bool IsTouchingRight(Sprite sprite)
+        private bool IsTouchingRight(Sprite sprite)
         {
             return Hurtbox.Left + Velocity.X < sprite.Hurtbox.Right &&
               Hurtbox.Right > sprite.Hurtbox.Right &&
@@ -259,7 +268,7 @@ namespace RogueLike.Sprites
               Hurtbox.Top < sprite.Hurtbox.Bottom;
         }
 
-        protected bool IsTouchingTop(Sprite sprite)
+        private bool IsTouchingTop(Sprite sprite)
         {
             return Hurtbox.Bottom + Velocity.Y > sprite.Hurtbox.Top &&
               Hurtbox.Top < sprite.Hurtbox.Top &&
@@ -267,7 +276,7 @@ namespace RogueLike.Sprites
               Hurtbox.Left < sprite.Hurtbox.Right;
         }
 
-        protected bool IsTouchingBottom(Sprite sprite)
+        private bool IsTouchingBottom(Sprite sprite)
         {
             return Hurtbox.Top + Velocity.Y < sprite.Hurtbox.Bottom &&
               Hurtbox.Bottom > sprite.Hurtbox.Bottom &&
