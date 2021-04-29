@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace RogueLike.Sprites
 {
-    public class Player : Sprite, IHurtbox, IHitbox
+    public class Player : Sprite, IDamageable, IDamaging
     {
         private KeyboardState _currentKey;
 

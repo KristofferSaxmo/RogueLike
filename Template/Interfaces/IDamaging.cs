@@ -1,6 +1,6 @@
 ﻿namespace RogueLike.Interfaces
 {
-    public interface IHitbox
+    public interface IDamaging
     {
         void UpdateHitbox();
     }

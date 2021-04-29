@@ -82,7 +82,10 @@ namespace RogueLike.Sprites
             {
                 if (Texture != null)
                 {
-                    return new Rectangle((int)Position.X, (int)Position.Y, Texture.Width * Scale, Texture.Height * Scale);
+                    if (Texture.Width > 5 && Texture.Height > 5)
+                    {
+                        return new Rectangle((int)Position.X, (int)Position.Y, Texture.Width * Scale, Texture.Height * Scale);
+                    }
                 }
 
                 if (_animationManager != null)
@@ -95,12 +98,7 @@ namespace RogueLike.Sprites
                     return new Rectangle((int)Position.X, (int)Position.Y, animation.FrameWidth * Scale, animation.FrameHeight * Scale);
                 }
 
-                if (this is Hitbox)
-                {
                     return new Rectangle(_rectangle.X - (int)Origin.X * Scale, (int)_rectangle.Y - (int)Origin.Y * Scale, _rectangle.Width, _rectangle.Height);
-                }
-
-                throw new Exception("Unknown sprite");
             }
             set => _rectangle = value;
         }

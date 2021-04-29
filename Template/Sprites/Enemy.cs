@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace RogueLike.Sprites
 {
-    public class Enemy : Sprite, IHurtbox
+    public class Enemy : Sprite, IDamageable
     {
 
         private Vector2 _playerPos;

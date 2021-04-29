@@ -2,7 +2,7 @@
 
 namespace RogueLike.Interfaces
 {
-    public interface IHurtbox
+    public interface IDamageable
     {
         void UpdateHurtbox();
         void OnCollide(Hitbox hitbox);

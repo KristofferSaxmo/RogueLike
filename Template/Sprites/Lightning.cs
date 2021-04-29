@@ -5,7 +5,7 @@ using RogueLike.Models;
 
 namespace RogueLike.Sprites
 {
-    public class Lightning : Sprite, IHitbox
+    public class Lightning : Sprite, IDamaging
     {
         public Lightning(Animation animation) : base(animation)
         {

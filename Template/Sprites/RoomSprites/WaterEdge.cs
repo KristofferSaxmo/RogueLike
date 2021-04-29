@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace RogueLike.Sprites.RoomSprites
 {
-    public class WaterEdge : Sprite, IHurtbox
+    public class WaterEdge : Sprite, IDamageable
     {
         public WaterEdge(Dictionary<string, Animation> animations) : base(animations)
         {

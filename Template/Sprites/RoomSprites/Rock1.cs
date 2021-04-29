@@ -4,7 +4,7 @@ using RogueLike.Interfaces;
 
 namespace RogueLike.Sprites.RoomSprites
 {
-    public class Rock1 : Sprite, IHurtbox
+    public class Rock1 : Sprite, IDamageable
     {
         public Rock1(Texture2D texture, Texture2D shadowTexture) : base(texture, shadowTexture)
         {

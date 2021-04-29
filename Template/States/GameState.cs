@@ -38,7 +38,7 @@ namespace RogueLike.States
         public override void LoadContent()
         {
             _roomManager = new RoomManager(_content);
-            _guiManager = new GuiManager(_content);
+            _guiManager = new GuiManager(_content, _defaultTex);
             _enemyManager = new EnemyManager(_content);
 
             _sprites = new List<Sprite>()
@@ -82,15 +82,15 @@ namespace RogueLike.States
         private void DetectCollisions()
         {
 
-            var hurtboxSprites = _onScreenSprites.Where(c => c is IHurtbox) as Sprite[] ?? _onScreenSprites.Where(c => c is IHurtbox).ToArray();
+            var hurtboxSprites = _onScreenSprites.Where(c => c is IDamageable) as Sprite[] ?? _onScreenSprites.Where(c => c is IDamageable).ToArray();
             foreach (var sprite in hurtboxSprites)
             {
-                ((IHurtbox)sprite).UpdateHurtbox();
+                ((IDamageable)sprite).UpdateHurtbox();
             }
 
-            foreach (var sprite in _onScreenSprites.Where(c => c is IHitbox))
+            foreach (var sprite in _onScreenSprites.Where(c => c is IDamaging))
             {
-                ((IHitbox)sprite).UpdateHitbox();
+                ((IDamaging)sprite).UpdateHitbox();
             }
 
             var hitboxes = _onScreenSprites.Where(c => c is Hitbox);
@@ -120,7 +120,7 @@ namespace RogueLike.States
 
                 foreach (var spriteB in _returnSprites)
                 {
-                    if (!(spriteB is IHurtbox))
+                    if (!(spriteB is IDamageable))
                         continue;
 
                     if (spriteA == spriteB)
@@ -145,7 +145,7 @@ namespace RogueLike.States
 
                     if (spriteC.Rectangle.Intersects(spriteA.Hurtbox))
                     {
-                        ((IHurtbox)spriteA).OnCollide((Hitbox)spriteC);
+                        ((IDamageable)spriteA).OnCollide((Hitbox)spriteC);
                     }
                 }
 
@@ -210,7 +210,7 @@ namespace RogueLike.States
 
             RemoveSprites();
 
-            _guiManager.Update();
+            _guiManager.Update(gameTime, _players[0].Health);
 
             if (Keyboard.GetState().IsKeyDown(Keys.Enter) && !_previousKeyboardState.IsKeyDown(Keys.Enter))
             {
@@ -235,9 +235,9 @@ namespace RogueLike.States
             //Shows Hurtboxes. Only for testing
             if (_showHurtboxes)
             {
-                foreach (var sprite1 in _onScreenSprites.Where(c => c is IHurtbox))
+                foreach (var sprite1 in _onScreenSprites.Where(c => c is IDamageable))
                 {
-                    var sprite = (IHurtbox)sprite1;
+                    var sprite = (IDamageable)sprite1;
                     spriteBatch.Draw(_defaultTex, ((Sprite)sprite).Hurtbox, Color.Blue);
                 }
             }
@@ -257,7 +257,7 @@ namespace RogueLike.States
 
             spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);
 
-            _guiManager.Draw(spriteBatch, _players[0].Health);
+            _guiManager.Draw(gameTime, spriteBatch, _players[0].Health);
 
             spriteBatch.End();
 

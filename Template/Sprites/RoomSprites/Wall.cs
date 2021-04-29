@@ -4,7 +4,7 @@ using RogueLike.Interfaces;
 
 namespace RogueLike.Sprites.RoomSprites
 {
-    public class Wall : Sprite, IHurtbox
+    public class Wall : Sprite, IDamageable
     {
         public Wall(Texture2D texture) : base(texture)
         {
