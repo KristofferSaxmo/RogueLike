@@ -14,7 +14,7 @@ namespace RogueLike.Managers
             _playerHearts = new Hearts(content.Load<Texture2D>("gui/hearts"));
             _playerDamageIndicator = new DamageIndicator(defaultTex)
             {
-                Color = new Color(150, 0, 0, 150),
+                Color = new Color(100, 0, 0, 100),
                 Position = Vector2.Zero,
                 Rectangle = new Rectangle(0, 0, Game1.ScreenWidth, Game1.ScreenHeight)
             };
