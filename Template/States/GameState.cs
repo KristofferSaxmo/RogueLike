@@ -8,12 +8,16 @@ using RogueLike.Models;
 using RogueLike.Rooms;
 using RogueLike.Sprites;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace RogueLike.States
 {
     public class GameState : State
     {
+
+        public static int Score;
+
         #region Fields
 
         private KeyboardState _previousKeyboardState;
@@ -27,6 +31,8 @@ namespace RogueLike.States
         private Rectangle _screenRectangle;
         private readonly List<Sprite> _returnSprites = new List<Sprite>();
         private List<Player> _players;
+        private BinaryReader _br;
+        private SpriteFont _font;
 
         #endregion
 
@@ -37,6 +43,16 @@ namespace RogueLike.States
 
         public override void LoadContent()
         {
+            _font = _content.Load<SpriteFont>("misc/font");
+
+            if (File.Exists("Score.bin"))
+            {
+                _br = new BinaryReader(new FileStream("Score.bin", FileMode.OpenOrCreate, FileAccess.Read));
+                if(_br.BaseStream.Length > 0)
+                    Score = _br.ReadInt32();
+
+                _br.Close();
+            }
             _roomManager = new RoomManager(_content);
             _guiManager = new GuiManager(_content, _defaultTex);
             _enemyManager = new EnemyManager(_content);
@@ -45,7 +61,7 @@ namespace RogueLike.States
             {
                 _roomManager.CreateRoom(
                     new Vector2(0, 0),
-                    new Vector2(100, 100), // Room size
+                    new Vector2(20, 20), // Room size
                     _enemyManager),
 
                 new Player(new Dictionary<string, Animation>()
@@ -54,12 +70,12 @@ namespace RogueLike.States
                     { "WalkRight", new Animation(_content.Load<Texture2D>("player/player_run_right"), 4, 0.1f) },
                     { "IdleLeft", new Animation(_content.Load<Texture2D>("player/player_idle_left"), 5, 0.2f) },
                     { "IdleRight", new Animation(_content.Load<Texture2D>("player/player_idle_right"), 5, 0.2f) },
-                    { "AttackRight1", new Animation(_content.Load<Texture2D>("player/player_attack_right1"), 6, 0.04f) { IsLooping = false } },
-                    { "AttackRight2", new Animation(_content.Load<Texture2D>("player/player_attack_right2"), 6, 0.04f) { IsLooping = false } },
-                    { "AttackRight3", new Animation(_content.Load<Texture2D>("player/player_attack_right3"), 5, 0.1f) { IsLooping = false } },
                     { "AttackLeft1", new Animation(_content.Load<Texture2D>("player/player_attack_left1"), 6, 0.04f) { IsLooping = false } },
                     { "AttackLeft2", new Animation(_content.Load<Texture2D>("player/player_attack_left2"), 6, 0.04f) { IsLooping = false } },
-                    { "AttackLeft3", new Animation(_content.Load<Texture2D>("player/player_attack_left3"), 5, 0.1f) { IsLooping = false } }
+                    { "AttackLeft3", new Animation(_content.Load<Texture2D>("player/player_attack_left3"), 5, 0.1f) { IsLooping = false } },
+                    { "AttackRight1", new Animation(_content.Load<Texture2D>("player/player_attack_right1"), 6, 0.04f) { IsLooping = false } },
+                    { "AttackRight2", new Animation(_content.Load<Texture2D>("player/player_attack_right2"), 6, 0.04f) { IsLooping = false } },
+                    { "AttackRight3", new Animation(_content.Load<Texture2D>("player/player_attack_right3"), 5, 0.1f) { IsLooping = false } }
                 })
                 {
                     Health = 6,
@@ -258,6 +274,8 @@ namespace RogueLike.States
             spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);
 
             _guiManager.Draw(gameTime, spriteBatch, _players[0].Health);
+
+            spriteBatch.DrawString(_font, "Score: " + Score.ToString(), new Vector2(20, 100), Color.White);
 
             spriteBatch.End();
 
