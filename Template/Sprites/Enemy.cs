@@ -3,12 +3,15 @@ using Microsoft.Xna.Framework.Graphics;
 using RogueLike.Interfaces;
 using RogueLike.Models;
 using RogueLike.Structs;
+using RogueLike.States;
 using System.Collections.Generic;
+using System.IO;
 
 namespace RogueLike.Sprites
 {
     public class Enemy : Sprite, IDamageable
     {
+        private BinaryWriter _bw;
 
         private Vector2 _playerPos;
 
@@ -146,17 +149,25 @@ namespace RogueLike.Sprites
                 _collisionCooldown = 10;
             }
 
-            if (Health > 0) return;
+            if (Health >= 0) return;
+
+            GameState.Score++;
+
+            _bw = new BinaryWriter(new FileStream("Score.bin", FileMode.OpenOrCreate, FileAccess.Write));
+            _bw.Write(GameState.Score);
+            _bw.Close();
+           
+
+            Velocity = Vector2.Zero;
 
             if (_isFacingLeft)
             {
                 _animationManager.Play(_animations["GhostDeathLeft"]);
-                Velocity = Vector2.Zero;
+                
                 return;
             }
 
             _animationManager.Play(_animations["GhostDeathRight"]);
-            Velocity = Vector2.Zero;
         }
         private bool InAnimation()
         {
