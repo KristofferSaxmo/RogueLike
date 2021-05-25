@@ -149,7 +149,7 @@ namespace RogueLike.Sprites
                 _collisionCooldown = 10;
             }
 
-            if (Health >= 0) return;
+            if (Health > 0) return;
 
             GameState.Score++;
 
