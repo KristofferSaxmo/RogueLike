@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using RogueLike.Interfaces;
@@ -7,8 +7,17 @@ using System.Collections.Generic;
 
 namespace RogueLike.Sprites
 {
+    enum Attacks
+    {
+        None,
+        Attack1,
+        Attack2,
+        Attack3
+    }
     public class Player : Sprite, IDamageable, IDamaging
     {
+        private Attacks _lastAttack = Attacks.None;
+
         private KeyboardState _currentKey;
 
         private MouseState _currentMouse;
@@ -18,8 +27,6 @@ namespace RogueLike.Sprites
         private int _attackCooldown;
 
         private int _collisionCooldown;
-
-        private int _lastAttack;
 
         private bool _isFacingLeft;
 
@@ -34,7 +41,7 @@ namespace RogueLike.Sprites
 
         private void Attack()
         {
-            if (_lastAttack == 0) // Lose all movement speed before attacking
+            if (_lastAttack == Attacks.None) // Lose all movement speed before attacking
                 Velocity = Vector2.Zero;
 
             _direction = Camera.GetWorldPosition(new Vector2(_currentMouse.X, _currentMouse.Y)) - Position;
@@ -55,50 +62,50 @@ namespace RogueLike.Sprites
 
         private void AttackLeft()
         {
-            if (!IsAttacking() && (_lastAttack == 0 || _lastAttack == 3))
+            if (!IsAttacking() && (_lastAttack == Attacks.None || _lastAttack == Attacks.Attack3))
             {
                 _animationManager.Play(_animations["AttackLeft1"]);
                 _attackCooldown = 0;
-                _lastAttack = 1;
+                _lastAttack = Attacks.Attack1;
                 Velocity = _direction * 5;
             }
-            else if (!IsAttacking() && _lastAttack == 1)
+            else if (!IsAttacking() && _lastAttack == Attacks.Attack1)
             {
                 _animationManager.Play(_animations["AttackLeft2"]);
                 _attackCooldown = 0;
-                _lastAttack = 2;
+                _lastAttack = Attacks.Attack2;
                 Velocity = _direction * 5;
             }
-            else if (!IsAttacking() && _lastAttack == 2)
+            else if (!IsAttacking() && _lastAttack == Attacks.Attack2)
             {
                 _animationManager.Play(_animations["AttackLeft3"]);
                 _attackCooldown = 0;
-                _lastAttack = 3;
+                _lastAttack = Attacks.Attack3;
                 Velocity = _direction * 15;
             }
         }
 
         private void AttackRight()
         {
-            if (!IsAttacking() && (_lastAttack == 0 || _lastAttack == 3))
+            if (!IsAttacking() && (_lastAttack == Attacks.None || _lastAttack == Attacks.Attack3))
             {
                 _animationManager.Play(_animations["AttackRight1"]);
                 _attackCooldown = 0;
-                _lastAttack = 1;
+                _lastAttack = Attacks.Attack1;
                 Velocity = _direction * 5;
             }
-            else if (!IsAttacking() && _lastAttack == 1)
+            else if (!IsAttacking() && _lastAttack == Attacks.Attack1)
             {
                 _animationManager.Play(_animations["AttackRight2"]);
                 _attackCooldown = 0;
-                _lastAttack = 2;
+                _lastAttack = Attacks.Attack2;
                 Velocity = _direction * 5;
             }
-            else if (!IsAttacking() && _lastAttack == 2)
+            else if (!IsAttacking() && _lastAttack == Attacks.Attack2)
             {
                 _animationManager.Play(_animations["AttackRight3"]);
                 _attackCooldown = 0;
-                _lastAttack = 3;
+                _lastAttack = Attacks.Attack3;
                 Velocity = _direction * 15;
             }
         }
@@ -169,7 +176,7 @@ namespace RogueLike.Sprites
             if (_attackCooldown < 30)
                 _attackCooldown++;
             else
-                _lastAttack = 0;
+                _lastAttack = Attacks.None;
 
             if (_collisionCooldown > 0)
                 _collisionCooldown--;
