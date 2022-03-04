@@ -59,6 +59,7 @@
     <Compile Include="Camera.cs" />
     <Compile Include="Component.cs" />
     <Compile Include="Controls\Button.cs" />
+    <Compile Include="Letter.cs" />
     <Compile Include="Sprites\GUISprites\DamageIndicator.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Interfaces\IDamaging.cs" />
@@ -94,6 +95,8 @@
     <Compile Include="States\MenuState.cs" />
     <Compile Include="States\State.cs" />
     <Compile Include="Structs\Circle.cs" />
+    <Compile Include="Text.cs" />
+    <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

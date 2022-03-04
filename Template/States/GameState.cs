@@ -32,18 +32,20 @@ namespace RogueLike.States
         private readonly List<Sprite> _returnSprites = new List<Sprite>();
         private List<Player> _players;
         private BinaryReader _br;
-        private SpriteFont _font;
+        private Texture2D _fontTexture;
+        private Text _scoreText;
 
         #endregion
 
-        public GameState(Game1 game, ContentManager content, Texture2D defaultTex) : base(game, content, defaultTex)
+        public GameState(Game1 game, ContentManager content) : base(game, content)
         {
 
         }
 
         public override void LoadContent()
         {
-            _font = _content.Load<SpriteFont>("misc/font");
+            _fontTexture = _content.Load<Texture2D>("misc/font");
+            _scoreText = new Text("", 3, new Vector2(20, 100), _fontTexture);
 
             if (File.Exists("Score.bin"))
             {
@@ -54,7 +56,7 @@ namespace RogueLike.States
                 _br.Close();
             }
             _roomManager = new RoomManager(_content);
-            _guiManager = new GuiManager(_content, _defaultTex);
+            _guiManager = new GuiManager(_content);
             _enemyManager = new EnemyManager(_content);
 
             _sprites = new List<Sprite>()
@@ -200,10 +202,10 @@ namespace RogueLike.States
         public override void Update(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-                _game.ChangeState(new MenuState(_game, _content, _defaultTex));
+                _game.ChangeState(new MenuState(_game, _content));
 
             if (_players[0].IsDead)
-                _game.ChangeState(new MenuState(_game, _content, _defaultTex));
+                _game.ChangeState(new MenuState(_game, _content));
 
             _screenRectangle = new Rectangle((int)_players[0].Position.X - Game1.ScreenWidth / 2 - 100,
                                              (int)_players[0].Position.Y - Game1.ScreenHeight / 2 - 100,
@@ -233,6 +235,8 @@ namespace RogueLike.States
                 _showHurtboxes = !_showHurtboxes;
             }
 
+            _scoreText.SetContent(Score.ToString());
+
             _previousKeyboardState = Keyboard.GetState();
         }
 
@@ -241,11 +245,11 @@ namespace RogueLike.States
 
             spriteBatch.Begin(SpriteSortMode.FrontToBack, null, SamplerState.PointClamp, null, null, null, Camera.Transform);
 
-            spriteBatch.Draw(_defaultTex, _roomManager.CurrentRoom.GrassRec, Room.Grass);
+            spriteBatch.Draw(Game1.DefaultTexture, _roomManager.CurrentRoom.GrassRec, Room.Grass);
 
             if (_roomManager.CurrentRoom.IsWater)
             {
-                spriteBatch.Draw(_defaultTex, _roomManager.CurrentRoom.GrassRec2, Room.Grass);
+                spriteBatch.Draw(Game1.DefaultTexture, _roomManager.CurrentRoom.GrassRec2, Room.Grass);
             }
 
             //Shows Hurtboxes. Only for testing
@@ -254,7 +258,7 @@ namespace RogueLike.States
                 foreach (var sprite1 in _onScreenSprites.Where(c => c is IDamageable))
                 {
                     var sprite = (IDamageable)sprite1;
-                    spriteBatch.Draw(_defaultTex, ((Sprite)sprite).Hurtbox, Color.Blue);
+                    spriteBatch.Draw(Game1.DefaultTexture, ((Sprite)sprite).Hurtbox, Color.Blue);
                 }
             }
 
@@ -275,7 +279,7 @@ namespace RogueLike.States
 
             _guiManager.Draw(gameTime, spriteBatch, _players[0].Health);
 
-            spriteBatch.DrawString(_font, "Score: " + Score.ToString(), new Vector2(20, 100), Color.White);
+            _scoreText.Draw(gameTime, spriteBatch);
 
             spriteBatch.End();
 
