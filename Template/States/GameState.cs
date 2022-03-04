@@ -61,7 +61,7 @@ namespace RogueLike.States
             {
                 _roomManager.CreateRoom(
                     new Vector2(0, 0),
-                    new Vector2(20, 20), // Room size
+                    new Vector2(100, 100), // Room size
                     _enemyManager),
 
                 new Player(new Dictionary<string, Animation>()
@@ -215,7 +215,7 @@ namespace RogueLike.States
 
             foreach (Enemy enemy in _sprites.Where(sprite => sprite is Enemy))
             {
-                enemy.Update(gameTime, _players[0].Position);
+                enemy.Update(gameTime, _players[0].Position, _players[0].Velocity);
             }
 
             _onScreenSprites = _sprites.Where(sprite => sprite.Rectangle.Intersects(_screenRectangle));

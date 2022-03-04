@@ -13,7 +13,7 @@ namespace RogueLike.Sprites
     {
         private BinaryWriter _bw;
 
-        private Vector2 _playerPos;
+        private Vector2 _playerPos, _playerVel;
 
         private Vector2 _startingPos;
 
@@ -50,9 +50,20 @@ namespace RogueLike.Sprites
 
             Children.Add(new Lightning(lightning)
             {
-                Position = new Vector2(_playerPos.X, _playerPos.Y - 99),
+                Position = new Vector2(_playerPos.X + (_playerVel.X * 32), _playerPos.Y + (_playerVel.Y * 32) - 99),
                 Parent = this,
             });
+
+            for (int i = 0; i < Game1.Random.Next(4, 8); i++)
+            {
+                Animation randomLightning = _lightningPrefab.Clone() as Animation;
+                randomLightning.CurrentFrame -= i*2;
+                Children.Add(new Lightning(randomLightning)
+                {
+                    Position = new Vector2(_playerPos.X + (_playerVel.X * 32) + Game1.Random.Next(-100, 100), _playerPos.Y + (_playerVel.Y * 32) - 99 + Game1.Random.Next(-100, 100)),
+                    Parent = this,
+                });
+            }
 
             _attackCooldown = 150;
         }
@@ -88,7 +99,7 @@ namespace RogueLike.Sprites
             }
         }
 
-        public void Update(GameTime gameTime, Vector2 playerPos)
+        public void Update(GameTime gameTime, Vector2 playerPos, Vector2 playerVel)
         {
             if (_isDying && _animationManager.CurrentAnimation.CurrentFrame >= _animations["GhostDeathLeft"].FrameCount - 1)
                 IsRemoved = true;
@@ -102,6 +113,7 @@ namespace RogueLike.Sprites
             }
 
             _playerPos = playerPos;
+            _playerVel = playerVel;
 
             if (!InAnimation())
             {
