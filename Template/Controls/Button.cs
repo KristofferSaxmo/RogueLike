@@ -50,6 +50,8 @@ namespace RogueLike.Controls
 
         public override void Update(GameTime gameTime)
         {
+            Text.Update(gameTime);
+
             _previousMouse = _currentMouse;
             _currentMouse = Mouse.GetState();
 

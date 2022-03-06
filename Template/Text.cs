@@ -11,6 +11,7 @@ namespace RogueLike
 
         private Texture2D _texture;
         private Rectangle _rectangle;
+        private Vector2 _currentLetterPosition;
         private readonly int _scale;
         private readonly List<Letter> _letters = new List<Letter>();
         private readonly static Dictionary<char, Rectangle> _rectangles = new Dictionary<char, Rectangle>()
@@ -123,7 +124,7 @@ namespace RogueLike
             get { return _rectangle; }
         }
         public Color Color { get; set; }
-        public Vector2 Position { get; }
+        public Vector2 Position { get; private set; }
 
         public Text(string content, int scale, Vector2 position, Texture2D texture)
         {
@@ -138,21 +139,53 @@ namespace RogueLike
         public void SetContent(string content)
         {
             _letters.Clear();
-            Vector2 position = Position;
-            _rectangle = new Rectangle((int)position.X, (int)position.Y, 0, 0);
+            _currentLetterPosition = Position;
+            _rectangle = new Rectangle((int)Position.X, (int)Position.Y, 0, 0);
             foreach (char character in content)
             {
-                if (character == '\n')
+                AddLetter(character);
+            }
+        }
+
+        public void AddLetter(char character)
+        {
+            if (character == '\n')
+            {
+                _currentLetterPosition.Y += NewlineSpacing * _scale;
+                _currentLetterPosition.X = Position.X;
+                return;
+            }
+
+            _letters.Add(new Letter(_texture, GetLetterYPos(character, _currentLetterPosition), _rectangles[character], _scale, character));
+            Letter letter = _letters[_letters.Count - 1];
+
+            _currentLetterPosition.X += letter.Rectangle.Width + _scale;
+
+            _rectangle = new Rectangle(
+                Math.Min(Rectangle.X, letter.Rectangle.X),
+                Math.Min(Rectangle.Y, letter.Rectangle.Y),
+                Math.Max(Rectangle.Width, letter.Rectangle.Width + letter.Rectangle.X - (int)Position.X),
+                Math.Max(Rectangle.Height, letter.Rectangle.Height + letter.Rectangle.Y - (int)Position.Y));
+
+            Content += character;
+        }
+
+        public void SetPosition(Vector2 position)
+        {
+            Position = position;
+            _currentLetterPosition = position;
+            _rectangle = new Rectangle((int)position.X, (int)position.Y, 0, 0);
+            foreach (Letter letter in _letters)
+            {
+                if (letter.Character == '\n')
                 {
-                    position.Y += NewlineSpacing * _scale;
-                    position.X = Position.X;
-                    continue;
+                    _currentLetterPosition.Y += NewlineSpacing * _scale;
+                    _currentLetterPosition.X = Position.X;
+                    return;
                 }
 
-                _letters.Add(new Letter(_texture, GetLetterYPos(character, position), _rectangles[character], _scale, character));
-                Letter letter = _letters[_letters.Count - 1];
-
-                position.X += letter.Rectangle.Width + _scale;
+                letter.SetPosition(GetLetterYPos(letter.Character, _currentLetterPosition));
+                _currentLetterPosition.X += letter.Rectangle.Width + _scale;
 
                 _rectangle = new Rectangle(
                     Math.Min(Rectangle.X, letter.Rectangle.X),
@@ -160,8 +193,6 @@ namespace RogueLike
                     Math.Max(Rectangle.Width, letter.Rectangle.Width + letter.Rectangle.X - (int)Position.X),
                     Math.Max(Rectangle.Height, letter.Rectangle.Height + letter.Rectangle.Y - (int)Position.Y));
             }
-
-            Content = content;
         }
 
         private Vector2 GetLetterYPos(char character, Vector2 position)

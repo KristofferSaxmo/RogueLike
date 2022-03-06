@@ -7,24 +7,28 @@ namespace RogueLike
     {
         private Texture2D _texture;
         private Vector2 _origin;
-        private Vector2 _position;
         private Rectangle _sourceRectangle;
 
+        public Vector2 Position { get; private set; }
         public char Character { get; }
-        public Rectangle Rectangle { get; }
+        public Rectangle Rectangle { get; private set; }
         public int Scale { get; }
 
         public Letter(Texture2D texture, Vector2 position, Rectangle sourceRectangle, int scale, char character)
         {
             Character = character;
             _texture = texture;
-            _position = position;
-            _origin = new Vector2(position.X + (sourceRectangle.X * 2) + (4 * scale), position.Y + (sourceRectangle.Y * 2) + (4 * scale));
             _sourceRectangle = sourceRectangle;
             Scale = scale;
+            _origin = new Vector2(position.X + (_sourceRectangle.X * 2) + (4 * Scale), position.Y + (_sourceRectangle.Y * 2) + (4 * Scale));
 
+            SetPosition(position);
+        }
 
-            if (character == ' ')
+        public void SetPosition(Vector2 position)
+        {
+            Position = position;
+            if (Character == ' ')
             {
                 Rectangle = new Rectangle(0, 0, 4, 8);
             }
@@ -34,15 +38,15 @@ namespace RogueLike
                 Texture2D croppedTexture = Game1.Bit8Texture;
 
                 // Copy the data from the cropped region into a buffer, then into the new texture
-                Color[] data = new Color[sourceRectangle.Width * sourceRectangle.Height];
-                texture.GetData(0, sourceRectangle, data, 0, sourceRectangle.Width * sourceRectangle.Height);
+                Color[] data = new Color[_sourceRectangle.Width * _sourceRectangle.Height];
+                _texture.GetData(0, _sourceRectangle, data, 0, _sourceRectangle.Width * _sourceRectangle.Height);
                 croppedTexture.SetData(data);
 
                 // Create smallest possible rectangle
                 Rectangle = Util.GetSmallestRectangleFromTexture(croppedTexture);
             }
 
-            Rectangle = new Rectangle(Rectangle.X * scale + (int)position.X, Rectangle.Y * scale + (int)position.Y, Rectangle.Width * scale, Rectangle.Height * scale);
+            Rectangle = new Rectangle(Rectangle.X * Scale + (int)position.X, Rectangle.Y * Scale + (int)position.Y, Rectangle.Width * Scale, Rectangle.Height * Scale);
         }
 
         public void Update(GameTime gameTime)
@@ -53,7 +57,7 @@ namespace RogueLike
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Color color)
         {
             //spriteBatch.Draw(Game1.DefaultTex, Rectangle, Color.Blue);
-            spriteBatch.Draw(_texture, _position, _sourceRectangle, color, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(_texture, Position, _sourceRectangle, color, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0f);
         }
     }
 }
