@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using RogueLike.States;
 using System;
+using RogueLike.Input;
 
 namespace RogueLike
 {
@@ -20,7 +21,7 @@ namespace RogueLike
         private State _currentState;
         private State _nextState;
 
-        private Camera _camera;
+        public static Camera Camera;
 
         public Game1()
         {
@@ -33,7 +34,7 @@ namespace RogueLike
             _graphics.PreferredBackBufferHeight = ScreenHeight;
             _graphics.ApplyChanges();
 
-            _camera = new Camera();
+            Camera = new Camera();
 
             IsMouseVisible = true;
 
@@ -58,6 +59,9 @@ namespace RogueLike
         }
         protected override void Update(GameTime gameTime)
         {
+            FlatKeyboard.Instance.Update();
+            FlatMouse.Instance.Update();
+
             if (_nextState != null)
             {
                 _currentState = _nextState;
@@ -65,8 +69,6 @@ namespace RogueLike
 
                 _nextState = null;
             }
-
-            _currentState.UpdateCamera(_camera);
 
             _currentState.Update(gameTime);
 

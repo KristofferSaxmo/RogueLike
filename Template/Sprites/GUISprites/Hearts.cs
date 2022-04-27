@@ -14,10 +14,9 @@ namespace RogueLike.Sprites.GUISprites
         private readonly Rectangle _heart1, _heart2, _heart3;
         private const int HeartCount = 3;
 
-        public Hearts(Texture2D texture) : base(texture)
+        public Hearts(Texture2D texture, Vector2 position) : base(texture, position)
         {
             Scale = 5;
-            Position = new Vector2(20, 20);
 
             int width = Texture.Width / HeartCount;
             int height = Texture.Height;

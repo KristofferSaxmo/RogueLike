@@ -2,11 +2,13 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using RogueLike.Input;
 using RogueLike.Interfaces;
 using RogueLike.Managers;
 using RogueLike.Models;
 using RogueLike.Rooms;
 using RogueLike.Sprites;
+using RogueLike.Sprites.Player;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -30,7 +32,7 @@ namespace RogueLike.States
         private IEnumerable<Sprite> _onScreenSprites;
         private Rectangle _screenRectangle;
         private readonly List<Sprite> _returnSprites = new List<Sprite>();
-        private List<Player> _players;
+        private List<PlayerStateManager> _players;
         private BinaryReader _br;
         private Texture2D _fontTexture;
         private Text _scoreText;
@@ -59,14 +61,7 @@ namespace RogueLike.States
             _guiManager = new GuiManager(_content);
             _enemyManager = new EnemyManager(_content);
 
-            _sprites = new List<Sprite>()
-            {
-                _roomManager.CreateRoom(
-                    new Vector2(0, 0),
-                    new Vector2(100, 100), // Room size
-                    _enemyManager),
-
-                new Player(new Dictionary<string, Animation>()
+            var playerAnimations = new Dictionary<string, Animation>()
                 {
                     { "WalkLeft", new Animation(_content.Load<Texture2D>("player/player_run_left"), 4, 0.1f) },
                     { "WalkRight", new Animation(_content.Load<Texture2D>("player/player_run_right"), 4, 0.1f) },
@@ -78,12 +73,20 @@ namespace RogueLike.States
                     { "AttackRight1", new Animation(_content.Load<Texture2D>("player/player_attack_right1"), 6, 0.04f) { IsLooping = false } },
                     { "AttackRight2", new Animation(_content.Load<Texture2D>("player/player_attack_right2"), 6, 0.04f) { IsLooping = false } },
                     { "AttackRight3", new Animation(_content.Load<Texture2D>("player/player_attack_right3"), 5, 0.1f) { IsLooping = false } }
-                })
+                };
+
+            _sprites = new List<Sprite>()
+            {
+                _roomManager.CreateRoom(
+                    new Vector2(0, 0),
+                    new Vector2(100, 100), // Room size
+                    _enemyManager),
+
+                new PlayerStateManager(playerAnimations, new Vector2(_roomManager.CurrentRoom.Area.X + _roomManager.CurrentRoom.Area.Center.X, _roomManager.CurrentRoom.Area.Y + _roomManager.CurrentRoom.Area.Height - 300))
                 {
                     Health = 6,
-                    Position = new Vector2(_roomManager.CurrentRoom.Area.X + _roomManager.CurrentRoom.Area.Center.X, _roomManager.CurrentRoom.Area.Y + _roomManager.CurrentRoom.Area.Height - 300),
                     Speed = 7,
-                    Input = new Input()
+                    Input = new KeyInput()
                     {
                         Left = Keys.A,
                         Right = Keys.D,
@@ -94,7 +97,7 @@ namespace RogueLike.States
             };
 
             _quad = new Quadtree(0, _roomManager.CurrentRoom.Area);
-            _players = _sprites.OfType<Player>().ToList();
+            _players = _sprites.OfType<PlayerStateManager>().ToList();
         }
 
         private void DetectCollisions()
@@ -187,21 +190,12 @@ namespace RogueLike.States
         {
             for (int i = 0; i < _sprites.Count; i++)
             {
-                if (!_sprites[i].IsRemoved) continue;
-
-                _sprites.RemoveAt(i);
-                i--;
             }
-        }
-
-        public override void UpdateCamera(Camera camera)
-        {
-            camera.Follow(_players[0]);
         }
 
         public override void Update(GameTime gameTime)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (FlatKeyboard.Instance.IsKeyClicked(Keys.Escape))
                 _game.ChangeState(new MenuState(_game, _content));
 
             if (_players[0].IsDead)
@@ -236,6 +230,8 @@ namespace RogueLike.States
             }
 
             _scoreText.SetContent(Score.ToString());
+
+            Game1.Camera.SetCamera(_players[0].Position);
 
             _previousKeyboardState = Keyboard.GetState();
         }

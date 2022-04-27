@@ -5,7 +5,7 @@ namespace RogueLike.Sprites.RoomSprites
 {
     public class Stump : Sprite
     {
-        public Stump(Texture2D texture) : base(texture)
+        public Stump(Texture2D texture, Vector2 position) : base(texture, position)
         {
 
         }

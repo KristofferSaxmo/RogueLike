@@ -7,7 +7,7 @@ namespace RogueLike.Sprites.RoomSprites
 {
     public class PlantAnimation : Sprite
     {
-        public PlantAnimation(Dictionary<string, Animation> animations) : base(animations)
+        public PlantAnimation(Dictionary<string, Animation> animations, Vector2 position) : base(animations, position)
         {
             LayerOrigin = 17;
         }

@@ -8,9 +8,10 @@ namespace RogueLike.Sprites.RoomSprites
 {
     public class WaterEdge : Sprite, IDamageable
     {
-        public WaterEdge(Dictionary<string, Animation> animations) : base(animations)
+        public WaterEdge(Dictionary<string, Animation> animations, Vector2 position) : base(animations, position)
         {
-
+            UpdateRectangle();
+            _hurtbox = Rectangle;
         }
 
         public override void Update(GameTime gameTime)
@@ -20,7 +21,7 @@ namespace RogueLike.Sprites.RoomSprites
 
         public void UpdateHurtbox()
         {
-            _hurtbox = Rectangle;
+            
         }
 
         public void OnCollide(Hitbox hitbox)

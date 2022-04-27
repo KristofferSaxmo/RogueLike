@@ -103,43 +103,37 @@ namespace RogueLike.Rooms
             {
                 for (int y = (int)roomSize.Y; y < (int)roomSize.Y + 5; y++)
                 {
-                    Children.Add(new AnimatedDefaultSprite(new Dictionary<string, Animation>() { { "Animation", new Animation(_textures["Water-Sheet"], 32, 0.1f) } })
+                    Children.Add(new Sprite(new Dictionary<string, Animation>() { { "Animation", new Animation(_textures["Water-Sheet"], 32, 0.1f) } }, new Vector2(GetRandomXPos(x, 0, 0), GetRandomYPos(y, 144, 144)))
                     {
-                        Position = new Vector2(GetRandomXPos(x, 0, 0), GetRandomYPos(y, 144, 144)),
                         Parent = this
                     });
                 }
                 // Water
-                Children.Add(new WaterEdge(new Dictionary<string, Animation>() { { "Animation", new Animation(_textures["WaterEdge-Sheet"], 32, 0.1f) } })
+                Children.Add(new WaterEdge(new Dictionary<string, Animation>() { { "Animation", new Animation(_textures["WaterEdge-Sheet"], 32, 0.1f) } }, new Vector2(GetRandomXPos(x, 0, 0), GetRandomYPos((int)roomSize.Y - 1, 144, 144)))
                 {
-                    Position = new Vector2(GetRandomXPos(x, 0, 0), GetRandomYPos((int)roomSize.Y - 1, 144, 144)),
                     Parent = this
                 });
                 // Left water walls
                 if (x < roomSize.X / 2 && x < 0)
                 {
-                    Children.Add(new Wall(_textures["LeftWall"])
+                    Children.Add(new Wall(_textures["LeftWall"], new Vector2(GetRandomXPos(x, 0, 0), Position.Y + ((int)roomSize.Y - 1) * TileSize - 5))
                     {
-                        Position = new Vector2(GetRandomXPos(x, 0, 0), Position.Y + ((int)roomSize.Y - 1) * TileSize - 5),
                         Parent = this
                     });
-                    Children.Add(new Wall(_textures["LeftWall"])
+                    Children.Add(new Wall(_textures["LeftWall"], new Vector2(GetRandomXPos(x, 48, 48), Position.Y + ((int)roomSize.Y - 1) * TileSize - 25))
                     {
-                        Position = new Vector2(GetRandomXPos(x, 48, 48), Position.Y + ((int)roomSize.Y - 1) * TileSize - 25),
                         Parent = this
                     });
                 }
                 // Right water walls
                 else if (x >= roomSize.X - 1)
                 {
-                    Children.Add(new Wall(_textures["RightWall"])
+                    Children.Add(new Wall(_textures["RightWall"], new Vector2(GetRandomXPos(x, 0, 0), Position.Y + ((int)roomSize.Y - 1) * TileSize - 5))
                     {
-                        Position = new Vector2(GetRandomXPos(x, 0, 0), Position.Y + ((int)roomSize.Y - 1) * TileSize - 5),
                         Parent = this
                     });
-                    Children.Add(new Wall(_textures["RightWall"])
+                    Children.Add(new Wall(_textures["RightWall"], new Vector2(GetRandomXPos(x, 48, 48), Position.Y + ((int)roomSize.Y - 1) * TileSize - 25))
                     {
-                        Position = new Vector2(GetRandomXPos(x, 48, 48), Position.Y + ((int)roomSize.Y - 1) * TileSize - 25),
                         Parent = this
                     });
                 }
@@ -151,28 +145,24 @@ namespace RogueLike.Rooms
             // Left Walls
             if (x == 0)
             {
-                Children.Add(new Wall(_textures["LeftWall"])
+                Children.Add(new Wall(_textures["LeftWall"], new Vector2(GetRandomXPos(x, 0, 0), GetRandomYPos(y, 0, 0)))
                 {
-                    Position = new Vector2(GetRandomXPos(x, 0, 0), GetRandomYPos(y, 0, 0)),
                     Parent = this
                 });
-                Children.Add(new Wall(_textures["LeftWall"])
+                Children.Add(new Wall(_textures["LeftWall"], new Vector2(GetRandomXPos(x, 30, 30), Position.Y + y * TileSize - 48))
                 {
-                    Position = new Vector2(GetRandomXPos(x, 30, 30), Position.Y + y * TileSize - 48),
                     Parent = this
                 });
             }
             // Right Walls
             else if (x == roomSize.X - 1)
             {
-                Children.Add(new Wall(_textures["RightWall"])
+                Children.Add(new Wall(_textures["RightWall"], new Vector2(GetRandomXPos(x, 30, 30), GetRandomYPos(y, 0, 0)))
                 {
-                    Position = new Vector2(GetRandomXPos(x, 30, 30), GetRandomYPos(y, 0, 0)),
                     Parent = this
                 });
-                Children.Add(new Wall(_textures["RightWall"])
+                Children.Add(new Wall(_textures["RightWall"], new Vector2(GetRandomXPos(x, 0, 0), Position.Y + y * TileSize - 48))
                 {
-                    Position = new Vector2(GetRandomXPos(x, 0, 0), Position.Y + y * TileSize - 48),
                     Parent = this
                 });
             }
@@ -181,27 +171,23 @@ namespace RogueLike.Rooms
             {
                 if (x < roomSize.X / 2)
                 {
-                    Children.Add(new Wall(_textures["LeftWall"])
+                    Children.Add(new Wall(_textures["LeftWall"], new Vector2(GetRandomXPos(x, 0, 0), GetRandomYPos(y - 1, 50, 50)))
                     {
-                        Position = new Vector2(GetRandomXPos(x, 0, 0), GetRandomYPos(y - 1, 50, 50)),
                         Parent = this
                     });
-                    Children.Add(new Wall(_textures["LeftWall"])
+                    Children.Add(new Wall(_textures["LeftWall"], new Vector2(GetRandomXPos(x, 48, 48), GetRandomYPos(y - 1, 30, 30)))
                     {
-                        Position = new Vector2(GetRandomXPos(x, 48, 48), GetRandomYPos(y - 1, 30, 30)),
                         Parent = this
                     });
                 }
                 else
                 {
-                    Children.Add(new Wall(_textures["RightWall"])
+                    Children.Add(new Wall(_textures["RightWall"], new Vector2(GetRandomXPos(x, 0, 0), GetRandomYPos(y - 1, 50, 50)))
                     {
-                        Position = new Vector2(GetRandomXPos(x, 0, 0), GetRandomYPos(y - 1, 50, 50)),
                         Parent = this
                     });
-                    Children.Add(new Wall(_textures["RightWall"])
+                    Children.Add(new Wall(_textures["RightWall"], new Vector2(GetRandomXPos(x, 48, 48), GetRandomYPos(y - 1, 30, 30)))
                     {
-                        Position = new Vector2(GetRandomXPos(x, 48, 48), GetRandomYPos(y - 1, 30, 30)),
                         Parent = this
                     });
                 }
@@ -211,30 +197,26 @@ namespace RogueLike.Rooms
             {
                 if (x < roomSize.X / 2)
                 {
-                    Children.Add(new Wall(_textures["LeftWall"])
+                    Children.Add(new Wall(_textures["LeftWall"], new Vector2(GetRandomXPos(x, 0, 0), GetRandomYPos(y, 48, 48)))
                     {
-                        Position = new Vector2(GetRandomXPos(x, 0, 0), GetRandomYPos(y, 48, 48)),
                         Parent = this,
                         Color = Color.Black
                     });
-                    Children.Add(new Wall(_textures["LeftWall"])
+                    Children.Add(new Wall(_textures["LeftWall"], new Vector2(GetRandomXPos(x, 48, 48), GetRandomYPos(y, 18, 18)))
                     {
-                        Position = new Vector2(GetRandomXPos(x, 48, 48), GetRandomYPos(y, 18, 18)),
                         Parent = this,
                         Color = Color.Black
                     });
                 }
                 else
                 {
-                    Children.Add(new Wall(_textures["RightWall"])
+                    Children.Add(new Wall(_textures["RightWall"], new Vector2(GetRandomXPos(x, 0, 0), GetRandomYPos(y, 48, 48)))
                     {
-                        Position = new Vector2(GetRandomXPos(x, 0, 0), GetRandomYPos(y, 48, 48)),
                         Parent = this,
                         Color = Color.Black
                     });
-                    Children.Add(new Wall(_textures["RightWall"])
+                    Children.Add(new Wall(_textures["RightWall"], new Vector2(GetRandomXPos(x, 48, 48), GetRandomYPos(y, 18, 18)))
                     {
-                        Position = new Vector2(GetRandomXPos(x, 48, 48), GetRandomYPos(y, 18, 18)),
                         Parent = this,
                         Color = Color.Black
                     });
@@ -248,59 +230,51 @@ namespace RogueLike.Rooms
                 Children.Add(_enemyManager.CreateEnemy(GetRandomPosition(x, y, 50), this));
 
             if (Game1.Random.Next(100) < 20) // 20%
-                Children.Add(new Tree(_textures["Tree"], _textures["TreeShadow"])
+                Children.Add(new Tree(_textures["Tree"], _textures["TreeShadow"], GetRandomPosition(x, y, 50))
                 {
-                    Position = GetRandomPosition(x, y, 50),
                     Parent = this
                 });
 
             if (Game1.Random.Next(100) < 15) // 15%
-                Children.Add(new DefaultSprite(_textures["Plant1"])
+                Children.Add(new Sprite(_textures["Plant1"], GetRandomPosition(x, y, 50))
                 {
                     LayerOrigin = 17,
-                    Position = GetRandomPosition(x, y, 50),
                     Parent = this
                 });
 
             if (Game1.Random.Next(100) < 30) // 30%
-                Children.Add(new DefaultSprite(_textures["Plant2"])
+                Children.Add(new Sprite(_textures["Plant2"], GetRandomPosition(x, y, 50))
                 {
-                    Position = GetRandomPosition(x, y, 50),
                     Parent = this
                 });
 
             if (Game1.Random.Next(100) < 15) // 15%
-                Children.Add(new PlantAnimation(new Dictionary<string, Animation>() { { "Animation", new Animation(_textures["Plant-Sheet"], 4, 0.5f) } })
+                Children.Add(new PlantAnimation(new Dictionary<string, Animation>() { { "Animation", new Animation(_textures["Plant-Sheet"], 4, 0.5f) } }, GetRandomPosition(x, y, 50))
                 {
-                    Position = GetRandomPosition(x, y, 50),
                     Parent = this
                 });
 
             if (Game1.Random.Next(100) < 15) // 15%
-                Children.Add(new Rock1(_textures["Rock1"], _textures["Rock1Shadow"])
+                Children.Add(new Rock1(_textures["Rock1"], _textures["Rock1Shadow"], GetRandomPosition(x, y, 50))
                 {
-                    Position = GetRandomPosition(x, y, 50),
                     Parent = this
                 });
 
             if (Game1.Random.Next(100) < 30) // 30%
-                Children.Add(new DefaultSprite(_textures["Rock2"])
+                Children.Add(new Sprite(_textures["Rock2"], GetRandomPosition(x, y, 50))
                 {
-                    Position = GetRandomPosition(x, y, 50),
                     Parent = this
                 });
 
             if (Game1.Random.Next(100) < 10) // 10%
-                Children.Add(new DefaultSprite(_textures["Mushroom"])
+                Children.Add(new Sprite(_textures["Mushroom"], GetRandomPosition(x, y, 50))
                 {
-                    Position = GetRandomPosition(x, y, 50),
                     Parent = this
                 });
 
             if (Game1.Random.Next(100) < 2) // 2%
-                Children.Add(new DefaultSprite(_textures["Mud"])
+                Children.Add(new Sprite(_textures["Mud"], GetRandomPosition(x, y, 50))
                 {
-                    Position = GetRandomPosition(x, y, 50),
                     Parent = this
                 });
         }
@@ -349,25 +323,22 @@ namespace RogueLike.Rooms
             switch (random)
             {
                 case 0:
-                    Children.Add(new DefaultSprite(_textures["TreeTop1"])
+                    Children.Add(new Sprite(_textures["TreeTop1"], Position = GetRandomPosition(x, y, 48))
                     {
-                        Position = GetRandomPosition(x, y, 48),
                         Parent = this,
                         LayerOrigin = 50
                     });
                     break;
                 case 1:
-                    Children.Add(new DefaultSprite(_textures["TreeTop2"])
+                    Children.Add(new Sprite(_textures["TreeTop2"], Position = GetRandomPosition(x, y, 48))
                     {
-                        Position = GetRandomPosition(x, y, 48),
                         Parent = this,
                         LayerOrigin = 50
                     });
                     break;
                 case 2:
-                    Children.Add(new DefaultSprite(_textures["TreeTop3"])
+                    Children.Add(new Sprite(_textures["TreeTop3"], Position = GetRandomPosition(x, y, 48))
                     {
-                        Position = GetRandomPosition(x, y, 48),
                         Parent = this,
                         LayerOrigin = 50
                     });

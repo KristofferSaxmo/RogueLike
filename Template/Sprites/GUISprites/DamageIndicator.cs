@@ -13,7 +13,7 @@ namespace RogueLike.Sprites.GUISprites
         int _previousPlayerHealth = 0;
         Color colorCopy;
 
-        public DamageIndicator(Texture2D texture) : base(texture)
+        public DamageIndicator(Texture2D texture, Vector2 position) : base(texture, position)
         {
 
         }

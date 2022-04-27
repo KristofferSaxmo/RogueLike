@@ -59,6 +59,8 @@
     <Compile Include="Camera.cs" />
     <Compile Include="Component.cs" />
     <Compile Include="Controls\Button.cs" />
+    <Compile Include="Input\FlatKeyboard.cs" />
+    <Compile Include="Input\FlatMouse.cs" />
     <Compile Include="Letter.cs" />
     <Compile Include="Sprites\GUISprites\DamageIndicator.cs" />
     <Compile Include="Game1.cs" />
@@ -68,23 +70,26 @@
     <Compile Include="Managers\GUIManager.cs" />
     <Compile Include="Managers\RoomManager.cs" />
     <Compile Include="Models\Animation.cs" />
-    <Compile Include="Models\Input.cs" />
+    <Compile Include="Models\KeyInput.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Quadtree.cs" />
     <Compile Include="Rooms\Room.cs" />
-    <Compile Include="Sprites\AnimatedDefaultSprite.cs" />
     <Compile Include="Sprites\Hitbox.cs" />
     <Compile Include="Sprites\Lightning.cs" />
     <Compile Include="Sprites\Enemy.cs" />
     <Compile Include="Sprites\GUISprites\Hearts.cs" />
     <Compile Include="Interfaces\IDamageable.cs" />
-    <Compile Include="Sprites\Player.cs" />
+    <Compile Include="Sprites\Player\Player.cs" />
+    <Compile Include="Sprites\Player\PlayerAttackState.cs" />
+    <Compile Include="Sprites\Player\PlayerBaseState.cs" />
+    <Compile Include="Sprites\Player\PlayerIdleState.cs" />
+    <Compile Include="Sprites\Player\PlayerMoveState.cs" />
+    <Compile Include="Sprites\Player\PlayerStateManager.cs" />
     <Compile Include="Sprites\RoomSprites\Stump.cs" />
     <Compile Include="Sprites\RoomSprites\TelepadCrystal.cs" />
     <Compile Include="Sprites\RoomSprites\TelepadBase.cs" />
     <Compile Include="Sprites\RoomSprites\Tree.cs" />
-    <Compile Include="Sprites\DefaultSprite.cs" />
     <Compile Include="Sprites\RoomSprites\PlantAnimation.cs" />
     <Compile Include="Sprites\RoomSprites\Rock1.cs" />
     <Compile Include="Sprites\RoomSprites\WaterEdge.cs" />
@@ -99,6 +104,9 @@
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="MonoGame.Aseprite, Version=2.0.4.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MonoGame.Aseprite.2.0.4.1\lib\net45\MonoGame.Aseprite.dll</HintPath>
+    </Reference>
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Windows\MonoGame.Framework.dll</HintPath>
     </Reference>
@@ -111,6 +119,7 @@
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
     <None Include="app.manifest" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">

@@ -2,7 +2,7 @@
 
 namespace RogueLike.Models
 {
-    public class Input
+    public class KeyInput
     {
         public Keys Up { get; set; }
 

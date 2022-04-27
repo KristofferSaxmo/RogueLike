@@ -27,7 +27,7 @@ namespace RogueLike.Managers
                 { "GhostLightning", new Animation(content.Load<Texture2D>("enemies/ghost/ghost_lightning"), 10, 0.10f) { IsLooping = false } }
             };
 
-            _enemyPrefab = new Enemy(ghostAnimations, ghostShadow)
+            _enemyPrefab = new Enemy(ghostAnimations, ghostShadow, Vector2.Zero)
             {
                 Health = 1,
                 Speed = 3

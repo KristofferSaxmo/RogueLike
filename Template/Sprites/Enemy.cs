@@ -33,7 +33,7 @@ namespace RogueLike.Sprites
 
         public Circle FollowCircle => new Circle(new Vector2(Rectangle.X, Rectangle.Y + Rectangle.Height / 2 - 48), 600);
 
-        public Enemy(Dictionary<string, Animation> animations, Texture2D shadowTexture) : base(animations, shadowTexture)
+        public Enemy(Dictionary<string, Animation> animations, Texture2D shadowTexture, Vector2 position) : base(animations, shadowTexture, position)
         {
             LayerOrigin = 62;
             _startingPos = Position;
@@ -48,20 +48,18 @@ namespace RogueLike.Sprites
 
             Animation lightning = _lightningPrefab.Clone() as Animation;
 
-            Children.Add(new Lightning(lightning)
+            Children.Add(new Lightning(lightning, new Vector2(_playerPos.X + (_playerVel.X * 32), _playerPos.Y + (_playerVel.Y * 32) - 99))
             {
-                Position = new Vector2(_playerPos.X + (_playerVel.X * 32), _playerPos.Y + (_playerVel.Y * 32) - 99),
-                Parent = this,
+                Parent = this
             });
 
             for (int i = 0; i < Game1.Random.Next(4, 8); i++)
             {
                 Animation randomLightning = _lightningPrefab.Clone() as Animation;
                 randomLightning.CurrentFrame -= i*2;
-                Children.Add(new Lightning(randomLightning)
+                Children.Add(new Lightning(randomLightning, new Vector2(_playerPos.X + (_playerVel.X * 32) + Game1.Random.Next(-100, 100), _playerPos.Y + (_playerVel.Y * 32) - 99 + Game1.Random.Next(-100, 100)))
                 {
-                    Position = new Vector2(_playerPos.X + (_playerVel.X * 32) + Game1.Random.Next(-100, 100), _playerPos.Y + (_playerVel.Y * 32) - 99 + Game1.Random.Next(-100, 100)),
-                    Parent = this,
+                    Parent = this
                 });
             }
 
@@ -135,6 +133,8 @@ namespace RogueLike.Sprites
 
             if (_collisionCooldown > 0)
                 _collisionCooldown--;
+
+            UpdateRectangle();
         }
 
         public void UpdateHurtbox()
@@ -155,7 +155,7 @@ namespace RogueLike.Sprites
             if (_isDying || _collisionCooldown != 0)
                 return;
 
-            if (hitbox.Parent is Player)
+            if (hitbox.Parent is Player.Player)
             {
                 Health--;
                 _collisionCooldown = 10;
@@ -181,6 +181,7 @@ namespace RogueLike.Sprites
 
             _animationManager.Play(_animations["GhostDeathRight"]);
         }
+
         private bool InAnimation()
         {
             return _animationManager.CurrentAnimation == _animations["GhostAttackLeft"] ||

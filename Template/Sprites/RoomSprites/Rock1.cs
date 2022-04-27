@@ -6,9 +6,10 @@ namespace RogueLike.Sprites.RoomSprites
 {
     public class Rock1 : Sprite, IDamageable
     {
-        public Rock1(Texture2D texture, Texture2D shadowTexture) : base(texture, shadowTexture)
+        public Rock1(Texture2D texture, Texture2D shadowTexture, Vector2 position) : base(texture, shadowTexture, position)
         {
             LayerOrigin = 2;
+            _hurtbox = new Rectangle(Rectangle.X + 2 * Scale, Rectangle.Y + 7 * Scale, 14 * Scale, 3 * Scale);
         }
 
         public void OnCollide(Hitbox hitbox)
@@ -18,7 +19,7 @@ namespace RogueLike.Sprites.RoomSprites
 
         public void UpdateHurtbox()
         {
-            _hurtbox = new Rectangle(Rectangle.X + 2 * Scale, Rectangle.Y + 7 * Scale, 14 * Scale, 3 * Scale);
+            
         }
     }
 }

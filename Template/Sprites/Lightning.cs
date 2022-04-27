@@ -7,7 +7,7 @@ namespace RogueLike.Sprites
 {
     public class Lightning : Sprite, IDamaging
     {
-        public Lightning(Animation animation) : base(animation)
+        public Lightning(Animation animation, Vector2 position) : base(animation, position)
         {
             LayerOrigin = 153;
         }

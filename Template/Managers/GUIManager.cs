@@ -11,11 +11,10 @@ namespace RogueLike.Managers
         private readonly DamageIndicator _playerDamageIndicator;
         public GuiManager(ContentManager content)
         {
-            _playerHearts = new Hearts(content.Load<Texture2D>("gui/hearts"));
-            _playerDamageIndicator = new DamageIndicator(Game1.DefaultTexture)
+            _playerHearts = new Hearts(content.Load<Texture2D>("gui/hearts"), new Vector2(20, 20));
+            _playerDamageIndicator = new DamageIndicator(Game1.DefaultTexture, Vector2.Zero)
             {
                 Color = new Color(100, 0, 0, 100),
-                Position = Vector2.Zero,
                 Rectangle = new Rectangle(0, 0, Game1.ScreenWidth, Game1.ScreenHeight)
             };
         }

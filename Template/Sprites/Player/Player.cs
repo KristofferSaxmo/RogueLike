@@ -1,26 +1,15 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using RogueLike.Input;
 using RogueLike.Interfaces;
 using RogueLike.Models;
 using System.Collections.Generic;
 
-namespace RogueLike.Sprites
+namespace RogueLike.Sprites.Player
 {
-    enum Attacks
-    {
-        None,
-        Attack1,
-        Attack2,
-        Attack3
-    }
-    public class Player : Sprite, IDamageable, IDamaging
+    public class Player : Sprite, IDamageable
     {
         private Attacks _lastAttack = Attacks.None;
-
-        private KeyboardState _currentKey;
-
-        private MouseState _currentMouse;
 
         private Vector2 _direction;
 
@@ -32,23 +21,25 @@ namespace RogueLike.Sprites
 
         public bool IsDead => Health <= 0;
 
-        public Input Input { get; set; }
+        public KeyInput Input { get; set; }
 
-        public Player(Dictionary<string, Animation> animations) : base(animations)
+        public Player(Dictionary<string, Animation> animations, Vector2 position) : base(animations, position)
         {
             LayerOrigin = 57;
         }
 
         private void Attack()
         {
+            FlatMouse mouse = FlatMouse.Instance;
+
             if (_lastAttack == Attacks.None) // Lose all movement speed before attacking
                 Velocity = Vector2.Zero;
 
-            _direction = Camera.GetWorldPosition(new Vector2(_currentMouse.X, _currentMouse.Y)) - Position;
+            _direction = mouse.GetRelativePosition() - Position;
             _direction.Normalize();
 
             // If mouse is left of player
-            if (Camera.GetWorldPosition(new Vector2(_currentMouse.X, _currentMouse.Y)).X < Rectangle.X)
+            if (mouse.GetRelativePosition().X < Rectangle.X)
             {
                 AttackLeft();
                 _isFacingLeft = true;
@@ -112,18 +103,20 @@ namespace RogueLike.Sprites
 
         private void Move()
         {
+            FlatKeyboard keyboard = FlatKeyboard.Instance;
+
             Velocity = Vector2.Zero;
 
-            if (_currentKey.IsKeyDown(Input.Left))
+            if (keyboard.IsKeyDown(Input.Left))
                 Velocity = new Vector2(Velocity.X - Speed, Velocity.Y);
 
-            if (_currentKey.IsKeyDown(Input.Right))
+            if (keyboard.IsKeyDown(Input.Right))
                 Velocity = new Vector2(Velocity.X + Speed, Velocity.Y);
 
-            if (_currentKey.IsKeyDown(Input.Up))
+            if (keyboard.IsKeyDown(Input.Up))
                 Velocity = new Vector2(Velocity.X, Velocity.Y - Speed);
 
-            if (_currentKey.IsKeyDown(Input.Down))
+            if (keyboard.IsKeyDown(Input.Down))
                 Velocity = new Vector2(Velocity.X, Velocity.Y + Speed);
         }
 
@@ -156,10 +149,9 @@ namespace RogueLike.Sprites
         {
             _animationManager.Update(gameTime, Layer);
 
-            _currentKey = Keyboard.GetState();
-            _currentMouse = Mouse.GetState();
+            FlatMouse mouse = FlatMouse.Instance;
 
-            if (_currentMouse.LeftButton == ButtonState.Pressed)
+            if (mouse.IsLeftButtonDown())
                 Attack();
 
             if (IsAttacking())
@@ -180,58 +172,13 @@ namespace RogueLike.Sprites
 
             if (_collisionCooldown > 0)
                 _collisionCooldown--;
+
+            UpdateHurtbox();
         }
 
         public void UpdateHurtbox()
         {
             _hurtbox = new Rectangle(Rectangle.X + 29 * Scale, Rectangle.Y + 33 * Scale, 12 * Scale, 4 * Scale);
-        }
-
-        public void UpdateHitbox()
-        {
-            if (!IsAttacking()) return;
-
-
-            if (_isFacingLeft)
-            {
-                if (_animationManager.CurrentAnimation == _animations["AttackLeft1"] && _animationManager.CurrentAnimation.CurrentFrame == 3)
-                    Children.Add(new Hitbox(new Rectangle(Rectangle.X,
-                        Rectangle.Y + 3 * Scale,
-                        28 * Scale,
-                        34 * Scale), this));
-
-                else if (_animationManager.CurrentAnimation == _animations["AttackLeft2"] && _animationManager.CurrentAnimation.CurrentFrame == 3)
-                    Children.Add(new Hitbox(new Rectangle(Rectangle.X + 5 * Scale,
-                        Rectangle.Y,
-                        49 * Scale,
-                        36 * Scale), this));
-
-                else if (_animationManager.CurrentAnimation == _animations["AttackLeft3"])
-                    Children.Add(new Hitbox(new Rectangle(Rectangle.X,
-                        Rectangle.Y + 19 * Scale,
-                        18 * Scale,
-                        4 * Scale), this));
-
-                return;
-            }
-
-            if (_animationManager.CurrentAnimation == _animations["AttackRight1"] && _animationManager.CurrentAnimation.CurrentFrame == 3)
-                Children.Add(new Hitbox(new Rectangle(Rectangle.X + 41 * Scale,
-                    Rectangle.Y + 3 * Scale,
-                    28 * Scale,
-                    34 * Scale), this));
-
-            else if (_animationManager.CurrentAnimation == _animations["AttackRight2"] && _animationManager.CurrentAnimation.CurrentFrame == 3)
-                Children.Add(new Hitbox(new Rectangle(Rectangle.X + 14 * Scale,
-                    Rectangle.Y,
-                    49 * Scale,
-                    36 * Scale), this));
-
-            else if (_animationManager.CurrentAnimation == _animations["AttackRight3"])
-                Children.Add(new Hitbox(new Rectangle(Rectangle.X + 51 * Scale,
-                    Rectangle.Y + 19 * Scale,
-                    18 * Scale,
-                    4 * Scale), this));
         }
 
         public void OnCollide(Hitbox hitbox)

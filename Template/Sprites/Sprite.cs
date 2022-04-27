@@ -78,29 +78,8 @@ namespace RogueLike.Sprites
         }
         public Rectangle Rectangle
         {
-            get
-            {
-                if (Texture != null)
-                {
-                    if (Texture.Width > 5 && Texture.Height > 5)
-                    {
-                        return new Rectangle((int)Position.X, (int)Position.Y, Texture.Width * Scale, Texture.Height * Scale);
-                    }
-                }
-
-                if (_animationManager != null)
-                {
-                    if (_animation != null)
-                        return new Rectangle((int)Position.X, (int)Position.Y, _animation.FrameWidth * Scale, _animation.FrameHeight * Scale);
-
-                    var animation = _animations.FirstOrDefault().Value;
-
-                    return new Rectangle((int)Position.X, (int)Position.Y, animation.FrameWidth * Scale, animation.FrameHeight * Scale);
-                }
-
-                    return new Rectangle(_rectangle.X - (int)Origin.X * Scale, (int)_rectangle.Y - (int)Origin.Y * Scale, _rectangle.Width, _rectangle.Height);
-            }
-            set => _rectangle = value;
+            get { return _rectangle; }
+            set { _rectangle = value; }
         }
 
         public Rectangle Hurtbox
@@ -113,9 +92,11 @@ namespace RogueLike.Sprites
 
         #region Methods
 
-        public Sprite(Texture2D texture)
+        public Sprite(Texture2D texture, Vector2 position)
         {
             Texture = texture;
+
+            Position = position;
 
             Children = new List<Sprite>();
 
@@ -123,14 +104,24 @@ namespace RogueLike.Sprites
 
             if (texture != null)
                 Origin = new Vector2(Texture.Width / 2, Texture.Height / 2);
+
+            #region Rectangle
+            if (Texture.Width > 5 && Texture.Height > 5)
+                Rectangle = new Rectangle((int)Position.X, (int)Position.Y, Texture.Width * Scale, Texture.Height * Scale);
+
+            else
+                Rectangle = new Rectangle(_rectangle.X - (int)Origin.X * Scale, (int)_rectangle.Y - (int)Origin.Y * Scale, _rectangle.Width, _rectangle.Height);
+            #endregion
         } // Sprite
-        public Sprite(Texture2D texture, Texture2D shadowTexture)
+        public Sprite(Texture2D texture, Texture2D shadowTexture, Vector2 position)
         {
             Texture = texture;
 
+            Position = position;
+
             Children = new List<Sprite>
             {
-                (_shadow = new Shadow(shadowTexture)
+                (_shadow = new Shadow(shadowTexture, position)
                 {
                     Parent = this
                 })
@@ -140,10 +131,20 @@ namespace RogueLike.Sprites
 
             if (texture != null)
                 Origin = new Vector2(Texture.Width / 2, Texture.Height / 2);
+
+            #region Rectangle
+            if (Texture.Width > 5 && Texture.Height > 5)
+                Rectangle = new Rectangle((int)Position.X, (int)Position.Y, Texture.Width * Scale, Texture.Height * Scale);
+
+            else
+                Rectangle = new Rectangle(_rectangle.X - (int)Origin.X * Scale, (int)_rectangle.Y - (int)Origin.Y * Scale, _rectangle.Width, _rectangle.Height);
+            #endregion
         } // Sprite with shadow
-        public Sprite(Animation animation)
+        public Sprite(Animation animation, Vector2 position)
         {
             Texture = null;
+
+            Position = position;
 
             Children = new List<Sprite>();
 
@@ -152,10 +153,14 @@ namespace RogueLike.Sprites
             _animationManager = new AnimationManager(animation, Scale) { Color = Color.White };
 
             Origin = new Vector2(animation.FrameWidth / 2, animation.FrameHeight / 2);
+
+            Rectangle = new Rectangle((int)Position.X, (int)Position.Y, _animation.FrameWidth * Scale, _animation.FrameHeight * Scale);
         } // Animated sprite
-        public Sprite(Dictionary<string, Animation> animations)
+        public Sprite(Dictionary<string, Animation> animations, Vector2 position)
         {
             Texture = null;
+
+            Position = position;
 
             Children = new List<Sprite>();
 
@@ -166,14 +171,19 @@ namespace RogueLike.Sprites
             _animationManager = new AnimationManager(animation, Scale) { Color = Color.White };
 
             Origin = new Vector2(animation.FrameWidth / 2, animation.FrameHeight / 2);
+
+            var anim = _animations.FirstOrDefault().Value;
+            Rectangle = new Rectangle((int)Position.X, (int)Position.Y, anim.FrameWidth * Scale, anim.FrameHeight * Scale);
         } // Animated sprite dictionary
-        public Sprite(Dictionary<string, Animation> animations, Texture2D shadowTexture)
+        public Sprite(Dictionary<string, Animation> animations, Texture2D shadowTexture, Vector2 position)
         {
             Texture = null;
 
+            Position = position;
+
             Children = new List<Sprite>
             {
-                (_shadow = new Shadow(shadowTexture)
+                (_shadow = new Shadow(shadowTexture, position)
                 {
                     Parent = this
                 })
@@ -186,7 +196,11 @@ namespace RogueLike.Sprites
             _animationManager = new AnimationManager(animation, Scale) { Color = Color.White };
 
             Origin = new Vector2(animation.FrameWidth / 2, animation.FrameHeight / 2);
+
+            var anim = _animations.FirstOrDefault().Value;
+            Rectangle = new Rectangle((int)Position.X, (int)Position.Y, anim.FrameWidth * Scale, anim.FrameHeight * Scale);
         } // Animated sprite dictionary with shadow
+
         public Sprite()
         {
             Children = new List<Sprite>();
@@ -218,6 +232,26 @@ namespace RogueLike.Sprites
             }
 
             return sprite;
+        }
+
+        protected void UpdateRectangle()
+        {
+            if (Texture != null && Texture.Width > 5 && Texture.Height > 5)
+                Rectangle = new Rectangle((int)Position.X, (int)Position.Y, Texture.Width * Scale, Texture.Height * Scale);
+
+            else if (_animationManager != null)
+            {
+                if (_animation != null)
+                    Rectangle = new Rectangle((int)Position.X, (int)Position.Y, _animation.FrameWidth * Scale, _animation.FrameHeight * Scale);
+
+                else
+                {
+                    var anim = _animations.FirstOrDefault().Value;
+                    Rectangle = new Rectangle((int)Position.X, (int)Position.Y, anim.FrameWidth * Scale, anim.FrameHeight * Scale);
+                }
+            }
+            else
+                Rectangle = new Rectangle(_rectangle.X - (int)Origin.X * Scale, (int)_rectangle.Y - (int)Origin.Y * Scale, _rectangle.Width, _rectangle.Height);
         }
 
         #region Collision
